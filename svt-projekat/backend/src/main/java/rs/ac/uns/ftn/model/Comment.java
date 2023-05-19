@@ -30,11 +30,14 @@ public class Comment {
     @Column(name = "isDeleted",nullable = false)
     private Boolean isDeleted;
 
-    @OneToOne(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private User belongsTo = new User();
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private User belongsTo;
 
-    @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.ALL,orphanRemoval = true)
-    @JoinColumn(name = "belongsTo_id")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,orphanRemoval = true)
+    @JoinTable(name = "RepliesOfComment",
+            joinColumns = @JoinColumn(name = "comment_id",referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "reply_id",referencedColumnName = "id"))
+
     private Set<Comment> repliesTo = new HashSet<Comment>();
 
 }

@@ -15,7 +15,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Group {
+public class Groupp {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,16 +36,16 @@ public class Group {
     @Column(name = "suspendedReason",nullable = false)
     private String suspendedReason;
 
-    @ManyToMany
-    @JoinTable(name = "group_post",
-            joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "post_id", referencedColumnName = "id"))
+    @OneToMany
+    @JoinTable(name = "PostOfGroup",
+            joinColumns = @JoinColumn(name = "group_id",referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "post_id",referencedColumnName = "id"))
     private Set<Post> contains = new HashSet<Post>();
 
-    @ManyToMany
-    @JoinTable(name = "group_admin",
-            joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "admin_id", referencedColumnName = "id"))
+    @OneToMany
+    @JoinTable(name = "AdminOfGroup",
+            joinColumns = @JoinColumn(name = "group_id",referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "admin_id",referencedColumnName = "id"))
     private Set<GroupAdmin> groupAdmins = new HashSet<GroupAdmin>();
 
 

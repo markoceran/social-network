@@ -2,7 +2,7 @@ package rs.ac.uns.ftn.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import rs.ac.uns.ftn.model.Group;
+import rs.ac.uns.ftn.model.Groupp;
 import rs.ac.uns.ftn.repository.GroupRepository;
 import rs.ac.uns.ftn.service.GroupService;
 
@@ -16,17 +16,17 @@ public class GroupServiceImpl implements GroupService {
     GroupRepository groupRepository;
 
     @Override
-    public List<Group> getAll() {
+    public List<Groupp> getAll() {
         return groupRepository.findAll();
     }
 
     @Override
-    public Optional<Group> getById(Long id) {
+    public Optional<Groupp> getById(Long id) {
         return groupRepository.findById(id);
     }
 
     @Override
-    public Group save(Group group) {
+    public Groupp save(Groupp group) {
 
         try{
             return groupRepository.save(group);

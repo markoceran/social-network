@@ -25,7 +25,7 @@ public class Post {
     @Column(name = "creationDate",nullable = false)
     private LocalDateTime creationDate;
 
-    @OneToOne(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private User postedBy = new User();
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private User postedBy;
 
 }

@@ -45,7 +45,7 @@ public class User {
     private String lastName;
 
     @ManyToMany
-    @JoinTable(name = "user_friends",
+    @JoinTable(name = "FriendsOfUser",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "friend_id", referencedColumnName = "id"))
     private Set<User> friendsWith = new HashSet<User>();

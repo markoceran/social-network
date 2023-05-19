@@ -1,13 +1,13 @@
 package rs.ac.uns.ftn.service;
 
-import rs.ac.uns.ftn.model.Group;
+import rs.ac.uns.ftn.model.Groupp;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface GroupService {
 
-    List<Group> getAll();
-    Optional<Group> getById(Long id);
-    Group save(Group group);
+    List<Groupp> getAll();
+    Optional<Groupp> getById(Long id);
+    Groupp save(Groupp group);
 }
