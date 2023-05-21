@@ -36,13 +36,13 @@ public class Groupp {
     @Column(name = "suspendedReason",nullable = false)
     private String suspendedReason;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinTable(name = "PostOfGroup",
             joinColumns = @JoinColumn(name = "group_id",referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "post_id",referencedColumnName = "id"))
     private Set<Post> contains = new HashSet<Post>();
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "AdminOfGroup",
             joinColumns = @JoinColumn(name = "group_id",referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "admin_id",referencedColumnName = "id"))
