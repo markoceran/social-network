@@ -36,7 +36,7 @@ public class Groupp {
     @Column(name = "suspendedReason",nullable = false)
     private String suspendedReason;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable(name = "PostOfGroup",
             joinColumns = @JoinColumn(name = "group_id",referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "post_id",referencedColumnName = "id"))

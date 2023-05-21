@@ -44,6 +44,10 @@ public class User {
     @Column(name = "lastName",nullable = false)
     private String lastName;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Roles role;
+
     @ManyToMany
     @JoinTable(name = "FriendsOfUser",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),

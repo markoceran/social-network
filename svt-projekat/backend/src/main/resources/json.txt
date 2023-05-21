@@ -1,0 +1,67 @@
+Post
+
+{
+  "id": 3,
+  "content": "Check out this amazing photo!",
+  "creationDate": "2023-05-20T15:45:00",
+  "postedBy": {
+    "id": 2,
+    "username": "janeSmith",
+    "password": "456",
+    "email": "jane@gmail.com",
+    "lastLogin": "2023-05-19T11:30:00",
+    "firstName": "Jane",
+    "lastName": "Smith",
+    "role": "USER",
+    "friendsWith": []
+  }
+}
+
+Groupp
+
+{
+  "id": 4,
+  "name": "Group Nameee",
+  "description": "Group Descriptionnn",
+  "creationDate": "2023-05-20T10:00:00",
+  "isSuspended": false,
+  "suspendedReason": "N/A",
+  "contains": [{
+  "id": 3,
+  "content": "Check out this amazing photo!",
+  "creationDate": "2023-05-20T15:45:00",
+  "postedBy": {
+    "id": 2,
+    "username": "janeSmith",
+    "password": "456",
+    "email": "jane@gmail.com",
+    "lastLogin": "2023-05-19T11:30:00",
+    "firstName": "Jane",
+    "lastName": "Smith",
+    "role": "USER",
+    "friendsWith": []
+  }
+}],
+  "groupAdmins": []
+}
+
+User
+
+{
+    "username": "test",
+    "password": "test",
+    "email": "test@gmail.com",
+    "lastLogin": "2023-05-19T11:30:00",
+    "firstName": "test",
+    "lastName": "test",
+    "role": "USER",
+    "friendsWith": []
+}
+
+Login
+
+{
+    "username": "test",
+    "password": "test"
+
+}

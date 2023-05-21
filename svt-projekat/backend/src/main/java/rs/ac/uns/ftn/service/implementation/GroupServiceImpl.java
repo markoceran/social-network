@@ -35,4 +35,42 @@ public class GroupServiceImpl implements GroupService {
         }
 
     }
+
+    @Override
+    public Groupp update(Long id, Groupp group) {
+
+        Optional<Groupp> toUpdate = this.getById(id);
+
+        if (toUpdate.isPresent()) {
+
+            toUpdate.get().setName(group.getName());
+            toUpdate.get().setDescription(group.getDescription());
+            toUpdate.get().setCreationDate(group.getCreationDate());
+            toUpdate.get().setSuspendedReason(group.getSuspendedReason());
+            toUpdate.get().setIsSuspended(group.getIsSuspended());
+            toUpdate.get().setContains(group.getContains());
+            toUpdate.get().setGroupAdmins(group.getGroupAdmins());
+
+            groupRepository.save(toUpdate.get());
+
+            return toUpdate.get();
+
+        } else {
+            return null;
+        }
+
+
+    }
+
+    @Override
+    public Groupp delete(Long id) {
+
+        Optional<Groupp> group = this.getById(id);
+        if(group.isPresent()){
+            groupRepository.deleteById(id);
+            return group.get();
+        }else {return null;}
+
+    }
+
 }

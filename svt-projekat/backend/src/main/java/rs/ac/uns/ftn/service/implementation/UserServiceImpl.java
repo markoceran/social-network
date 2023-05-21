@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.service.implementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.model.Roles;
 import rs.ac.uns.ftn.model.User;
 import rs.ac.uns.ftn.model.dto.UserDTO;
 import rs.ac.uns.ftn.repository.UserRepository;
@@ -30,7 +31,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createUser(UserDTO userDTO) {
 
-        User user = findByUsername(userDTO.getUsername());
+        User user = this.findByUsername(userDTO.getUsername());
 
         if(user != null){
             return null;
@@ -39,7 +40,12 @@ public class UserServiceImpl implements UserService {
         User newUser = new User();
         newUser.setUsername(userDTO.getUsername());
         newUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        //newUser.setRole(Roles.USER);
+        newUser.setRole(Roles.USER);
+        newUser.setFirstName(userDTO.getFirstName());
+        newUser.setLastName(userDTO.getLastName());
+        newUser.setLastLogin(userDTO.getLastLogin());
+        newUser.setEmail(userDTO.getEmail());
+        newUser.setFriendsWith(userDTO.getFriendsWith());
         newUser = userRepository.save(newUser);
 
         return newUser;
@@ -47,7 +53,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByEmail(String email) {
-        return getAll().stream().filter(s->s.getEmail().equals(email)).findAny().orElse(null);
+        return this.getAll().stream().filter(s->s.getEmail().equals(email)).findAny().orElse(null);
     }
 
     @Override

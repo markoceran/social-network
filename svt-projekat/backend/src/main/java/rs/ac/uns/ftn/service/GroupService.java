@@ -10,4 +10,9 @@ public interface GroupService {
     List<Groupp> getAll();
     Optional<Groupp> getById(Long id);
     Groupp save(Groupp group);
+
+    Groupp update(Long id, Groupp group);
+
+    Groupp delete(Long id);
+
 }

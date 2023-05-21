@@ -33,4 +33,35 @@ public class PostServiceImpl implements PostService {
             return null;
         }
     }
+
+    @Override
+    public Post update(Long id, Post post) {
+
+        Optional<Post> toUpdate = this.getById(id);
+
+        if (toUpdate.isPresent()) {
+
+            toUpdate.get().setContent(post.getContent());
+            toUpdate.get().setCreationDate(post.getCreationDate());
+            toUpdate.get().setPostedBy(post.getPostedBy());
+            postRepository.save(toUpdate.get());
+
+            return toUpdate.get();
+
+        } else {
+            return null;
+        }
+
+    }
+
+    @Override
+    public Post delete(Long id) {
+
+        Optional<Post> post = this.getById(id);
+        if(post.isPresent()){
+            postRepository.deleteById(id);
+            return post.get();
+        }else {return null;}
+
+    }
 }
