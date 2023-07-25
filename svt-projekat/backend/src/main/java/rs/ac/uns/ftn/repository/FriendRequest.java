@@ -2,11 +2,7 @@ package rs.ac.uns.ftn.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import rs.ac.uns.ftn.model.User;
-
-import java.util.Optional;
-
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface FriendRequest extends JpaRepository<rs.ac.uns.ftn.model.FriendRequest, Long> {
 }

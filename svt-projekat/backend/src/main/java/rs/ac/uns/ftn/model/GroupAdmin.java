@@ -10,11 +10,6 @@ import javax.persistence.Table;
 
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-
 @Table(name="group_admin")
 public class GroupAdmin extends User {
 
