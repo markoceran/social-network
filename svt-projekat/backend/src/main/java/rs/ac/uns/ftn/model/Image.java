@@ -6,26 +6,24 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Post {
+public class Image {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "content",nullable = false)
-    private String content;
+    @Column(name = "path",nullable = false)
+    private String path;
 
-    @Column(name = "creationDate",nullable = false)
-    private LocalDateTime creationDate;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Post post;
 
-    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    private User postedBy;
-
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private User belongsTo;
 }

@@ -17,6 +17,8 @@ import static javax.persistence.InheritanceType.JOINED;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+
+@Table(name="user")
 @Inheritance(strategy=JOINED)
 public class User {
 

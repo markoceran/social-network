@@ -13,19 +13,22 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Post {
+public class GroupRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "content",nullable = false)
-    private String content;
-
-    @Column(name = "creationDate",nullable = false)
-    private LocalDateTime creationDate;
+    @Column(name = "approved",nullable = false)
+    private Boolean approved;
+    @Column(name = "createdAt",nullable = false)
+    private LocalDateTime createdAt;
+    @Column(name = "at")
+    private LocalDateTime at;
 
     @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    private User postedBy;
+    private Groupp forr;
 
+    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    private User from;
 }

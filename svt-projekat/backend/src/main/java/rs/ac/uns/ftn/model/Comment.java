@@ -33,6 +33,9 @@ public class Comment {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private User belongsTo;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Post post;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,orphanRemoval = true)
     @JoinTable(name = "RepliesOfComment",
             joinColumns = @JoinColumn(name = "comment_id",referencedColumnName = "id"),

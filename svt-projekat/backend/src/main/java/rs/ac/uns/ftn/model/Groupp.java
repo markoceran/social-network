@@ -33,7 +33,7 @@ public class Groupp {
     @Column(name = "isSuspended",nullable = false)
     private Boolean isSuspended;
 
-    @Column(name = "suspendedReason",nullable = false)
+    @Column(name = "suspendedReason")
     private String suspendedReason;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
@@ -42,7 +42,7 @@ public class Groupp {
             inverseJoinColumns = @JoinColumn(name = "post_id",referencedColumnName = "id"))
     private Set<Post> contains = new HashSet<Post>();
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable(name = "AdminOfGroup",
             joinColumns = @JoinColumn(name = "group_id",referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "admin_id",referencedColumnName = "id"))

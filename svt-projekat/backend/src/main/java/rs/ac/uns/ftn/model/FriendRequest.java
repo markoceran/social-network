@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,19 +14,22 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Post {
+public class FriendRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "content",nullable = false)
-    private String content;
-
-    @Column(name = "creationDate",nullable = false)
-    private LocalDateTime creationDate;
+    @Column(name = "approved",nullable = false)
+    private Boolean approved;
+    @Column(name = "createdAt",nullable = false)
+    private LocalDateTime createdAt;
+    @Column(name = "at")
+    private LocalDateTime at;
 
     @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    private User postedBy;
+    private User from;
 
+    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    private User forr;
 }

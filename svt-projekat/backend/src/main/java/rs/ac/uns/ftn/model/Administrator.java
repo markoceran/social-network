@@ -8,14 +8,12 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 
-@Table(name="group_admin")
-public class GroupAdmin extends User {
-
+@Table(name="administrator")
+public class Administrator extends User{
 }
