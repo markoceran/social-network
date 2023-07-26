@@ -22,4 +22,8 @@ public interface UserService {
     User update(Long id, User user);
 
     User delete(Long id);
+
+    User setRoleAsGroupAdmin(Long id);
+
+    User deleteRoleAsGroupAdmin(Long id);
 }

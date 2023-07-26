@@ -3,19 +3,30 @@ package rs.ac.uns.ftn.service.implementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.model.GroupAdmin;
+import rs.ac.uns.ftn.model.Post;
 import rs.ac.uns.ftn.model.Roles;
 import rs.ac.uns.ftn.model.User;
 import rs.ac.uns.ftn.model.dto.UserDTO;
+import rs.ac.uns.ftn.repository.GroupAdminRepository;
 import rs.ac.uns.ftn.repository.UserRepository;
+import rs.ac.uns.ftn.service.GroupAdminService;
 import rs.ac.uns.ftn.service.UserService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private GroupAdminRepository groupAdminRepository;
+
+    @Autowired
+    private GroupAdminService groupAdminService;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -52,12 +63,82 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<User> getById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    @Override
     public User findByEmail(String email) {
-        return this.getAll().stream().filter(s->s.getEmail().equals(email)).findAny().orElse(null);
+        return getAll().stream().filter(s->s.getEmail().equals(email)).findAny().orElse(null);
     }
 
     @Override
     public List<User> getAll() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public User update(Long id, User user) {
+
+        Optional<User> toUpdate = this.getById(id);
+
+        if (toUpdate.isPresent()) {
+
+            toUpdate.get().setFirstName(user.getFirstName());
+            toUpdate.get().setLastName(user.getLastName());
+            toUpdate.get().setPassword(user.getPassword());
+            toUpdate.get().setEmail(user.getEmail());
+            toUpdate.get().setUsername(user.getUsername());
+            userRepository.save(toUpdate.get());
+
+            return toUpdate.get();
+
+        } else {
+            return null;
+        }
+
+    }
+
+    @Override
+    public User delete(Long id) {
+        Optional<User> user = this.getById(id);
+        if(user.isPresent()){
+            userRepository.deleteById(id);
+            return user.get();
+        }else {return null;}
+    }
+
+    @Override
+    public User setRoleAsGroupAdmin(Long id) {
+        Optional<User> toUpdate = this.getById(id);
+
+        if (toUpdate.isPresent()) {
+
+            toUpdate.get().setRole(Roles.GROUP_ADMIN);
+
+            groupAdminRepository.save((GroupAdmin) toUpdate.get());
+
+            return toUpdate.get();
+
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public User deleteRoleAsGroupAdmin(Long id) {
+        Optional<GroupAdmin> toUpdate = this.groupAdminService.getById(id);
+
+        if (toUpdate.isPresent()) {
+
+            toUpdate.get().setRole(Roles.USER);
+
+            userRepository.save(toUpdate.get());
+
+            return toUpdate.get();
+
+        } else {
+            return null;
+        }
     }
 }
