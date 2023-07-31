@@ -30,24 +30,16 @@ public class UserDTO {
     private String email;
 
     @NotBlank
-    private LocalDateTime lastLogin;
-
-    @NotBlank
     private String firstName;
 
     @NotBlank
     private String lastName;
 
-    @NotBlank
-    private Set<User> friendsWith = new HashSet<User>();
-
     public UserDTO(User createdUser) {
         this.id = createdUser.getId();
         this.username = createdUser.getUsername();
         this.email = createdUser.getEmail();
-        this.lastLogin = createdUser.getLastLogin();
         this.firstName = createdUser.getFirstName();
         this.lastName = createdUser.getLastName();
-        this.friendsWith = createdUser.getFriendsWith();
     }
 }

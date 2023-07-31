@@ -2,10 +2,16 @@ package rs.ac.uns.ftn.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.uns.ftn.model.Groupp;
+import rs.ac.uns.ftn.model.*;
+import rs.ac.uns.ftn.service.GroupAdminService;
 import rs.ac.uns.ftn.service.GroupService;
+import rs.ac.uns.ftn.service.UserService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,10 +22,34 @@ public class GroupController {
     @Autowired
     private GroupService groupService;
 
-    @GetMapping
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private GroupAdminService groupAdminService;
+
+    /*@GetMapping
     public ResponseEntity<List<Groupp>> getAllGroups() {
         List<Groupp> groups = groupService.getAll();
         return ResponseEntity.ok(groups);
+    }*/
+
+    @GetMapping("/my")
+    public ResponseEntity<List<Groupp>> getMyGroups(){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String username = authentication.getName();
+        User user = userService.findByUsername(username);
+
+        List<Groupp> groupps = new ArrayList<>();
+
+        for(Groupp g: groupService.getAll()){
+            if(g.getGroupAdmins().contains((GroupAdmin) user)){
+                groupps.add(g);
+            }
+        }
+        return ResponseEntity.ok(groupps);
     }
 
     @GetMapping("/{id}")
@@ -34,6 +64,19 @@ public class GroupController {
 
     @PostMapping
     public ResponseEntity<Groupp> createGroup(@RequestBody Groupp group) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String username = authentication.getName();
+        User user = userService.findByUsername(username);
+
+        if(user.getRole().equals(Roles.USER)){
+
+            user.setRole(Roles.GROUP_ADMIN);
+            groupAdminService.update(user.getId(), (GroupAdmin) user);
+        }
+
+        group.getGroupAdmins().add((GroupAdmin) user);
         Groupp createdGroup = groupService.save(group);
         return ResponseEntity.ok(createdGroup);
     }

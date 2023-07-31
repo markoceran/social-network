@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.service;
 
+import rs.ac.uns.ftn.model.Administrator;
 import rs.ac.uns.ftn.model.Post;
 import rs.ac.uns.ftn.model.User;
 import rs.ac.uns.ftn.model.dto.UserDTO;
@@ -26,4 +27,5 @@ public interface UserService {
     User setRoleAsGroupAdmin(Long id);
 
     User deleteRoleAsGroupAdmin(Long id);
+
 }

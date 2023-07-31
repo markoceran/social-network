@@ -12,11 +12,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import rs.ac.uns.ftn.model.Administrator;
 import rs.ac.uns.ftn.model.User;
 import rs.ac.uns.ftn.model.dto.JwtAuthenticationRequest;
 import rs.ac.uns.ftn.model.dto.UserDTO;
 import rs.ac.uns.ftn.model.dto.UserTokenState;
 import rs.ac.uns.ftn.security.TokenUtils;
+import rs.ac.uns.ftn.service.AdministratorService;
 import rs.ac.uns.ftn.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +32,10 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AdministratorService administratorService;
+
 
     @Autowired
     AuthenticationManager authenticationManager;
@@ -49,7 +55,7 @@ public class UserController {
         return this.userService.getAll();
     }
 
-    @GetMapping("/me")
+    @GetMapping("/profile")
     @PreAuthorize("isAuthenticated()")
     public User user(Principal user) {
         return this.userService.findByUsername(user.getName());
@@ -100,6 +106,19 @@ public class UserController {
         TokenUtils.clearAuthenticationCookie(request, response);
 
         return ResponseEntity.ok("Logged out successfully");
+    }
+
+    @PostMapping("/addAdmin")
+    public ResponseEntity<UserDTO> addAdmin(@RequestBody @Validated UserDTO newUser){
+
+        Administrator createdUser = administratorService.createAdmin(newUser);
+
+        if(createdUser == null){
+            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+        }
+        UserDTO userDTO = new UserDTO(createdUser);
+
+        return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
     }
 
 

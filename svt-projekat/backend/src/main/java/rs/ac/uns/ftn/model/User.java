@@ -4,13 +4,18 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.bytebuddy.utility.nullability.NeverNull;
+import org.springframework.boot.context.properties.bind.DefaultValue;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import static javax.persistence.DiscriminatorType.STRING;
 import static javax.persistence.InheritanceType.JOINED;
+import static javax.persistence.InheritanceType.SINGLE_TABLE;
 
 @Entity
 @Getter
@@ -19,7 +24,9 @@ import static javax.persistence.InheritanceType.JOINED;
 @AllArgsConstructor
 
 @Table(name="user")
-@Inheritance(strategy=JOINED)
+@Inheritance(strategy=SINGLE_TABLE)
+@DiscriminatorColumn(name="type", discriminatorType=STRING)
+@DiscriminatorValue("U")
 public class User {
 
     @Id
@@ -37,7 +44,7 @@ public class User {
     @Column(name = "email",nullable = false, unique = true)
     private String email;
 
-    @Column(name = "lastLogin",nullable = false)
+    @Column(name = "lastLogin")
     private LocalDateTime lastLogin;
 
     @Column(name = "firstName",nullable = false)

@@ -9,7 +9,7 @@ VALUES('1','john@gmail.com','John','2023-05-19 10:00:00', 'Doe','123','USER','jo
       ('2','jane@gmail.com', 'Jane','2023-05-19 11:30:00','Smith','456','USER','janeSmith');
 
 INSERT INTO `post`
-VALUES ('1','Post content 1', '2023-05-18 10:30:00', '1');
+VALUES ('1','Post content 1', '2023-05-18 10:30:00', '2');
 
 INSERT INTO `post`
 VALUES ('2','Post content 2', '2023-05-19 12:45:00', '2');

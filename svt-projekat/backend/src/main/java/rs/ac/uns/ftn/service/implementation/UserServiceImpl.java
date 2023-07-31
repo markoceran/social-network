@@ -13,8 +13,11 @@ import rs.ac.uns.ftn.repository.UserRepository;
 import rs.ac.uns.ftn.service.GroupAdminService;
 import rs.ac.uns.ftn.service.UserService;
 
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -54,9 +57,9 @@ public class UserServiceImpl implements UserService {
         newUser.setRole(Roles.USER);
         newUser.setFirstName(userDTO.getFirstName());
         newUser.setLastName(userDTO.getLastName());
-        newUser.setLastLogin(userDTO.getLastLogin());
+        newUser.setLastLogin(LocalDateTime.now());
         newUser.setEmail(userDTO.getEmail());
-        newUser.setFriendsWith(userDTO.getFriendsWith());
+        newUser.setFriendsWith(new HashSet<>());
         newUser = userRepository.save(newUser);
 
         return newUser;

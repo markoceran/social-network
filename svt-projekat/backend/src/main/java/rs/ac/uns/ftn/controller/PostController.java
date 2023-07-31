@@ -2,10 +2,15 @@ package rs.ac.uns.ftn.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.model.Post;
+import rs.ac.uns.ftn.model.User;
 import rs.ac.uns.ftn.service.PostService;
+import rs.ac.uns.ftn.service.UserService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,15 +21,36 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-    @GetMapping
+    @Autowired
+    private UserService userService;
+
+    /*@GetMapping
     public ResponseEntity<List<Post>> getAll(){
         return ResponseEntity.ok(postService.getAll());
-    }
+    }*/
 
     @PostMapping
     public ResponseEntity<Post> createPost(@RequestBody Post post) {
         Post createdPost = postService.save(post);
         return ResponseEntity.ok(createdPost);
+    }
+
+    @GetMapping("/my")
+    public ResponseEntity<List<Post>> getMyPosts(){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String username = authentication.getName();
+        User user = userService.findByUsername(username);
+
+        List<Post> posts = new ArrayList<>();
+
+        for(Post p: postService.getAll()){
+            if(p.getPostedBy().equals(user)){
+                posts.add(p);
+            }
+        }
+        return ResponseEntity.ok(posts);
     }
 
     @GetMapping("/{id}")

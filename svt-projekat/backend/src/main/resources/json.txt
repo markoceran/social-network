@@ -51,11 +51,9 @@ User
     "username": "test",
     "password": "test",
     "email": "test@gmail.com",
-    "lastLogin": "2023-05-19T11:30:00",
     "firstName": "test",
-    "lastName": "test",
-    "role": "USER",
-    "friendsWith": []
+    "lastName": "test"
+
 }
 
 Login
