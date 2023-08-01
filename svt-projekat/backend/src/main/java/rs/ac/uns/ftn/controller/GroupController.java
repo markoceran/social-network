@@ -28,11 +28,19 @@ public class GroupController {
     @Autowired
     private GroupAdminService groupAdminService;
 
-    /*@GetMapping
+    @GetMapping
     public ResponseEntity<List<Groupp>> getAllGroups() {
-        List<Groupp> groups = groupService.getAll();
+        List<Groupp> allGroups = groupService.getAll();
+        List<Groupp> groups = new ArrayList<>();
+
+        for(Groupp g:allGroups){
+            if(!g.getIsSuspended()){
+                groups.add(g);
+            }
+        }
+
         return ResponseEntity.ok(groups);
-    }*/
+    }
 
     @GetMapping("/my")
     public ResponseEntity<List<Groupp>> getMyGroups(){
@@ -45,7 +53,7 @@ public class GroupController {
         List<Groupp> groupps = new ArrayList<>();
 
         for(Groupp g: groupService.getAll()){
-            if(g.getGroupAdmins().contains((GroupAdmin) user)){
+            if(!g.getIsSuspended() && g.getGroupAdmins().contains((GroupAdmin) user)){
                 groupps.add(g);
             }
         }
@@ -55,7 +63,7 @@ public class GroupController {
     @GetMapping("/{id}")
     public ResponseEntity<Groupp> getGroupById(@PathVariable Long id) {
         Optional<Groupp> group = groupService.getById(id);
-        if (group.isPresent()) {
+        if (!group.get().getIsSuspended() && group.isPresent()) {
             return ResponseEntity.ok(group.get());
         } else {
             return ResponseEntity.notFound().build();
@@ -83,6 +91,7 @@ public class GroupController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Groupp> updateGroup(@PathVariable Long id, @RequestBody Groupp group) {
+
         Groupp updatedGroup = groupService.update(id, group);
         if (updatedGroup != null) {
             return ResponseEntity.ok(updatedGroup);

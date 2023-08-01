@@ -43,7 +43,6 @@ public class PostServiceImpl implements PostService {
 
             toUpdate.get().setContent(post.getContent());
             toUpdate.get().setCreationDate(post.getCreationDate());
-            toUpdate.get().setPostedBy(post.getPostedBy());
             postRepository.save(toUpdate.get());
 
             return toUpdate.get();

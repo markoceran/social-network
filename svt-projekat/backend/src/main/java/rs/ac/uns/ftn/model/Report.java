@@ -40,4 +40,8 @@ public class Report {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Nullable
     private Comment comment;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Nullable
+    private User user;
 }

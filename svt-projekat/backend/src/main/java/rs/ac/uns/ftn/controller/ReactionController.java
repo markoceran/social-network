@@ -30,7 +30,7 @@ public class ReactionController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/byPost")
+    @GetMapping("/byPost/{id}")
     public ResponseEntity<List<Reaction>> getPostReactions(@PathVariable Long id){
 
         Optional<Post> post = postService.getById(id);
@@ -45,7 +45,7 @@ public class ReactionController {
         return ResponseEntity.ok(reactions);
     }
 
-    @GetMapping("/byComment")
+    @GetMapping("/byComment/{id}")
     public ResponseEntity<List<Reaction>> getCommentReactions(@PathVariable Long id){
 
         Optional<Comment> comment = commentService.getById(id);

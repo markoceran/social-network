@@ -24,10 +24,10 @@ public class CommentController {
     @Autowired
     private PostService postService;
 
-    @GetMapping
+    /*@GetMapping
     public ResponseEntity<List<Comment>> getAll(){
-        return ResponseEntity.ok(commentService.getAll());
-    }
+        return ResponseEntity.ok(commentService.getAll());  //logicko brisanje provera
+    }*/
 
     @PostMapping
     public ResponseEntity<Comment> createComment(@RequestBody Comment comment) {
@@ -35,8 +35,8 @@ public class CommentController {
         return ResponseEntity.ok(createdComment);
     }
 
-    @GetMapping("/postComments")
-    public ResponseEntity<List<Comment>> getComments(@RequestParam Long id){
+    @GetMapping("/postComments/{id}")
+    public ResponseEntity<List<Comment>> getComments(@PathVariable Long id){
 
         Optional<Post> post = postService.getById(id);
 
@@ -44,7 +44,7 @@ public class CommentController {
         List<Comment> comments = new ArrayList<>();
 
         for(Comment c: commentService.getAll()){
-            if(c.getPost().equals(post.get())){
+            if(!c.getIsDeleted() && c.getPost().equals(post.get())){
                 comments.add(c);
             }
         }
@@ -54,7 +54,7 @@ public class CommentController {
     @GetMapping("/{id}")
     public ResponseEntity<Comment> getCommentById(@PathVariable Long id) {
         Optional<Comment> comment = commentService.getById(id);
-        if (comment.get() != null) {
+        if (!comment.get().getIsDeleted() && comment.get() != null) {
             return ResponseEntity.ok(comment.get());
         } else {
             return ResponseEntity.notFound().build();

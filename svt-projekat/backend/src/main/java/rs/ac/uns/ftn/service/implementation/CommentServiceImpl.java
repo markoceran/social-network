@@ -44,7 +44,7 @@ public class CommentServiceImpl implements CommentService {
 
             toUpdate.get().setText(comment.getText());
             toUpdate.get().setTimestamp(comment.getTimestamp());
-
+            toUpdate.get().setIsDeleted(comment.getIsDeleted());
             commentRepository.save(toUpdate.get());
 
             return toUpdate.get();

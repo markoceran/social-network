@@ -2,6 +2,7 @@ package rs.ac.uns.ftn.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.model.Comment;
 import rs.ac.uns.ftn.model.Groupp;
 import rs.ac.uns.ftn.repository.GroupRepository;
 import rs.ac.uns.ftn.service.GroupService;
@@ -65,10 +66,11 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public Groupp delete(Long id) {
 
-        Optional<Groupp> group = this.getById(id);
-        if(group.isPresent()){
-            groupRepository.deleteById(id);
-            return group.get();
+        Optional<Groupp> groupp = this.getById(id);
+        if(groupp.isPresent()){
+            groupp.get().setIsSuspended(true);
+            groupRepository.save(groupp.get());
+            return groupp.get();
         }else {return null;}
 
     }
