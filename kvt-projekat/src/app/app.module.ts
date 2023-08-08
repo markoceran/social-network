@@ -11,6 +11,12 @@ import { AuthenticationService } from './services/authentication.service';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NavbarComponent } from './navbar/navbar.component';
+import { FriendRequestsComponent } from './friend-requests/friend-requests.component';
+import { GroupsComponent } from './groups/groups.component';
+import { ProfileComponent } from './profile/profile.component';
+import { AddPostComponent } from './add-post/add-post.component';
+import { SearchComponent } from './search/search.component';
 
 
 @NgModule({
@@ -18,7 +24,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AppComponent,
     CommentComponent,
     LoginComponent,
-    MainPageComponent
+    MainPageComponent,
+    NavbarComponent,
+    FriendRequestsComponent,
+    GroupsComponent,
+    ProfileComponent,
+    AddPostComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,

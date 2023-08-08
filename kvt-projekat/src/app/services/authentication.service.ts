@@ -13,7 +13,7 @@ export class AuthenticationService {
 	) { }
 
 	login(auth: any): Observable<any> {
-		return this.http.post('/users/login', {username: auth.username, password: auth.password}, {headers: this.headers, responseType: 'json'});
+		return this.http.post('api/users/login', {username: auth.username, password: auth.password}, {headers: this.headers, responseType: 'json'});
 	}
 
 	logout(): Observable<any> {

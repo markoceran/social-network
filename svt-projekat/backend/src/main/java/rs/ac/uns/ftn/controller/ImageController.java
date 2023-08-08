@@ -128,9 +128,10 @@ public class ImageController {
 
 
     @PostMapping("/setPostImage")
-    public ResponseEntity<String> setPostImage(@RequestParam("imageFile") MultipartFile imageFile, @RequestParam Long id) {
+    public ResponseEntity<String> setPostImage(@RequestParam("image") MultipartFile imageFile) {
 
-        Optional<Post> post = postService.getById(id);
+        List<Post> all = postService.getAll();
+        Post post = all.get(all.size()-1);
 
         try {
             // Check if the uploaded file is not empty and is an image
@@ -144,7 +145,7 @@ public class ImageController {
                 // Create an Image entity and set the path to the saved image file
                 Image image = new Image();
                 image.setPath(fileName);
-                image.setPost(post.get());
+                image.setPost(post);
 
                 // Save the Image entity to the database
                 imageService.save(image);

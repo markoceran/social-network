@@ -1,0 +1,24 @@
+<app-navbar></app-navbar>
+<section class="h-100 gradient-custom-2">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col col-lg-9 col-xl-7">
+          <div class="card">            
+            
+            <ul class="list-group list-group-light">
+                <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let u of searchUsers">
+                  <div class="d-flex align-items-center">
+                    <img src="https://mdbootstrap.com/img/new/avatars/8.jpg" alt="" style="width: 45px; height: 45px;margin-left: 15px;"
+                      class="rounded-circle" />
+                    <div class="ms-3">
+                      <p class="fw-bold mb-1">{{ u.firstName + ' ' + u.lastName }}</p>
+                      <p class="text-muted mb-0">username: {{u.username}}</p>
+                    </div>
+                  </div>
+                  <a class="btn btn-link btn-rounded btn-sm" href="#" role="button">Add friend</a>            
+              </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>

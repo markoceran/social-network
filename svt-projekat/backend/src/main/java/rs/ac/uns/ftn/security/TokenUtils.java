@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.security;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -26,7 +28,11 @@ public class TokenUtils {
     public String getUsernameFromToken(String token) {
         String username;
         try {
-            Claims claims = this.getClaimsFromToken(token); // username izvlacimo iz subject polja unutar payload tokena
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(token);
+            String accessToken = jsonNode.get("accessToken").asText();
+
+            Claims claims = this.getClaimsFromToken(accessToken); // username izvlacimo iz subject polja unutar payload tokena
             username = claims.getSubject();
         } catch (Exception e) {
             username = null;

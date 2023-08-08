@@ -24,6 +24,7 @@ import rs.ac.uns.ftn.service.UserService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -55,12 +56,27 @@ public class UserController {
         return this.userService.getAll();
     }
 
-    @GetMapping("/profile")
-    @PreAuthorize("isAuthenticated()")
-    public User user(Principal user) {
-        return this.userService.findByUsername(user.getName());
+    @GetMapping("/profile/{username}")
+    //@PreAuthorize("isAuthenticated()")
+    public User user(@PathVariable String username) {
+        return this.userService.findByUsername(username);
     }
 
+    @GetMapping("/{unos}")
+    //@PreAuthorize("isAuthenticated()")
+    public List<User> findUsers(@PathVariable String unos) {
+
+        List<User> svi = userService.getAll();
+        List<User> rezultat = new ArrayList<>();
+
+        for(User u : svi){
+            if(u.getFirstName().toLowerCase().contains(unos.toLowerCase()) || u.getLastName().toLowerCase().contains(unos.toLowerCase()) || u.getUsername().toLowerCase().contains(unos.toLowerCase())){
+                rezultat.add(u);
+            }
+        }
+
+        return rezultat;
+    }
 
 
     @PostMapping("/signup")

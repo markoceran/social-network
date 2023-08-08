@@ -1,0 +1,16 @@
+<app-navbar></app-navbar>
+<form [formGroup]="postForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="content">Content</label>
+      <textarea id="content" formControlName="content" class="form-control" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Create Post</button>
+</form>
+  
+<form [formGroup]="postFormImage" (ngSubmit)="onSubmitImage()" enctype="multipart/form-data">
+  <div class="mb-3">
+    <label for="image" class="form-label">Add image (optional)</label>
+    <input type="file" class="form-control" formControlName="image" id="image" name="image" required>
+  </div>
+  <button type="submit" class="btn btn-warning">Upload Image</button>
+</form>

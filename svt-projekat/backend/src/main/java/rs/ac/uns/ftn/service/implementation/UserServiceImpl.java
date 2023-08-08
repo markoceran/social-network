@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.service.implementation;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -37,9 +39,18 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+
     @Override
     public User findByUsername(String username) {
-        return getAll().stream().filter(s->s.getUsername().equals(username)).findAny().orElse(null);
+
+        List<User> svi = this.getAll();
+        for(User u : svi){
+            if(u.getUsername().equals(username)){
+                return u;
+            }
+        }
+
+        return null;
     }
 
     @Override

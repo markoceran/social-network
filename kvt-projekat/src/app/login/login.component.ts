@@ -12,44 +12,36 @@ import { finalize } from 'rxjs/operators';
 })
 export class LoginComponent {
   form: FormGroup;
-  isLoggingIn = false;
 
-  constructor(
-    private fb: FormBuilder,
-    private authenticationService: AuthenticationService,
-    private router: Router,
-    private toastr: ToastrService
-  ) {
-    this.form = this.fb.group({
-      username: [null, Validators.required],
-      password: [null, Validators.required]
-    });
-  }
+	constructor(
+		private fb: FormBuilder,
+		private authenticationService: AuthenticationService,
+		private router: Router,
+		private toastr: ToastrService
+	) {
+		this.form = this.fb.group({
+			username : [null, Validators.required],
+			password: [null, Validators.required]
+		});
+	}
 
-  ngOnInit() {
-  }
+	ngOnInit() {
+	}
 
-  submit() {
-    const auth: any = {};
-    auth.username = this.form.controls['username'].value;
-    auth.password = this.form.controls['password'].value;
+	submit() {
+		const auth: any = {};
+		auth.username = this.form.value.username;
+		auth.password = this.form.value.password;
 
-    this.isLoggingIn = true;
-    this.authenticationService.login(auth)
-      .pipe(
-        finalize(() => {
-          this.isLoggingIn = false;
-        })
-      )
-      .subscribe({
-        next: result => {
-          this.toastr.success('Successful login!');
-          localStorage.setItem('user', JSON.stringify(result));
-          this.router.navigate(['main']);
-        },
-        error: error => {
-          this.toastr.error(error.error);
-        }
-      });
-  }
+		this.authenticationService.login(auth).subscribe(
+			result => {
+				this.toastr.success('Successful login!');
+				localStorage.setItem('user', JSON.stringify(result));
+				this.router.navigate(['main']);
+			},
+			error => {
+				this.toastr.error('Bad credencials');
+			}
+		);
+	}
 }
