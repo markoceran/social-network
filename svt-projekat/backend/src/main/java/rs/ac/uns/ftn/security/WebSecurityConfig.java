@@ -77,6 +77,8 @@ public class WebSecurityConfig {
                 .antMatchers("/users/**").permitAll()
                 .antMatchers("/posts/**").permitAll()
                 .antMatchers("/posts").permitAll()
+                .antMatchers("/friendRequest").permitAll()
+                .antMatchers("/friendRequest/**").permitAll()
                 .antMatchers("/users/addAdmin").permitAll()
                 .antMatchers("/comments/**").permitAll()
                 .antMatchers("/images/**").permitAll()

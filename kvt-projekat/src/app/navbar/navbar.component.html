@@ -46,9 +46,9 @@
                     </a>
                 </li>
                 <li class="nav-item me-3 me-lg-0">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link"  [routerLink]="['/friendRequests']">
                         <i class="fas fa-people-arrows"></i>
-                        Friend requests
+                        Friend request
                     </a>
                 </li>
                 <li class="nav-item me-3 me-lg-0">
@@ -61,6 +61,12 @@
                     <a class="nav-link" [routerLink]="['/profile/', username]">
                         <i class="fas fa-user text-white"></i>
                         Profile
+                    </a>
+                </li>
+                <li class="nav-item me-3 me-lg-0">
+                    <a class="nav-link" [routerLink]="['/user/logout']">
+                        <i class="fas fa-right-from-bracket"></i>
+                        Logout
                     </a>
                 </li>
             </ul>

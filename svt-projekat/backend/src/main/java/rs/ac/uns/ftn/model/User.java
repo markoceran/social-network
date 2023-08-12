@@ -1,5 +1,7 @@
 package rs.ac.uns.ftn.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -57,9 +59,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Roles role;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "FriendsOfUser",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "friend_id", referencedColumnName = "id"))
+    @JsonIgnoreProperties("friendsWith")
     private Set<User> friendsWith = new HashSet<User>();
 }

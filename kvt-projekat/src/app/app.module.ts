@@ -17,6 +17,7 @@ import { GroupsComponent } from './groups/groups.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AddPostComponent } from './add-post/add-post.component';
 import { SearchComponent } from './search/search.component';
+import { LogoutComponent } from './logout/logout.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { SearchComponent } from './search/search.component';
     GroupsComponent,
     ProfileComponent,
     AddPostComponent,
-    SearchComponent
+    SearchComponent,
+    LogoutComponent
   ],
   imports: [
     BrowserModule,

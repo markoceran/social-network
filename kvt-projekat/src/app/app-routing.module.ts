@@ -5,6 +5,8 @@ import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AddPostComponent } from './add-post/add-post.component';
 import { SearchComponent } from './search/search.component';
+import { FriendRequestsComponent } from './friend-requests/friend-requests.component';
+import { LogoutComponent } from './logout/logout.component';
 
 const routes: Routes = [
 
@@ -38,6 +40,18 @@ const routes: Routes = [
 	{
 		path: 'users/search/:input',
 		component: SearchComponent,
+	  //canActivate: [RoleGuard],
+		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	},
+	{
+		path: 'friendRequests',
+		component: FriendRequestsComponent,
+	  //canActivate: [RoleGuard],
+		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	},
+	{
+		path: 'user/logout',
+		component: LogoutComponent,
 	  //canActivate: [RoleGuard],
 		//data: {expectedRoles: 'ADMIN|WINE_USER'}
 	}

@@ -62,6 +62,7 @@ public class PostController {
     public ResponseEntity<List<Post>> getMyPosts(@PathVariable String username){
 
         User user = userService.findByUsername(username);
+        List<Post> svi = postService.getAll();
 
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -69,11 +70,14 @@ public class PostController {
 
         List<Post> posts = new ArrayList<>();
 
-        for(Post p: postService.getAll()){
-            if(p.getPostedBy().equals(user)){
-                posts.add(p);
+        if(!svi.isEmpty()){
+            for(Post p: svi){
+                if(p.getPostedBy().equals(user)){
+                    posts.add(p);
+                }
             }
         }
+
         return ResponseEntity.ok(posts);
     }
 

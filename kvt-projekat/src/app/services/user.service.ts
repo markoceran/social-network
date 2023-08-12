@@ -38,7 +38,19 @@ export class UserServiceService {
   }
 
   findUsers(unos: string): Observable<Array<User>> {
-    return this.http.get<Array<User>>('api/users/' + unos);
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<Array<User>>('api/users/' + unos , {headers});
+  }
+
+  logout(): Observable<any> {
+    return this.http.post('api/users/logout', null);
   }
 
   

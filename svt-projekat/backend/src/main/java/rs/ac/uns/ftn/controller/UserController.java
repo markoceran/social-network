@@ -25,7 +25,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -58,22 +60,35 @@ public class UserController {
 
     @GetMapping("/profile/{username}")
     //@PreAuthorize("isAuthenticated()")
-    public User user(@PathVariable String username) {
+    public User user(@PathVariable String username, HttpServletResponse response) {
+        //response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         return this.userService.findByUsername(username);
     }
 
     @GetMapping("/{unos}")
     //@PreAuthorize("isAuthenticated()")
-    public List<User> findUsers(@PathVariable String unos) {
+    public List<User> findUsers(@PathVariable String unos, @RequestHeader("Authorization") String token) {
+
+        String tokenValue = token.replace("Bearer ", "");
+
+        String username = tokenUtils.getUsernameFromToken(tokenValue);
+        User user = userService.findByUsername(username);
+
+        if (user == null) {
+            return (List<User>) ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         List<User> svi = userService.getAll();
         List<User> rezultat = new ArrayList<>();
 
-        for(User u : svi){
-            if(u.getFirstName().toLowerCase().contains(unos.toLowerCase()) || u.getLastName().toLowerCase().contains(unos.toLowerCase()) || u.getUsername().toLowerCase().contains(unos.toLowerCase())){
-                rezultat.add(u);
+        if(!svi.isEmpty()){
+            for(User u : svi){
+                if(!u.getUsername().equals(user.getUsername()) && (u.getFirstName().toLowerCase().contains(unos.toLowerCase()) || u.getLastName().toLowerCase().contains(unos.toLowerCase()) || u.getUsername().toLowerCase().contains(unos.toLowerCase()))){
+                    rezultat.add(u);
+                }
             }
         }
+
 
         return rezultat;
     }
@@ -94,7 +109,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<UserTokenState> createAuthenticationToken(
-            @RequestBody JwtAuthenticationRequest authenticationRequest, HttpServletResponse response) {
+            @RequestBody JwtAuthenticationRequest authenticationRequest) {
 
         // Ukoliko kredencijali nisu ispravni, logovanje nece biti uspesno, desice se
         // AuthenticationException
@@ -115,13 +130,16 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<Map<String, String>> logout(HttpServletRequest request, HttpServletResponse response) {
 
         SecurityContextHolder.getContext().setAuthentication(null);
 
         TokenUtils.clearAuthenticationCookie(request, response);
 
-        return ResponseEntity.ok("Logged out successfully");
+        Map<String, String> responseBody = new HashMap<>();
+        responseBody.put("message", "Logged out successfully");
+
+        return ResponseEntity.ok(responseBody);
     }
 
     @PostMapping("/addAdmin")
