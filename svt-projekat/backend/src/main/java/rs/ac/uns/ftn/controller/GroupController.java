@@ -1,16 +1,19 @@
 package rs.ac.uns.ftn.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.model.*;
+import rs.ac.uns.ftn.security.TokenUtils;
 import rs.ac.uns.ftn.service.GroupAdminService;
 import rs.ac.uns.ftn.service.GroupService;
 import rs.ac.uns.ftn.service.UserService;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +27,9 @@ public class GroupController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private TokenUtils tokenUtils;
 
     @Autowired
     private GroupAdminService groupAdminService;
@@ -43,17 +49,21 @@ public class GroupController {
     }
 
     @GetMapping("/my")
-    public ResponseEntity<List<Groupp>> getMyGroups(){
+    public ResponseEntity<List<Groupp>> getMyGroups(@RequestHeader("Authorization") String token){
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String tokenValue = token.replace("Bearer ", "");
 
-        String username = authentication.getName();
+        String username = tokenUtils.getUsernameFromToken(tokenValue);
         User user = userService.findByUsername(username);
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         List<Groupp> groupps = new ArrayList<>();
 
         for(Groupp g: groupService.getAll()){
-            if(!g.getIsSuspended() && g.getGroupAdmins().contains((GroupAdmin) user)){
+            if(!g.getIsSuspended() && g.getGroupAdmins().stream().filter(u->u.getUsername().equals(user.getUsername())).findAny().orElse(null) != null){
                 groupps.add(g);
             }
         }
@@ -71,20 +81,44 @@ public class GroupController {
     }
 
     @PostMapping
-    public ResponseEntity<Groupp> createGroup(@RequestBody Groupp group) {
+    public ResponseEntity<Groupp> createGroup(@RequestBody Groupp group, @RequestHeader("Authorization") String token) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String tokenValue = token.replace("Bearer ", "");
 
-        String username = authentication.getName();
+        String username = tokenUtils.getUsernameFromToken(tokenValue);
         User user = userService.findByUsername(username);
 
-        if(user.getRole().equals(Roles.USER)){
-
-            user.setRole(Roles.GROUP_ADMIN);
-            groupAdminService.update(user.getId(), (GroupAdmin) user);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        group.getGroupAdmins().add((GroupAdmin) user);
+
+        GroupAdmin groupAdmin = new GroupAdmin();
+        if(user.getRole().equals(Roles.USER)){
+
+
+            groupAdmin.setId(user.getId());
+            groupAdmin.setEmail(user.getEmail());
+            groupAdmin.setUsername(user.getUsername());
+            groupAdmin.setPassword(user.getPassword());
+            groupAdmin.setFirstName(user.getFirstName());
+            groupAdmin.setLastName(user.getLastName());
+            groupAdmin.setFriendsWith(user.getFriendsWith());
+            groupAdmin.setLastLogin(user.getLastLogin());
+            groupAdmin.setRole(Roles.GROUP_ADMIN);
+
+            userService.update(user.getId(), groupAdmin);
+            groupAdmin.setUsername("");
+            groupAdminService.save(groupAdmin);
+        }
+
+        group.setCreationDate(LocalDateTime.now());
+        group.setIsSuspended(false);
+
+
+        group.getGroupAdmins().add(groupAdmin);
+
+
         Groupp createdGroup = groupService.save(group);
         return ResponseEntity.ok(createdGroup);
     }

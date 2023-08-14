@@ -24,7 +24,7 @@
                           <input
                             type="search"
                             class="form-control rounded"
-                            placeholder="Find friends"
+                            placeholder="Find friend"
                             aria-label="Search"
                             aria-describedby="search-addon"
                             formControlName="input"
@@ -40,7 +40,7 @@
             <ul class="navbar-nav d-flex flex-row">
                 <!-- Icons -->
                 <li class="nav-item me-3 me-lg-0">
-                    <a class="nav-link" [routerLink]="['/posts']">
+                    <a class="nav-link" [routerLink]="['/posts/add']">
                         <i class="fas fa-photo-film"></i>
                         Add post
                     </a>
@@ -52,9 +52,9 @@
                     </a>
                 </li>
                 <li class="nav-item me-3 me-lg-0">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" [routerLink]="['/group']">
                         <i class="fas fa-user-group"></i>
-                        Groups
+                        Group
                     </a>
                 </li>
                 <li class="nav-item me-3 me-lg-0">

@@ -1,0 +1,17 @@
+.input-group {
+    margin-top: 35px;
+    width: 30%;
+}
+.btn-success{
+    margin-top: 35px;
+    width: fit-content;
+    margin-left: 15px;
+}
+h4{
+    color: rgba(60, 141, 98, 0.793);
+    margin-top: 50px;
+    text-align: center;
+}
+#date{
+    font-size: 10px;
+}

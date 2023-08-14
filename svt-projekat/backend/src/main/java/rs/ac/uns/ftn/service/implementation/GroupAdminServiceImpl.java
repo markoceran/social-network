@@ -13,6 +13,8 @@ import rs.ac.uns.ftn.repository.UserRepository;
 import rs.ac.uns.ftn.service.GroupAdminService;
 import rs.ac.uns.ftn.service.UserService;
 
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +32,14 @@ public class GroupAdminServiceImpl implements GroupAdminService {
     @Override
     public Optional<GroupAdmin> getById(Long id) {
         return groupAdminRepository.findById(id);
+    }
+
+    @Override
+    public GroupAdmin save(GroupAdmin groupAdmin) {
+
+        GroupAdmin newUser = groupAdminRepository.save(groupAdmin);
+
+        return newUser;
     }
 
 
@@ -53,6 +63,19 @@ public class GroupAdminServiceImpl implements GroupAdminService {
             return null;
         }
 
+    }
+
+    @Override
+    public GroupAdmin findByUsername(String username) {
+
+        List<GroupAdmin> svi = this.getAll();
+        for(GroupAdmin u : svi){
+            if(u.getUsername().equals(username)){
+                return u;
+            }
+        }
+
+        return null;
     }
 
     @Override

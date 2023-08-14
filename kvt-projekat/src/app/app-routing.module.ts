@@ -7,6 +7,9 @@ import { AddPostComponent } from './add-post/add-post.component';
 import { SearchComponent } from './search/search.component';
 import { FriendRequestsComponent } from './friend-requests/friend-requests.component';
 import { LogoutComponent } from './logout/logout.component';
+import { GroupsComponent } from './groups/groups.component';
+import { AddGroupComponent } from './add-group/add-group.component';
+import { RegistrationComponent } from './registration/registration.component';
 
 const routes: Routes = [
 
@@ -32,7 +35,7 @@ const routes: Routes = [
 		//data: {expectedRoles: 'ADMIN|WINE_USER'}
 	},
 	{
-		path: 'posts',
+		path: 'posts/add',
 		component: AddPostComponent,
 	  //canActivate: [RoleGuard],
 		//data: {expectedRoles: 'ADMIN|WINE_USER'}
@@ -52,6 +55,24 @@ const routes: Routes = [
 	{
 		path: 'user/logout',
 		component: LogoutComponent,
+	  //canActivate: [RoleGuard],
+		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	},
+	{
+		path: 'group',
+		component: GroupsComponent,
+	  //canActivate: [RoleGuard],
+		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	},
+	{
+		path: 'group/add',
+		component: AddGroupComponent,
+	  //canActivate: [RoleGuard],
+		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	},
+	{
+		path: 'register',
+		component: RegistrationComponent,
 	  //canActivate: [RoleGuard],
 		//data: {expectedRoles: 'ADMIN|WINE_USER'}
 	}

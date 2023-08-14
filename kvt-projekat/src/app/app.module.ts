@@ -18,6 +18,8 @@ import { ProfileComponent } from './profile/profile.component';
 import { AddPostComponent } from './add-post/add-post.component';
 import { SearchComponent } from './search/search.component';
 import { LogoutComponent } from './logout/logout.component';
+import { AddGroupComponent } from './add-group/add-group.component';
+import { RegistrationComponent } from './registration/registration.component';
 
 
 @NgModule({
@@ -32,7 +34,9 @@ import { LogoutComponent } from './logout/logout.component';
     ProfileComponent,
     AddPostComponent,
     SearchComponent,
-    LogoutComponent
+    LogoutComponent,
+    AddGroupComponent,
+    RegistrationComponent
   ],
   imports: [
     BrowserModule,

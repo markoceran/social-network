@@ -97,7 +97,21 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<UserDTO> create(@RequestBody @Validated UserDTO newUser){
 
-        User createdUser = userService.createUser(newUser);
+        boolean isValid = true;
+        List<User> sviKorisnici = userService.getAll();
+        User createdUser;
+
+        for(User u:sviKorisnici){
+            if(u.getUsername().equals(newUser.getUsername()) || !newUser.getEmail().contains("@")){
+                isValid = false;
+            }
+        }
+
+        if(isValid){
+            createdUser = userService.createUser(newUser);
+        }else{
+            createdUser = null;
+        }
 
         if(createdUser == null){
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
