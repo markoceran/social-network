@@ -2,11 +2,13 @@ package rs.ac.uns.ftn.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.model.*;
+import rs.ac.uns.ftn.security.TokenUtils;
 import rs.ac.uns.ftn.service.*;
 
 import java.time.LocalDate;
@@ -29,6 +31,9 @@ public class ReactionController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private TokenUtils tokenUtils;
 
     @GetMapping("/byPost/{id}")
     public ResponseEntity<List<Reaction>> getPostReactions(@PathVariable Long id){
@@ -62,14 +67,18 @@ public class ReactionController {
 
 
     @PostMapping("/likePost")
-    public ResponseEntity<Reaction> likePost(@RequestParam Long id) {
+    public ResponseEntity<Reaction> likePost(@RequestParam Long id, @RequestHeader("Authorization") String token) {
 
         Optional<Post> post = postService.getById(id);
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String tokenValue = token.replace("Bearer ", "");
 
-        String username = authentication.getName();
+        String username = tokenUtils.getUsernameFromToken(tokenValue);
         User user = userService.findByUsername(username);
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         Reaction reaction = new Reaction();
         reaction.setPost(post.get());
@@ -82,14 +91,18 @@ public class ReactionController {
     }
 
     @PostMapping("/dislikePost")
-    public ResponseEntity<Reaction> dislikePost(@RequestParam Long id) {
+    public ResponseEntity<Reaction> dislikePost(@RequestParam Long id, @RequestHeader("Authorization") String token) {
 
         Optional<Post> post = postService.getById(id);
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String tokenValue = token.replace("Bearer ", "");
 
-        String username = authentication.getName();
+        String username = tokenUtils.getUsernameFromToken(tokenValue);
         User user = userService.findByUsername(username);
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         Reaction reaction = new Reaction();
         reaction.setPost(post.get());
@@ -102,14 +115,18 @@ public class ReactionController {
     }
 
     @PostMapping("/heartPost")
-    public ResponseEntity<Reaction> heartPost(@RequestParam Long id) {
+    public ResponseEntity<Reaction> heartPost(@RequestParam Long id, @RequestHeader("Authorization") String token) {
 
         Optional<Post> post = postService.getById(id);
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String tokenValue = token.replace("Bearer ", "");
 
-        String username = authentication.getName();
+        String username = tokenUtils.getUsernameFromToken(tokenValue);
         User user = userService.findByUsername(username);
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         Reaction reaction = new Reaction();
         reaction.setPost(post.get());
@@ -122,14 +139,18 @@ public class ReactionController {
     }
 
     @PostMapping("/likeComment")
-    public ResponseEntity<Reaction> likeComment(@RequestParam Long id) {
+    public ResponseEntity<Reaction> likeComment(@RequestParam Long id, @RequestHeader("Authorization") String token) {
 
         Optional<Comment> comment = commentService.getById(id);
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String tokenValue = token.replace("Bearer ", "");
 
-        String username = authentication.getName();
+        String username = tokenUtils.getUsernameFromToken(tokenValue);
         User user = userService.findByUsername(username);
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         Reaction reaction = new Reaction();
         reaction.setComment(comment.get());
@@ -142,14 +163,18 @@ public class ReactionController {
     }
 
     @PostMapping("/dislikeComment")
-    public ResponseEntity<Reaction> dislikeComment(@RequestParam Long id) {
+    public ResponseEntity<Reaction> dislikeComment(@RequestParam Long id, @RequestHeader("Authorization") String token) {
 
         Optional<Comment> comment = commentService.getById(id);
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String tokenValue = token.replace("Bearer ", "");
 
-        String username = authentication.getName();
+        String username = tokenUtils.getUsernameFromToken(tokenValue);
         User user = userService.findByUsername(username);
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         Reaction reaction = new Reaction();
         reaction.setComment(comment.get());
@@ -162,14 +187,18 @@ public class ReactionController {
     }
 
     @PostMapping("/heartComment")
-    public ResponseEntity<Reaction> heartComment(@RequestParam Long id) {
+    public ResponseEntity<Reaction> heartComment(@RequestParam Long id, @RequestHeader("Authorization") String token) {
 
         Optional<Comment> comment = commentService.getById(id);
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String tokenValue = token.replace("Bearer ", "");
 
-        String username = authentication.getName();
+        String username = tokenUtils.getUsernameFromToken(tokenValue);
         User user = userService.findByUsername(username);
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         Reaction reaction = new Reaction();
         reaction.setComment(comment.get());

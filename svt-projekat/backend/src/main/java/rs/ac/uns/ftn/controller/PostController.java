@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/posts")
@@ -79,6 +80,37 @@ public class PostController {
         }
 
         return ResponseEntity.ok(posts);
+    }
+
+    @GetMapping("/myFriends/{username}")
+    public ResponseEntity<List<Post>> getFriendsPosts(@PathVariable String username){
+
+        User user = userService.findByUsername(username);
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        Set<User> myFriendsSet = user.getFriendsWith();
+        List<User> myFriends = new ArrayList<>(myFriendsSet);
+
+
+        List<Post> allPosts = postService.getAll();
+        List<Post> friendsPosts = new ArrayList<>();
+
+        if(!myFriends.isEmpty() && !allPosts.isEmpty()){
+
+            for(Post p:allPosts){
+                for(User u:myFriends){
+                    if(p.getPostedBy().getUsername().equals(u.getUsername())){
+                        friendsPosts.add(p);
+                    }
+                }
+            }
+        }
+
+
+        return ResponseEntity.ok(friendsPosts);
     }
 
     @GetMapping("/{id}")

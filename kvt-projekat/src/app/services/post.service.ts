@@ -31,4 +31,8 @@ export class PostService {
     return this.http.get<number>('api/posts/lastId');
   }
 
+  getFriendsPosts(username:string): Observable<Array<Post>> {
+    return this.http.get<Array<Post>>('api/posts/myFriends/'+ username);
+  }
+
 }
