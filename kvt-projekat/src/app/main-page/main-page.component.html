@@ -8,7 +8,7 @@
             <div class="card-body p-4 text-black">
                 
 
-              <div class="row g-2" *ngFor="let p of allPosts" style="border-bottom: rgb(150, 150, 150) 1px solid;">
+              <div class="row g-2" *ngFor="let p of allPosts; let postIndex = index" style="border-bottom: rgb(150, 150, 150) 1px solid;">
                 <div class="container py-5 h-100">
                     <div>
                       <div>
@@ -30,23 +30,39 @@
                     </div>
                 </div>
                 <p style="margin-top: 25px;">{{p.content}}</p>
+                <p style="margin-top: 25px;">{{p.id}}</p>
                 <div class="col mb-2">
                   <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(112).webp"
                     alt="image 1" class="w-100 rounded-3">
                 </div>
                 <ul class="navbar-nav d-flex flex-row">                
                   <li class="nav-item me-3 me-lg-0">
-                    <a class="nav-link" [routerLink]="['/']">
-                      <i class="fab fa-gratipay"></i>
-                      Reactions
-                    </a>
+                    <button class="btn btn-link btn-rounded btn-sm" style="color: blue;" (click)="heart(p.id, postIndex)" *ngIf="(!p.isHearted && !p.isLiked && !p.isDisliked) || (p.isHearted && !p.isLiked && !p.isDisliked)">
+                      <a class="nav-link">
+                        <i class="far fa-heart" *ngIf="!p.isHearted && !p.isLiked && !p.isDisliked"></i>
+                        <i class="fas fa-heart" *ngIf="p.isHearted"></i>
+                        Heart
+                      </a>
+                    </button>                  
                   </li>
                   <li style="margin-left: 15px;" class="nav-item me-3 me-lg-0">
-                      <a class="nav-link" href="#">
-                        <i class="fas fa-comments"></i>
-                          Comments
+                    <button class="btn btn-link btn-rounded btn-sm" style="color: green;" (click)="like(p.id, postIndex)" *ngIf="(!p.isLiked && !p.isDisliked && !p.isHearted) || (!p.isHearted && p.isLiked && !p.isDisliked)">
+                      <a class="nav-link">
+                        <i class="far fa-thumbs-up" *ngIf="!p.isLiked && !p.isDisliked && !p.isHearted"></i>
+                        <i class="fas fa-thumbs-up" *ngIf="p.isLiked"></i>
+                          Like
                       </a>
-                  </li>              
+                    </button>
+                  </li>  
+                  <li style="margin-left: 15px;" class="nav-item me-3 me-lg-0">
+                    <button class="btn btn-link btn-rounded btn-sm" style="color: red;" (click)="dislike(p.id, postIndex)" *ngIf="(!p.isDisliked && !p.isHearted && !p.isLiked) || (!p.isHearted && !p.isLiked && p.isDisliked)">
+                      <a class="nav-link">
+                        <i class="far fa-thumbs-down" *ngIf="!p.isDisliked && !p.isHearted && !p.isLiked"></i>
+                        <i class="fas fa-thumbs-down" *ngIf="p.isDisliked"></i>
+                          Dislike
+                      </a>
+                    </button>
+                  </li>                
                 </ul>            
                 <p style="font-size: 10px; margin-top: 35px;">{{ p.creationDate | date: 'yyyy-MM-dd HH:mm' }}</p>
               </div>
