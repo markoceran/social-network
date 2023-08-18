@@ -1,5 +1,6 @@
 import { OnInit } from "@angular/core";
 import { User } from "./user.model";
+import { Image } from "./image";
 
 export interface Post{
     
@@ -10,6 +11,7 @@ export interface Post{
     isLiked: boolean;
     isDisliked: boolean;
     isHearted: boolean;
+    images: any;
 
 }
   

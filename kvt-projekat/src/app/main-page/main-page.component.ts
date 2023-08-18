@@ -6,6 +6,7 @@ import { Post } from '../model/post.model';
 import { ReactionService } from '../services/reaction.service';
 import { Toast, ToastrService } from 'ngx-toastr';
 import { Reaction } from '../model/reaction';
+import { ImageService } from '../services/image.service';
 
 @Component({
   selector: 'app-main-page',
@@ -23,7 +24,7 @@ export class MainPageComponent implements OnInit{
   isDisliked: boolean = false;
   isHearted: boolean = false;
 
-  constructor(private userService: UserServiceService, private postService: PostService, private reactionService: ReactionService, private toast:ToastrService) {} 
+  constructor(private userService: UserServiceService, private postService: PostService, private reactionService: ReactionService, private toast:ToastrService, private imageService:ImageService) {} 
 
   ngOnInit() {
     const username = this.userService.getUsernameFromToken();
@@ -70,6 +71,12 @@ export class MainPageComponent implements OnInit{
               });  
             }
                         
+            }
+          )
+          this.imageService.getPostImage(post.id).subscribe(
+            (images: any) =>{
+              post.images = images;
+              console.log(images);
             }
           )
         });
@@ -138,7 +145,9 @@ export class MainPageComponent implements OnInit{
   }
 
   
-
+  getImageUrl(imageName: string): string {
+    return `http://localhost:4200/api/images/getImage/${imageName}`;
+  }
 
   mergePosts() {
     this.allPosts = [...this.friendPosts, ...this.myPosts]; 

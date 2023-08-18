@@ -30,11 +30,37 @@
                     </div>
                 </div>
                 <p style="margin-top: 25px;">{{p.content}}</p>
-                <p style="margin-top: 25px;">{{p.id}}</p>
-                <div class="col mb-2">
-                  <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(112).webp"
-                    alt="image 1" class="w-100 rounded-3">
-                </div>
+               
+
+                
+                <!------<div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
+                  <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                  </div>
+                  <div class="carousel-inner"> 
+                    
+                    <div *ngFor="let imageName of p.images; let i = index" [ngClass]="{'carousel-item': true, 'active': i === 0}">
+                      <img [src]="getImageUrl(imageName)" class="d-block w-100" alt="Image">
+                    </div>
+                    
+                  </div>
+                  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden"></span>
+                  </button>
+                  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden"></span>
+                  </button>
+              </div>------>
+                
+              <div *ngFor="let imageName of p.images">
+                <img [src]="getImageUrl(imageName)" class="d-block w-100" alt="Image">
+              </div>
+                               
+
                 <ul class="navbar-nav d-flex flex-row">                
                   <li class="nav-item me-3 me-lg-0">
                     <button class="btn btn-link btn-rounded btn-sm" style="color: blue;" (click)="heart(p.id, postIndex)" *ngIf="(!p.isHearted && !p.isLiked && !p.isDisliked) || (p.isHearted && !p.isLiked && !p.isDisliked)">

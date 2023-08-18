@@ -16,6 +16,7 @@ export class AddPostComponent {
 
   postForm: FormGroup;
   postFormImage: FormGroup;
+ 
 
   constructor(
     private fb: FormBuilder,
@@ -50,25 +51,26 @@ export class AddPostComponent {
     }
   }
 
+
+
   onSubmitImage() {
-    const imageFile = this.postFormImage.get('image');
-    
-    if (imageFile && imageFile.value) {
-      console.log(imageFile);
-      console.log(imageFile.value);
-        this.imageService.uploadImageForPost(imageFile.value).subscribe(
-            (response) => {
-                console.log('Image uploaded successfully:', response);
-                this.toastr.success("Image uploaded successfully!");
-                
-            },
-            (error) => {
-                console.error('Error uploading image:', error);
-            }
-        );
-    }
+
+    const imageInput = document.querySelector('#imageInput') as HTMLInputElement;
+
+    if (imageInput.files && imageInput.files.length > 0) {
+
+      const formData = new FormData();
+      formData.append('imageFile', imageInput.files[0]);
+
+      this.imageService.uploadImageForPost(formData)
+        .subscribe(response => {
+          console.log(response);
+          this.toastr.success("Successfully added image!");
+        }, error => {
+          console.error('Error:', error);
+        });
+    } 
+  
   }
-
-
 
 }
