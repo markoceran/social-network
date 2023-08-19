@@ -8,6 +8,7 @@ export interface User {
 	lastName: string;
 	roles: string;
 	friendsWith: User[]; 
+	profileImage: any;
 }
 
   

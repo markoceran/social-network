@@ -6,25 +6,35 @@
           <div class="card">
             <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
               <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
-                <img src=""
+                
+                <img *ngFor="let imageName of user.profileImage " [src]="getImageUrl(imageName)"
                   alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
-                  style="width: 150px; z-index: 1">
+                  style="width: 150px; z-index: 1;height: 150px;" >
+
+                <img *ngIf="user.profileImage === undefined" [src]="getImageUrl('avatar.jpg')"
+                  alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
+                  style="width: 150px; z-index: 1;height: 150px;" >
+
+                <button type="button" class="btn btn-outline-dark" data-mdb-ripple-color="dark"
+                  style="z-index: 1;" (click)="addProfileImage()">
+                  Add or edit profile image
+                </button>
                 <button type="button" class="btn btn-outline-dark" data-mdb-ripple-color="dark"
                   style="z-index: 1;">
                   Edit profile
                 </button>
               </div>
               <div class="ms-3" style="margin-top: 130px;">
-                <h5>{{ user?.firstName + ' ' + user?.lastName }}</h5>
-                <p>username: {{user?.username}}</p>
+                <h5>{{ user.firstName + ' ' + user.lastName }}</h5>
+                <p>username: {{user.username}}</p>
                 
               </div>
             </div>
             <div class="p-4 text-black" style="background-color: #f8f9fa;">
               <div class="d-flex justify-content-end text-center py-1">
                 <div class="px-3">
-                  <p class="mb-1 h5">{{user.friendsWith?.length || 0}}</p>
-                  <p class="small text-muted mb-0">Followers</p>
+                  <p class="mb-1 h5">{{user.friendsWith.length || 0}}</p>
+                  <p class="small text-muted mb-0">Followers</p>               
                 </div>
               </div>
             </div>
@@ -42,10 +52,11 @@
               </div>        
               <div class="row g-2" *ngFor="let p of userPosts" style="border-bottom: gray 0.5px solid;">
                 <p style="margin-top: 25px;">{{p.content}}</p>
-                <div class="col mb-2">
-                  <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(112).webp"
-                    alt="image 1" class="w-100 rounded-3">
-                </div>
+                
+                  <div *ngFor="let imageName of p.images">
+                    <img [src]="getImageUrl(imageName)" class="d-block w-100" alt="Image">
+                  </div>
+                
                 <ul class="navbar-nav d-flex flex-row">                
                   <li class="nav-item me-3 me-lg-0">
                     <a class="nav-link" [routerLink]="['/']">

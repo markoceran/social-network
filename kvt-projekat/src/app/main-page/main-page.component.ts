@@ -79,6 +79,12 @@ export class MainPageComponent implements OnInit{
               console.log(images);
             }
           )
+          this.imageService.getProfileImageByUser(post.postedBy.username).subscribe(
+            (image: any) =>{
+              post.postedBy.profileImage = image;
+              console.log(image);
+            }
+          )
         });
 
       },

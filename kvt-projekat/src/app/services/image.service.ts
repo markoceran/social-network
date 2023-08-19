@@ -12,18 +12,41 @@ export class ImageService {
 
   uploadImageForPost(imageFile: FormData): Observable<any> {
 
+    return this.http.post<any>('api/images/setPostImage', imageFile);
+    
+  }
+
+  getPostImage(postId:number): Observable<any> {
+    return this.http.get<any>('api/images/'+ postId);
+  }
+
+  uploadProfileImage(imageFile: FormData): Observable<any> {
+
     const token = localStorage.getItem('user');
 
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
 
-    return this.http.post<any>('api/images/setPostImage', imageFile, { headers });
+    return this.http.post<any>('api/images/setProfileImage', imageFile, { headers });
     
   }
 
-  getPostImage(postId:number): Observable<any> {
-    return this.http.get<any>('api/images/'+ postId);
+  getProfileImage(): Observable<any> {
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<any>('api/images/profileImage', { headers });
+  }
+
+  getProfileImageByUser(username: String): Observable<any> {
+
+    return this.http.get<any>('api/images/profileImage/' + username);
+    
   }
   
 }

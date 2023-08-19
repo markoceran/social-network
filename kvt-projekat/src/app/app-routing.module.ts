@@ -10,6 +10,7 @@ import { LogoutComponent } from './logout/logout.component';
 import { GroupsComponent } from './groups/groups.component';
 import { AddGroupComponent } from './add-group/add-group.component';
 import { RegistrationComponent } from './registration/registration.component';
+import { AddProfileImageComponent } from './add-profile-image/add-profile-image.component';
 
 const routes: Routes = [
 
@@ -73,6 +74,12 @@ const routes: Routes = [
 	{
 		path: 'register',
 		component: RegistrationComponent,
+	  //canActivate: [RoleGuard],
+		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	},
+	{
+		path: 'addProfileImage',
+		component: AddProfileImageComponent,
 	  //canActivate: [RoleGuard],
 		//data: {expectedRoles: 'ADMIN|WINE_USER'}
 	}

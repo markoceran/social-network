@@ -20,6 +20,7 @@ import { SearchComponent } from './search/search.component';
 import { LogoutComponent } from './logout/logout.component';
 import { AddGroupComponent } from './add-group/add-group.component';
 import { RegistrationComponent } from './registration/registration.component';
+import { AddProfileImageComponent } from './add-profile-image/add-profile-image.component';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import { RegistrationComponent } from './registration/registration.component';
     SearchComponent,
     LogoutComponent,
     AddGroupComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    AddProfileImageComponent
   ],
   imports: [
     BrowserModule,
