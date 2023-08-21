@@ -23,6 +23,7 @@ import { RegistrationComponent } from './registration/registration.component';
 import { AddProfileImageComponent } from './add-profile-image/add-profile-image.component';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -38,7 +39,8 @@ import { AddProfileImageComponent } from './add-profile-image/add-profile-image.
     LogoutComponent,
     AddGroupComponent,
     RegistrationComponent,
-    AddProfileImageComponent
+    AddProfileImageComponent,
+    
   ],
   imports: [
     BrowserModule,

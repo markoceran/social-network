@@ -3,6 +3,7 @@ import { FriendRequestService } from '../services/friend-request.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FriendRequest } from '../model/friendRequest';
+import { ImageService } from '../services/image.service';
 
 @Component({
   selector: 'app-friend-requests',
@@ -13,7 +14,7 @@ export class FriendRequestsComponent implements OnInit{
 
   requests: Array<FriendRequest> = [];
 
-  constructor(private router: Router, private friendRequestService:FriendRequestService,private toastr: ToastrService ){
+  constructor(private imageService:ImageService, private router: Router, private friendRequestService:FriendRequestService,private toastr: ToastrService ){
   }
 
   ngOnInit(): void {
@@ -28,6 +29,15 @@ export class FriendRequestsComponent implements OnInit{
           ...request,
           createdAt: this.parseDateArrayToDate(request.createdAt)
         }));
+
+        this.requests.forEach(request => {
+          this.imageService.getProfileImageByUser(request.from.username).subscribe(
+            (image: any) =>{
+              request.from.profileImage = image;
+              console.log(image);
+            }
+          )
+        })
       },
       (error) => {
         console.error('Error get friend request:', error);
@@ -80,6 +90,10 @@ export class FriendRequestsComponent implements OnInit{
     return new Date(year, month-1, day, hour, minute);
   }
   
+
+  getImageUrl(imageName: string): string {
+    return `http://localhost:4200/api/images/getImage/${imageName}`;
+  }
   
 }
 

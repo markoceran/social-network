@@ -33,7 +33,7 @@ public class Reaction {
     @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private User madeBy;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Nullable
     private Comment comment;
 }

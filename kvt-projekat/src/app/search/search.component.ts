@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FriendRequestService } from '../services/friend-request.service';
 import { ToastrService } from 'ngx-toastr';
 import { FriendRequest } from '../model/friendRequest';
+import { ImageService } from '../services/image.service';
 
 @Component({
   selector: 'app-search',
@@ -19,7 +20,7 @@ export class SearchComponent implements OnInit{
   logedUser!: User;
   requests: Array<FriendRequest> = [];
 
-  constructor(private route: ActivatedRoute, private userService: UserServiceService,private fb: FormBuilder,private friendRequestService:FriendRequestService,private toastr: ToastrService ){
+  constructor(private route: ActivatedRoute, private userService: UserServiceService,private fb: FormBuilder,private friendRequestService:FriendRequestService,private toastr: ToastrService, private imageService:ImageService){
   }
 
 
@@ -35,6 +36,17 @@ export class SearchComponent implements OnInit{
     (userData: any) => {
       this.searchUsers = userData; 
       console.log(this.searchUsers);
+
+      this.searchUsers.forEach(user =>{
+        this.imageService.getProfileImageByUser(user.username).subscribe(
+          (image: any) => {
+            user.profileImage = image;
+            
+          },
+          (error) => {
+            console.error('Error fetching user data:', error);
+          });
+      })
     },
     (error) => {
       console.error('Error fetching user data:', error);
@@ -91,6 +103,10 @@ addFriend(id:number) {
       }
     );
   
+}
+
+getImageUrl(imageName: string): string {
+  return `http://localhost:4200/api/images/getImage/${imageName}`;
 }
 
 }

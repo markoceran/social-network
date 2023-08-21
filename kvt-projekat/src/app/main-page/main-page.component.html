@@ -90,7 +90,15 @@
                           Dislike
                       </a>
                     </button>
-                  </li>                
+                  </li> 
+                  <li style="margin-left: 15px;" class="nav-item me-3 me-lg-0">
+                    <button class="btn btn-link btn-rounded btn-sm" style="color: rgb(133, 133, 133);" (click)="comments(p.id)">
+                      <a class="nav-link">
+                        <i class="fas fa-comment-dots"></i>
+                          Comments
+                      </a>
+                    </button>
+                  </li>                    
                 </ul>            
                 <p style="font-size: 10px; margin-top: 35px;">{{ p.creationDate | date: 'yyyy-MM-dd HH:mm' }}</p>
               </div>

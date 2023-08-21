@@ -92,5 +92,8 @@ export class ReactionService {
     return this.http.get<Array<Reaction>>('api/reactions/byPost/'+ id);
   }
  
+  getCommentReaction(id:number): Observable<Array<Reaction>> {
+    return this.http.get<Array<Reaction>>('api/reactions/byComment/'+ id);
+  }
 
 }

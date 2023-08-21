@@ -1,29 +1,115 @@
-<table class="table" style="width: 50%; margin-left: auto; margin-right: auto;">
+<app-navbar></app-navbar>
 
-    <thead>
-        <tr>
-          <th scope="col">Text</th>
-          <th scope="col">Timestamp</th>
-          <th scope="col">isDeleted</th>
-        </tr>
-    </thead>
+<section class="h-100 gradient-custom-2">
 
-    <tbody>
 
-    <tr *ngFor="let i of comments" class="table-primary">
-        <td class="table-primary">
-            {{i["text"]}}
-        </td>
-        <td class="table-primary">
-            {{i["timestamp"]}}
-        </td>
-        <td class="table-primary">
-            {{i["isDeleted"]}}
-        </td>
-    </tr>
+    <form [formGroup]="commentForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="text">Text</label>
+          <textarea id="text" formControlName="text" class="form-control" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-success">Add comment</button>
+    </form>
 
-    </tbody>
-    
-</table>
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col col-lg-9 col-xl-7">
+          <div class="card"> 
+            <div class="card-body p-4 text-black">
+                
 
+              <div class="row g-2" *ngFor="let c of comments; let commentIndex = index" style="border-bottom: rgb(150, 150, 150) 2px solid;">
+                <div class="container py-5 h-100">
+                    <div>
+                      <div>
+                        <div class="card">            
+                          
+                          <ul class="list-group list-group-light">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                              <div class="d-flex align-items-center">
+                                
+                                <img *ngIf="c.belongsTo.profileImage === undefined" [src]="getImageUrl('avatar.jpg')" alt="" style="width: 45px; height: 45px;margin-left: 15px;" class="rounded-circle" />
+                                <img *ngIf="c.belongsTo.profileImage !== undefined" [src]="getImageUrl(c.belongsTo.profileImage)" alt="" style="width: 45px; height: 45px;margin-left: 15px;" class="rounded-circle" />
+                                <div class="ms-3">
+                                  <p class="fw-bold mb-1">{{ c.belongsTo.firstName + ' ' + c.belongsTo.lastName }}</p>
+                                  <p class="text-muted mb-0">username: {{c.belongsTo.username}}</p>
+                                </div>
+                              </div>                          
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <p style="margin-top: 25px;">{{c.text}}</p>
+               
+                             
+                <ul class="navbar-nav d-flex flex-row">                
+                  <li class="nav-item me-3 me-lg-0">
+                    <button class="btn btn-link btn-rounded btn-sm" style="color: rgba(255, 119, 0, 0.778);" (click)="heart(c.id, commentIndex)" *ngIf="(!c.isHearted && !c.isLiked && !c.isDisliked) || (c.isHearted && !c.isLiked && !c.isDisliked)">
+                      <a class="nav-link">
+                        <i class="far fa-heart" *ngIf="!c.isHearted && !c.isLiked && !c.isDisliked"></i>
+                        <i class="fas fa-heart" *ngIf="c.isHearted"></i>
+                        Heart
+                      </a>
+                    </button>                  
+                  </li>
+                  <li style="margin-left: 15px;" class="nav-item me-3 me-lg-0">
+                    <button class="btn btn-link btn-rounded btn-sm" style="color: rgba(255, 119, 0, 0.778);" (click)="like(c.id, commentIndex)" *ngIf="(!c.isLiked && !c.isDisliked && !c.isHearted) || (!c.isHearted && c.isLiked && !c.isDisliked)">
+                      <a class="nav-link">
+                        <i class="far fa-thumbs-up" *ngIf="!c.isLiked && !c.isDisliked && !c.isHearted"></i>
+                        <i class="fas fa-thumbs-up" *ngIf="c.isLiked"></i>
+                          Like
+                      </a>
+                    </button>
+                  </li>  
+                  <li style="margin-left: 15px;" class="nav-item me-3 me-lg-0">
+                    <button class="btn btn-link btn-rounded btn-sm" style="color: rgba(255, 119, 0, 0.778);" (click)="dislike(c.id, commentIndex)" *ngIf="(!c.isDisliked && !c.isHearted && !c.isLiked) || (!c.isHearted && !c.isLiked && c.isDisliked)">
+                      <a class="nav-link">
+                        <i class="far fa-thumbs-down" *ngIf="!c.isDisliked && !c.isHearted && !c.isLiked"></i>
+                        <i class="fas fa-thumbs-down" *ngIf="c.isDisliked"></i>
+                          Dislike
+                      </a>
+                    </button>
+                  </li>     
+                  <li style="margin-left: 15px;" class="nav-item me-3 me-lg-0">
+                    <button type="button" data-toggle="modal" data-target="#exampleModalScrollable" class="btn btn-link btn-rounded btn-sm" style="color: rgba(0, 0, 0, 0.778);">
+                      <a class="nav-link">
+                        <i class="fab fa-gratipay"></i>
+                          All reactions
+                      </a>
+                    </button>
+                  </li>              
+                </ul>
+                      
+                <p style="font-size: 10px; margin-top: 35px;">{{ c.timestamp | date: 'yyyy-MM-dd' }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalScrollableTitle">Modal title</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+        
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+</section>
 

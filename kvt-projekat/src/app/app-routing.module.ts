@@ -11,6 +11,7 @@ import { GroupsComponent } from './groups/groups.component';
 import { AddGroupComponent } from './add-group/add-group.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { AddProfileImageComponent } from './add-profile-image/add-profile-image.component';
+import { CommentComponent } from './comment/comment.component';
 
 const routes: Routes = [
 
@@ -80,6 +81,12 @@ const routes: Routes = [
 	{
 		path: 'addProfileImage',
 		component: AddProfileImageComponent,
+	  //canActivate: [RoleGuard],
+		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	},
+	{
+		path: 'comments/:postId',
+		component: CommentComponent,
 	  //canActivate: [RoleGuard],
 		//data: {expectedRoles: 'ADMIN|WINE_USER'}
 	}

@@ -43,7 +43,7 @@ public class ReactionController {
         List<Reaction> reactions = new ArrayList<>();
 
         for(Reaction r: reactionService.getAll()){
-            if(r.getPost().equals(post.get())){
+            if(r.getPost()!=null && r.getPost().getId().equals(post.get().getId())){
                 reactions.add(r);
             }
         }
@@ -58,7 +58,7 @@ public class ReactionController {
         List<Reaction> reactions = new ArrayList<>();
 
         for(Reaction r: reactionService.getAll()){
-            if(r.getComment().equals(comment.get())){
+            if(r.getComment()!=null && r.getComment().getId().equals(comment.get().getId())){
                 reactions.add(r);
             }
         }

@@ -7,6 +7,7 @@ import { ReactionService } from '../services/reaction.service';
 import { Toast, ToastrService } from 'ngx-toastr';
 import { Reaction } from '../model/reaction';
 import { ImageService } from '../services/image.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-page',
@@ -24,7 +25,7 @@ export class MainPageComponent implements OnInit{
   isDisliked: boolean = false;
   isHearted: boolean = false;
 
-  constructor(private userService: UserServiceService, private postService: PostService, private reactionService: ReactionService, private toast:ToastrService, private imageService:ImageService) {} 
+  constructor(private userService: UserServiceService, private postService: PostService, private reactionService: ReactionService, private toast:ToastrService, private imageService:ImageService,private router:Router) {} 
 
   ngOnInit() {
     const username = this.userService.getUsernameFromToken();
@@ -148,6 +149,10 @@ export class MainPageComponent implements OnInit{
         console.error('Error add dislike on post', error);
       }
     );
+  }
+
+  comments(postId:number){
+    this.router.navigate(['comments/', postId]);
   }
 
   
