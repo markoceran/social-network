@@ -9,6 +9,8 @@ export interface User {
 	roles: string;
 	friendsWith: User[]; 
 	profileImage: any;
+	displayName:string;
+	description:string;
 }
 
   

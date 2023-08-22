@@ -53,5 +53,30 @@ export class UserServiceService {
     return this.http.post('api/users/logout', null);
   }
 
+  editProfileData(user:User): Observable<any> {
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.put('api/users/editProfile', user, {headers});
+  }
   
+  editPassword(oldPassword:string, newPassword:string): Observable<any> {
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    const params = { oldPassword: oldPassword.toString(), newPassword: newPassword.toString()};
+
+    return this.http.put('api/users/editPassword', null, {headers, params});
+  }
+
 }

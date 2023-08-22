@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.model.Administrator;
@@ -23,7 +24,7 @@ import rs.ac.uns.ftn.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,7 +50,11 @@ public class UserController {
     @Autowired
     UserDetailsService userDetailsService;
 
+    private final PasswordEncoder passwordEncoder;
 
+    public UserController(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
 
     @GetMapping("/all")
@@ -139,6 +144,11 @@ public class UserController {
         String jwt = tokenUtils.generateToken(user);
         int expiresIn = tokenUtils.getExpiredIn();
 
+        User loggedUser = userService.findByUsername(authenticationRequest.getUsername());
+        loggedUser.setLastLogin(LocalDateTime.now());
+
+        userService.update(loggedUser.getId(), loggedUser);
+
         // Vrati token kao odgovor na uspesnu autentifikaciju
         return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
     }
@@ -168,6 +178,66 @@ public class UserController {
 
         return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
     }
+
+    @PutMapping("/editProfile")
+    public ResponseEntity<User> updateUserData(@RequestHeader("Authorization") String token, @RequestBody User user) throws Exception {
+
+        String tokenValue = token.replace("Bearer ", "");
+
+        String username = tokenUtils.getUsernameFromToken(tokenValue);
+        User loggedUser = userService.findByUsername(username);
+
+        if (loggedUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        List<User> allUser = userService.getAll();
+        for(User u : allUser){
+            if(!loggedUser.getUsername().equals(user.getUsername()) && u.getUsername().equals(user.getUsername())){
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+        }
+
+        user.setPassword(loggedUser.getPassword());
+
+
+        User updated = userService.update(loggedUser.getId(), user);
+        if (updated != null) {
+            return ResponseEntity.ok(updated);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/editPassword")
+    public ResponseEntity<User> editPassword(@RequestHeader("Authorization") String token, @RequestParam String oldPassword, @RequestParam String newPassword) throws Exception {
+
+        User updated = null;
+
+        String tokenValue = token.replace("Bearer ", "");
+
+        String username = tokenUtils.getUsernameFromToken(tokenValue);
+        User loggedUser = userService.findByUsername(username);
+
+        if (loggedUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+
+        if(passwordEncoder.matches(oldPassword, loggedUser.getPassword())){
+
+            loggedUser.setPassword(passwordEncoder.encode(newPassword));
+            updated = userService.update(loggedUser.getId(), loggedUser);
+
+        }
+
+        if (updated != null) {
+            return ResponseEntity.ok(updated);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 
 
 }

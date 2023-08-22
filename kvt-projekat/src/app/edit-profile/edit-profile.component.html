@@ -1,0 +1,66 @@
+<app-navbar></app-navbar>
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<div class="container bootstrap snippets bootdeys">
+  <div class="row">
+    <div class="col-xs-12 col-sm-9">
+
+      <form class="form-horizontal" [formGroup] ="editProfileForm"  (ngSubmit)="submit()">
+        
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">User info</h4>
+          </div>
+          <div class="panel-body">
+            <div class="form-group">
+              <label class="control-label">First name</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" formControlName="firstName" [(ngModel)]="loggedUser.firstName"  name="firstName" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label">Last name</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" formControlName="lastName" [(ngModel)]="loggedUser.lastName" name="lastName" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label">Username</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" formControlName="username" [(ngModel)]="loggedUser.username"  name="username" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label">Email address</label>
+              <div class="col-sm-10">
+                <input type="email" class="form-control" formControlName="email" [(ngModel)]="loggedUser.email"  name="email" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label">Display name</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" formControlName="displayName" [(ngModel)]="loggedUser.displayName"  name="displayName">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label">Profile description</label>
+              <div class="col-sm-10">
+                <textarea type="text" class="form-control" formControlName="description" [(ngModel)]="loggedUser.description"  name="description"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-10 col-sm-offset-2">
+            <button type="submit" class="btn btn-primary">Change profile data</button>
+          </div>
+        </div>
+
+      </form>
+
+      <app-edit-password></app-edit-password>
+
+    </div>
+  </div>
+</div>

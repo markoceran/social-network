@@ -55,6 +55,12 @@ public class User {
     @Column(name = "lastName",nullable = false)
     private String lastName;
 
+    @Column(name = "displayName")
+    private String displayName;
+
+    @Column(name = "description")
+    private String description;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Roles role;

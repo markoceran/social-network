@@ -9,7 +9,7 @@ import { MainPageComponent } from './main-page/main-page.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthenticationService } from './services/authentication.service';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FriendRequestsComponent } from './friend-requests/friend-requests.component';
@@ -21,6 +21,8 @@ import { LogoutComponent } from './logout/logout.component';
 import { AddGroupComponent } from './add-group/add-group.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { AddProfileImageComponent } from './add-profile-image/add-profile-image.component';
+import { EditProfileComponent } from './edit-profile/edit-profile.component';
+import { EditPasswordComponent } from './edit-password/edit-password.component';
 
 
 
@@ -40,6 +42,8 @@ import { AddProfileImageComponent } from './add-profile-image/add-profile-image.
     AddGroupComponent,
     RegistrationComponent,
     AddProfileImageComponent,
+    EditProfileComponent,
+    EditPasswordComponent,
     
   ],
   imports: [
@@ -48,7 +52,8 @@ import { AddProfileImageComponent } from './add-profile-image/add-profile-image.
     HttpClientModule,
     ToastrModule.forRoot(),
     ReactiveFormsModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    FormsModule
   ],
   providers: [
     AuthenticationService,

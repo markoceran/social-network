@@ -81,6 +81,10 @@ export class ProfileComponent implements OnInit{
   getImageUrl(imageName: string): string {
     return `http://localhost:4200/api/images/getImage/${imageName}`;
   }
+
+  editProfile(){
+    this.router.navigate(['editProfile']);
+  }
   
   
 }

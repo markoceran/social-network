@@ -12,6 +12,7 @@ import { AddGroupComponent } from './add-group/add-group.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { AddProfileImageComponent } from './add-profile-image/add-profile-image.component';
 import { CommentComponent } from './comment/comment.component';
+import { EditProfileComponent } from './edit-profile/edit-profile.component';
 
 const routes: Routes = [
 
@@ -87,6 +88,11 @@ const routes: Routes = [
 	{
 		path: 'comments/:postId',
 		component: CommentComponent,
+	  //canActivate: [RoleGuard],
+		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	},{
+		path: 'editProfile',
+		component: EditProfileComponent,
 	  //canActivate: [RoleGuard],
 		//data: {expectedRoles: 'ADMIN|WINE_USER'}
 	}

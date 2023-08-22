@@ -103,6 +103,8 @@ public class UserServiceImpl implements UserService {
             toUpdate.get().setPassword(user.getPassword());
             toUpdate.get().setEmail(user.getEmail());
             toUpdate.get().setUsername(user.getUsername());
+            toUpdate.get().setDisplayName(user.getDisplayName());
+            toUpdate.get().setDescription(user.getDescription());
             userRepository.save(toUpdate.get());
 
             return toUpdate.get();
