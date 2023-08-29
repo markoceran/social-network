@@ -170,7 +170,14 @@ export class MainPageComponent implements OnInit{
     // Destructure the array elements to get individual parts
     const [year, month, day, hour, minute] = dateArray;
     // Note: Months in JavaScript Date are 0-based (0 - January, 1 - February, etc.)
-    return new Date(year, month-1, day, hour, minute);
+    return new Date(year, month - 1, day, hour, minute);
+  }
+
+  parseDateArrayToDate2(dateArray: number[]): Date {
+    // Destructure the array elements to get individual parts
+    const [year, month, day, hour, minute] = dateArray;
+    // Note: Months in JavaScript Date are 0-based (0 - January, 1 - February, etc.)
+    return new Date(year, month - 1, day, hour+2, minute);
   }
 
   shuffleArray(array: any[]) {
@@ -178,6 +185,47 @@ export class MainPageComponent implements OnInit{
       const j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]]; // Swap elements
     }
+  }
+
+
+  orderAsc(){
+
+    console.log(this.allPosts);
+    
+    this.postService.orderAsc(this.allPosts).subscribe(
+      (data: Post[]) => {
+        console.log(data);
+        this.toast.success('Order success');
+        this.allPosts = data.map((post: any) => ({
+          ...post,
+          creationDate: this.parseDateArrayToDate2(post.creationDate)
+        }));
+      },
+      (error) => {
+        console.error('Order error', error);
+      }
+    );
+    
+  }
+
+  orderDesc(){
+
+    console.log(this.allPosts);
+    
+    this.postService.orderDesc(this.allPosts).subscribe(
+      (data: Post[]) => {
+        console.log(data);
+        this.toast.success('Order success');
+        this.allPosts = data.map((post: any) => ({
+          ...post,
+          creationDate: this.parseDateArrayToDate2(post.creationDate)
+        }));
+      },
+      (error) => {
+        console.error('Order error', error);
+      }
+    );
+    
   }
   
 

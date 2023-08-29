@@ -5,9 +5,11 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.model.Post;
 import rs.ac.uns.ftn.repository.PostRepository;
 import rs.ac.uns.ftn.service.PostService;
-
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Comparator;
+
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -62,5 +64,17 @@ public class PostServiceImpl implements PostService {
             return post.get();
         }else {return null;}
 
+    }
+
+    @Override
+    public List<Post> orderAsc(List<Post> posts) {
+        Collections.sort(posts, Comparator.comparing(Post::getCreationDate));
+        return posts;
+    }
+
+    @Override
+    public List<Post> orderDesc(List<Post> posts) {
+        Collections.sort(posts, Comparator.comparing(Post::getCreationDate).reversed());
+        return posts;
     }
 }

@@ -35,4 +35,12 @@ export class PostService {
     return this.http.get<Array<Post>>('api/posts/myFriends/'+ username);
   }
 
+  orderAsc(posts:Post[]): Observable<Array<Post>> {
+    return this.http.put<Array<Post>>('api/posts/orderAsc', posts);
+  }
+
+  orderDesc(posts:Post[]): Observable<Array<Post>> {
+    return this.http.put<Array<Post>>('api/posts/orderDesc', posts);
+  }
+
 }

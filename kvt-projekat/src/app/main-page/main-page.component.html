@@ -7,6 +7,25 @@
           <div class="card"> 
             <div class="card-body p-4 text-black">
                 
+              <div class="btn-group-vertical" role="group" aria-label="Vertical button group" style="margin-left: 89%;">      
+                <div class="btn-group" role="group">
+                  <button
+                    id="btnGroupVerticalDrop4"
+                    type="button"
+                    class="btn btn-link dropdown-toggle"
+                    data-mdb-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                  Filter
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop4">
+                    <li><button class="dropdown-item" (click)="orderAsc()">Order ascending</button></li>
+                    <li><button class="dropdown-item" (click)="orderDesc()">Order descending</button></li>
+                  </ul>
+                </div>
+              </div>
+              <br>
+              <br>
 
               <div class="row g-2" *ngFor="let p of allPosts; let postIndex = index" style="border-bottom: rgb(150, 150, 150) 1px solid;">
                 <div class="container py-5 h-100">

@@ -143,4 +143,21 @@ public class PostController {
             return ResponseEntity.notFound().build();
         }
     }
+
+
+    @PutMapping("/orderAsc")
+    public ResponseEntity<List<Post>> orderAsc(@RequestBody List<Post> posts) {
+
+        List<Post> list = postService.orderAsc(posts);
+
+        return ResponseEntity.ok(list);
+    }
+
+    @PutMapping("/orderDesc")
+    public ResponseEntity<List<Post>> orderDesc(@RequestBody List<Post> posts) {
+
+        List<Post> list = postService.orderDesc(posts);
+
+        return ResponseEntity.ok(list);
+    }
 }

@@ -15,4 +15,7 @@ public interface PostService {
 
     Post delete(Long id);
 
+    List<Post> orderAsc(List<Post> posts);
+
+    List<Post> orderDesc(List<Post> posts);
 }
