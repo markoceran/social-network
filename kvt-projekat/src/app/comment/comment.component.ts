@@ -21,6 +21,8 @@ export class CommentComponent implements OnInit{
   commentForm: FormGroup;
   postId!:number;
   comments!:Comments[];
+  showReactions: boolean = false;
+
   
   constructor(private commentService:CommentService, private fb: FormBuilder,private route: ActivatedRoute, private userService: UserServiceService, private postService: PostService, private reactionService: ReactionService, private toast:ToastrService, private imageService:ImageService,private router:Router) {
     this.commentForm = this.fb.group({
@@ -56,6 +58,9 @@ export class CommentComponent implements OnInit{
           (reaction: Reaction[]) => {
             
             if(reaction.length>0){
+              
+              comment.reactions = reaction;
+
               reaction.forEach(r => {
 
               if(r.madeBy.username === this.userService.getUsernameFromToken()){
@@ -162,6 +167,10 @@ export class CommentComponent implements OnInit{
     const [year, month, day] = dateArray;
     // Note: Months in JavaScript Date are 0-based (0 - January, 1 - February, etc.)
     return new Date(year, month-1, day);
+  }
+
+  show(){
+    this.showReactions = !this.showReactions;
   }
 
 

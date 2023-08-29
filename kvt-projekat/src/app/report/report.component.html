@@ -1,0 +1,63 @@
+<app-navbar></app-navbar>
+
+<br>
+<div style="background-color: rgba(198, 226, 255, 0.787);">
+    <h5>Post reports</h5>
+    <div *ngFor="let r of postReports" style="border: 1px solid;">
+        <p>Post:</p>
+        <p>{{r.post.postedBy.firstName + ' ' + r.post.postedBy.lastName}}, {{r.post.postedBy.username}}, {{r.post.postedBy.email}}</p>
+        <br>
+        <p>Content: {{r.post.content}}</p>
+        <p>Creation date: {{r.post.creationDate}}</p>
+        <br>
+        <p>Reason: {{r.reason}}</p>
+        <p>By user: {{r.byUser.username}}</p>
+        <p>Timestamp: {{r.timestamp}}</p>
+
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-success" (click)="acceptForPost(r.id)">Accept</button>
+            <button type="button" class="btn btn-danger" (click)="deny(r.id)">Deny</button>
+        </div>
+    </div>
+</div>
+<br>
+
+<div style="background-color: rgba(255, 233, 198, 0.787);">
+    <h5>Comment reports</h5>
+    <div *ngFor="let r of commentReports" style="border: 1px solid;">
+        <p>Comment:</p>
+        <p>{{r.comment.belongsTo.firstName + ' ' + r.comment.belongsTo.lastName}}, {{r.comment.belongsTo.username}}, {{r.comment.belongsTo.email}}</p>
+        <br>
+        <p>Text: {{r.comment.text}}</p>
+        <p>Creation date: {{r.comment.timestamp}}</p>
+        <br>
+        <p>Reason: {{r.reason}}</p>
+        <p>By user: {{r.byUser.username}}</p>
+        <p>Timestamp: {{r.timestamp}}</p>
+
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-success" (click)="acceptForComment(r.id)">Accept</button>
+            <button type="button" class="btn btn-danger" (click)="deny(r.id)">Deny</button>
+        </div>
+    </div>
+</div>
+<br>
+
+<div style="background-color: rgba(255, 198, 198, 0.787);">
+    <h5>User reports</h5>
+    <div *ngFor="let r of userReports" style="border: 1px solid;">
+        <p>User:</p>
+        <p>{{r.user.firstName + ' ' + r.user.lastName}}, {{r.user.username}}, {{r.user.email}}</p>
+        <br>
+        <p>Role: {{r.user.role}}</p>
+        <br>
+        <p>Reason: {{r.reason}}</p>
+        <p>By user: {{r.byUser.username}}</p>
+        <p>Timestamp: {{r.timestamp}}</p>
+
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-success" (click)="acceptForUser(r.id)">Accept</button>
+            <button type="button" class="btn btn-danger" (click)="deny(r.id)">Deny</button>
+        </div>
+    </div>
+</div>

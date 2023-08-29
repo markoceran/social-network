@@ -53,6 +53,7 @@ public class PostController {
         }
 
         post.setPostedBy(user);
+        post.setIsDeleted(false);
         post.setCreationDate(LocalDateTime.now());
 
         Post createdPost = postService.save(post);
@@ -73,7 +74,7 @@ public class PostController {
 
         if(!svi.isEmpty()){
             for(Post p: svi){
-                if(p.getPostedBy().equals(user)){
+                if(p.getPostedBy().getUsername().equals(user.getUsername()) && !p.getIsDeleted()){
                     posts.add(p);
                 }
             }
@@ -102,7 +103,7 @@ public class PostController {
 
             for(Post p:allPosts){
                 for(User u:myFriends){
-                    if(p.getPostedBy().getUsername().equals(u.getUsername())){
+                    if(p.getPostedBy().getUsername().equals(u.getUsername()) && !p.getIsDeleted()){
                         friendsPosts.add(p);
                     }
                 }
@@ -116,7 +117,7 @@ public class PostController {
     @GetMapping("/{id}")
     public ResponseEntity<Post> getPostById(@PathVariable Long id) {
         Optional<Post> post = postService.getById(id);
-        if (post.get() != null) {
+        if (post.get() != null && !post.get().getIsDeleted()) {
             return ResponseEntity.ok(post.get());
         } else {
             return ResponseEntity.notFound().build();

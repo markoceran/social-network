@@ -26,8 +26,27 @@
                                 </div>
                               </div>                          
                             </li>
-                          </ul>
+                          </ul>               
+
                         </div>
+                        
+                        <div class="btn-group-vertical" role="group" aria-label="Vertical button group" style="margin-left: 92%;">      
+                          <div class="btn-group" role="group">
+                            <button
+                              id="btnGroupVerticalDrop4"
+                              type="button"
+                              class="btn btn-link dropdown-toggle"
+                              data-mdb-toggle="dropdown"
+                              aria-expanded="false"
+                            >
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop4">
+                              <li><a class="dropdown-item" [routerLink]="['/addReportForPost/', p.id]">Report post</a></li>
+                              <li><a class="dropdown-item" [routerLink]="['/addReportForUser/', p.postedBy.id]">Report user</a></li>
+                            </ul>
+                          </div>
+                        </div>
+                        
                       </div>
                     </div>
                 </div>

@@ -38,6 +38,23 @@
                             </li>
                           </ul>
                         </div>
+
+                        <div class="btn-group-vertical" role="group" aria-label="Vertical button group" style="margin-left: 92%;">      
+                          <div class="btn-group" role="group">
+                            <button
+                              id="btnGroupVerticalDrop4"
+                              type="button"
+                              class="btn btn-link dropdown-toggle"
+                              data-mdb-toggle="dropdown"
+                              aria-expanded="false"
+                            >
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop4">
+                              <li><a class="dropdown-item" [routerLink]="['/addReportForComment/', c.id]">Report comment</a></li>                         
+                            </ul>
+                          </div>
+                        </div>
+
                       </div>
                     </div>
                 </div>
@@ -73,7 +90,13 @@
                     </button>
                   </li>     
                   <li style="margin-left: 15px;" class="nav-item me-3 me-lg-0">
-                    <button type="button" data-toggle="modal" data-target="#exampleModalScrollable" class="btn btn-link btn-rounded btn-sm" style="color: rgba(0, 0, 0, 0.778);">
+                    <!--<button type="button" data-toggle="modal" data-target="#exampleModalScrollable" class="btn btn-link btn-rounded btn-sm" style="color: rgba(0, 0, 0, 0.778);">
+                      <a class="nav-link">
+                        <i class="fab fa-gratipay"></i>
+                          All reactions
+                      </a>
+                    </button>-->
+                    <button type="button" class="btn btn-link btn-rounded btn-sm" (click)="show()" style="color: rgba(0, 0, 0, 0.778);">
                       <a class="nav-link">
                         <i class="fab fa-gratipay"></i>
                           All reactions
@@ -81,6 +104,15 @@
                     </button>
                   </li>              
                 </ul>
+
+                <div *ngIf="showReactions" style="background-color: rgba(255, 227, 198, 0.787);">
+                  <h5>All reactions</h5>
+                  <div *ngFor="let r of c.reactions" style="border: 1px solid;">
+                      <p>{{r.madeBy.firstName }} {{r.madeBy.lastName}}</p>
+                      <p>username: {{r.madeBy.username}}</p>
+                      <p>{{r.type}}</p>
+                  </div>
+                </div>
                       
                 <p style="font-size: 10px; margin-top: 35px;">{{ c.timestamp | date: 'yyyy-MM-dd' }}</p>
               </div>
@@ -89,7 +121,7 @@
         </div>
       </div>
 
-      <!-- Modal -->
+      <!-- Modal 
       <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable" role="document">
           <div class="modal-content">
@@ -108,7 +140,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div>-->
 
     </div>
 </section>

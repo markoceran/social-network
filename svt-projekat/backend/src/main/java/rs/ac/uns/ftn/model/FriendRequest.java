@@ -25,11 +25,12 @@ public class FriendRequest {
     @Column(name = "createdAt",nullable = false)
     private LocalDateTime createdAt;
     @Column(name = "at")
+    @Nullable
     private LocalDateTime at;
 
-    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     private User from;
 
-    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     private User forr;
 }

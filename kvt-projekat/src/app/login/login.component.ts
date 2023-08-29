@@ -34,13 +34,21 @@ export class LoginComponent {
 		auth.password = this.form.value.password;
 
 		this.authenticationService.login(auth).subscribe(
-			result => {
+			(result) => {
+				
 				this.toastr.success('Successful login!');
 				localStorage.setItem('user', JSON.stringify(result));
 				this.router.navigate(['main']);
+				
 			},
-			error => {
-				this.toastr.error('Bad credencials');
+			(error) => {
+
+				if (error.status === 401) {
+					this.toastr.error('You have been banned!');
+				} else {
+					this.toastr.error('Bad credencials');
+				}
+				
 			}
 		);
 	}

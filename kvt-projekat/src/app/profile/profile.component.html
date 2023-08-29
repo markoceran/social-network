@@ -57,18 +57,39 @@
                 
                 <ul class="navbar-nav d-flex flex-row">                
                   <li class="nav-item me-3 me-lg-0">
-                    <a class="nav-link" [routerLink]="['/']">
-                      <i class="fab fa-gratipay"></i>
-                      Reactions
-                    </a>
+                    <button class="nav-link" (click)="showReaction()">
+                      <a class="nav-link">
+                        <i class="fab fa-gratipay"></i>
+                        Reactions
+                      </a>  
+                    </button>
                   </li>
                   <li style="margin-left: 15px;" class="nav-item me-3 me-lg-0">
-                      <a class="nav-link" href="#">
-                        <i class="fas fa-comments"></i>
-                          Comments
-                      </a>
+                      <button class="nav-link" (click)="showComment()">
+                        <a class="nav-link">
+                          <i class="fas fa-comments"></i>
+                            Comments
+                        </a>
+                      </button>
                   </li>              
-                </ul>            
+                </ul>         
+                
+                <div *ngIf="showReactions" style="background-color: #d6e6ffdb;">
+                  <h5>All reactions</h5>
+                  <div *ngFor="let r of p.reactions" style="border: 1px solid;">
+                      <p>username: {{r.madeBy.username}}</p>
+                      <p>{{r.type}}</p>
+                  </div>
+                </div>
+                <div *ngIf="showComments" style="background-color: #fffac1;">
+                  <h5>All comments</h5>
+                  <div *ngFor="let c of p.comments" style="border: 1px solid;">
+                      <p>username: {{c.belongsTo.username}}</p>
+                      <p>{{c.text}}</p>
+                      <p>{{c.timestamp | date: 'yyyy-MM-dd' }}</p>
+                  </div>
+                </div>
+
                 <p style="font-size: 10px; margin-top: 35px;">{{ p.creationDate | date: 'yyyy-MM-dd HH:mm' }}</p>
               </div>
             </div>

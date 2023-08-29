@@ -13,6 +13,11 @@ import { RegistrationComponent } from './registration/registration.component';
 import { AddProfileImageComponent } from './add-profile-image/add-profile-image.component';
 import { CommentComponent } from './comment/comment.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
+import { ReportComponent } from './report/report.component';
+import { BannedComponent } from './banned/banned.component';
+import { AddReportPostComponent } from './add-report-post/add-report-post.component';
+import { AddReportUserComponent } from './add-report-user/add-report-user.component';
+import { AddReportCommentComponent } from './add-report-comment/add-report-comment.component';
 
 const routes: Routes = [
 
@@ -90,13 +95,46 @@ const routes: Routes = [
 		component: CommentComponent,
 	  //canActivate: [RoleGuard],
 		//data: {expectedRoles: 'ADMIN|WINE_USER'}
-	},{
+	},
+	{
 		path: 'editProfile',
 		component: EditProfileComponent,
 	  //canActivate: [RoleGuard],
 		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	},
+	{
+		path: 'report',
+		component: ReportComponent,
+	  //canActivate: [RoleGuard],
+		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	},
+	{
+		path: 'banned',
+		component: BannedComponent,
+	  //canActivate: [RoleGuard],
+		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	},
+	{
+		
+		path: 'addReportForPost/:id',
+		component: AddReportPostComponent,
+	  //canActivate: [RoleGuard],
+		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	},
+	{
+		
+		path: 'addReportForUser/:id',
+		component: AddReportUserComponent,
+	  //canActivate: [RoleGuard],
+		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	},
+	{
+		
+		path: 'addReportForComment/:id',
+		component: AddReportCommentComponent,
+	  //canActivate: [RoleGuard],
+		//data: {expectedRoles: 'ADMIN|WINE_USER'}
 	}
-	
 ];
 
 

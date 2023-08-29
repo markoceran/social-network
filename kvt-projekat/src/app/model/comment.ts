@@ -1,3 +1,4 @@
+import { Reaction } from "./reaction";
 import { User } from "./user.model";
 
 export interface Comments{
@@ -10,4 +11,6 @@ export interface Comments{
     isLiked: boolean;
     isDisliked: boolean;
     isHearted: boolean;
+    reactions:Reaction[];
+    isDeleted: boolean;
 }

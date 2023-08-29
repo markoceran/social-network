@@ -27,21 +27,21 @@ public class Report {
     @Column(name = "timestamp",nullable = false)
     private LocalDate timestamp;
 
-    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     private User byUser;
 
     @Column(name = "accepted",nullable = false)
-    private Boolean accepted;
+    private Boolean accepted = false;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     @Nullable
     private Post post;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     @Nullable
     private Comment comment;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     @Nullable
     private User user;
 }

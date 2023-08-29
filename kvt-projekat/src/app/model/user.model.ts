@@ -6,7 +6,7 @@ export interface User {
 	lastLogin: string; 
 	firstName: string;
 	lastName: string;
-	roles: string;
+	role: string;
 	friendsWith: User[]; 
 	profileImage: any;
 	displayName:string;

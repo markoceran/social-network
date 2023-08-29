@@ -81,11 +81,11 @@ isFriend(user: any): boolean {
 
 isAlreadySend(user: any): boolean {
   if (this.logedUser) {
-    return this.requests.some(r => r.approved === false &&  r.from.id === this.logedUser.id && r.forr.id === user.id);
+    
+    return this.requests.some(r => r.approved === false && r.at === null && r.from.id === this.logedUser.id && r.forr.id === user.id);
   }
   return false;
 }
-
 
 
 addFriend(id:number) {

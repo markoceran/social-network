@@ -28,4 +28,7 @@ public class Post {
     @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private User postedBy;
 
+    @Column(name = "isDeleted",nullable = false)
+    private Boolean isDeleted;
+
 }

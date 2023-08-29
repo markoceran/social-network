@@ -64,4 +64,17 @@ public class AdministratorServiceImpl implements AdministratorService {
         return newUser;
     }
 
+    @Override
+    public Administrator findByUsername(String username) {
+
+        List<Administrator> svi = this.getAll();
+        for(Administrator a : svi){
+            if(a.getUsername().equals(username)){
+                return a;
+            }
+        }
+
+        return null;
+    }
+
 }

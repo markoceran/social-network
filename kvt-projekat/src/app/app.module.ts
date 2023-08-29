@@ -23,6 +23,11 @@ import { RegistrationComponent } from './registration/registration.component';
 import { AddProfileImageComponent } from './add-profile-image/add-profile-image.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { EditPasswordComponent } from './edit-password/edit-password.component';
+import { ReportComponent } from './report/report.component';
+import { BannedComponent } from './banned/banned.component';
+import { AddReportPostComponent } from './add-report-post/add-report-post.component';
+import { AddReportCommentComponent } from './add-report-comment/add-report-comment.component';
+import { AddReportUserComponent } from './add-report-user/add-report-user.component';
 
 
 
@@ -44,6 +49,11 @@ import { EditPasswordComponent } from './edit-password/edit-password.component';
     AddProfileImageComponent,
     EditProfileComponent,
     EditPasswordComponent,
+    ReportComponent,
+    BannedComponent,
+    AddReportPostComponent,
+    AddReportCommentComponent,
+    AddReportUserComponent,
     
   ],
   imports: [

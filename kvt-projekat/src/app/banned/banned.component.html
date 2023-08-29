@@ -1,0 +1,15 @@
+<app-navbar></app-navbar>
+
+<br>
+<div>
+    <h5>Banned users</h5>
+    <div *ngFor="let u of bannedUsers" style="border: 1px solid;">
+
+        <p>{{u.firstName + ' ' + u.lastName}}, {{u.username}}, {{u.email}}</p>
+        <p>Role: {{u.role}}</p>
+
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-danger" (click)="deleteBan(u.id)">Delete ban</button>
+        </div>
+    </div>
+</div>

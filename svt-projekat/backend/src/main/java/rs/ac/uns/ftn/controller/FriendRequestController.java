@@ -60,7 +60,7 @@ public class FriendRequestController {
         if(!allFriendRequest.isEmpty()){
 
             for (FriendRequest f : allFriendRequest) {
-                if (!f.getApproved() && f.getForr().equals(user) && f.getAt().equals(LocalDateTime.of(1, 1, 1, 1, 1))) {
+                if (!f.getApproved() && f.getForr().equals(user) && f.getAt() == null) {
                     requests.add(f);
                 }
             }
@@ -91,7 +91,7 @@ public class FriendRequestController {
             friendRequest.setCreatedAt(LocalDateTime.now());
             friendRequest.setForr(forUser.get());
             friendRequest.setFrom(user);
-            friendRequest.setAt(LocalDateTime.of(1, 1, 1, 1, 1));
+            //friendRequest.setAt(LocalDateTime.of(1, 1, 1, 1, 1));
 
 
             FriendRequest created = friendRequestService.save(friendRequest);
@@ -133,9 +133,7 @@ public class FriendRequestController {
 
         if (request.isPresent()) {
 
-            request.get().setAt(LocalDateTime.now());
-            request.get().setApproved(false);
-            friendRequestService.update(id, request.get());
+            friendRequestService.delete(request.get().getId());
 
             return ResponseEntity.ok(request.get());
         } else {
