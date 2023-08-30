@@ -27,4 +27,40 @@ export class CommentService {
   getComments(postId:number): Observable<Array<Comments>> {
     return this.http.get<Array<Comments>>('api/comments/postComments/'+ postId);
   }
+
+
+  orderAscLikes(comments:Comments[]): Observable<Array<Comments>> {
+    return this.http.put<Array<Comments>>('api/comments/orderAscLikes', comments);
+  }
+
+  orderAscDislikes(comments:Comments[]): Observable<Array<Comments>> {
+    return this.http.put<Array<Comments>>('api/comments/orderAscDislikes', comments);
+  }
+
+  orderAscHearts(comments:Comments[]): Observable<Array<Comments>> {
+    return this.http.put<Array<Comments>>('api/comments/orderAscHearts', comments);
+  }
+
+
+  orderDescLikes(comments:Comments[]): Observable<Array<Comments>> {
+    return this.http.put<Array<Comments>>('api/comments/orderDescLikes', comments);
+  }
+
+  orderDescDislikes(comments:Comments[]): Observable<Array<Comments>> {
+    return this.http.put<Array<Comments>>('api/comments/orderDescDislikes', comments);
+  }
+
+  orderDescHearts(comments:Comments[]): Observable<Array<Comments>> {
+    return this.http.put<Array<Comments>>('api/comments/orderDescHearts', comments);
+  }
+
+
+
+  orderAscDate(comments:Comments[]): Observable<Array<Comments>> {
+    return this.http.put<Array<Comments>>('api/comments/orderAscDate', comments);
+  }
+
+  orderDescDate(comments:Comments[]): Observable<Array<Comments>> {
+    return this.http.put<Array<Comments>>('api/comments/orderDescDate', comments);
+  }
 }

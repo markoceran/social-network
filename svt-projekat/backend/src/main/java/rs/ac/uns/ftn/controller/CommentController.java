@@ -133,4 +133,72 @@ public class CommentController {
         replyOn.get().getRepliesTo().add(createdComment);
         return ResponseEntity.ok(createdComment);
     }
+
+
+
+    @PutMapping("/orderAscLikes")
+    public ResponseEntity<List<Comment>> orderAscLikes(@RequestBody List<Comment> comments) {
+
+        List<Comment> list = commentService.orderAscLikes(comments);
+
+        return ResponseEntity.ok(list);
+    }
+
+    @PutMapping("/orderAscDislikes")
+    public ResponseEntity<List<Comment>> orderAscDislikes(@RequestBody List<Comment> comments) {
+
+        List<Comment> list = commentService.orderAscDislikes(comments);
+
+        return ResponseEntity.ok(list);
+    }
+
+    @PutMapping("/orderAscHearts")
+    public ResponseEntity<List<Comment>> orderAscHearts(@RequestBody List<Comment> comments) {
+
+        List<Comment> list = commentService.orderAscHearts(comments);
+
+        return ResponseEntity.ok(list);
+    }
+
+
+    @PutMapping("/orderDescLikes")
+    public ResponseEntity<List<Comment>> orderDesc(@RequestBody List<Comment> comments) {
+
+        List<Comment> list = commentService.orderDescLikes(comments);
+
+        return ResponseEntity.ok(list);
+    }
+
+    @PutMapping("/orderDescDislikes")
+    public ResponseEntity<List<Comment>> orderDescDislikes(@RequestBody List<Comment> comments) {
+
+        List<Comment> list = commentService.orderDescDislikes(comments);
+
+        return ResponseEntity.ok(list);
+    }
+
+    @PutMapping("/orderDescHearts")
+    public ResponseEntity<List<Comment>> orderDescHearts(@RequestBody List<Comment> comments) {
+
+        List<Comment> list = commentService.orderDescHearts(comments);
+
+        return ResponseEntity.ok(list);
+    }
+
+
+    @PutMapping("/orderAscDate")
+    public ResponseEntity<List<Comment>> orderAscDate(@RequestBody List<Comment> comments) {
+
+        List<Comment> list = commentService.orderAscDate(comments);
+
+        return ResponseEntity.ok(list);
+    }
+
+    @PutMapping("/orderDescDate")
+    public ResponseEntity<List<Comment>> orderDescDate(@RequestBody List<Comment> comments) {
+
+        List<Comment> list = commentService.orderDescDate(comments);
+
+        return ResponseEntity.ok(list);
+    }
 }

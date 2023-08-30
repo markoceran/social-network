@@ -16,6 +16,34 @@
         <div class="col col-lg-9 col-xl-7">
           <div class="card"> 
             <div class="card-body p-4 text-black">
+
+              <div class="btn-group-vertical" role="group" aria-label="Vertical button group" style="margin-left: 89%;" *ngIf="comments.length>0">      
+                <div class="btn-group" role="group">
+                  <button
+                    id="btnGroupVerticalDrop4"
+                    type="button"
+                    class="btn btn-link dropdown-toggle"
+                    data-mdb-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                  Filter
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop4">
+                    <li><button class="dropdown-item" (click)="orderAscLikes()" >Order ascending - by like</button></li>
+                    <li><button class="dropdown-item" (click)="orderAscDislikes()">Order ascending - by dislike</button></li>
+                    <li><button class="dropdown-item" (click)="orderAscHearts()">Order ascending - by heart</button></li>
+                    <br>
+                    <li><button class="dropdown-item" (click)="orderDescLikes()">Order descending - by like</button></li>
+                    <li><button class="dropdown-item" (click)="orderDescDislikes()">Order descending - by dislike</button></li>
+                    <li><button class="dropdown-item" (click)="orderDescHearts()">Order descending - by heart</button></li>
+                    <br>
+                    <li><button class="dropdown-item" (click)="orderAscDate()">Order ascending - by date</button></li>
+                    <li><button class="dropdown-item" (click)="orderDescDate()">Order descending - by date</button></li>
+                  </ul>
+                </div>
+              </div>
+              <br>
+              <br>
                 
 
               <div class="row g-2" *ngFor="let c of comments; let commentIndex = index" style="border-bottom: rgb(150, 150, 150) 2px solid;">

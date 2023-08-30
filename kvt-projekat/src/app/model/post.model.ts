@@ -8,7 +8,7 @@ export interface Post{
     
     id: number;
     content: string;
-    creationDate: any;
+    creationDate: Date;
     postedBy: User;
     isLiked: boolean;
     isDisliked: boolean;

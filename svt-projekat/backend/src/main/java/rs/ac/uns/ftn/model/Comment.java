@@ -44,4 +44,7 @@ public class Comment {
 
     private Set<Comment> repliesTo = new HashSet<Comment>();
 
+    private int likes;
+    private int dislikes;
+    private int hearts;
 }
