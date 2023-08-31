@@ -31,13 +31,13 @@ public class Comment {
     @Column(name = "isDeleted",nullable = false)
     private Boolean isDeleted;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     private User belongsTo;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     private Post post;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable(name = "RepliesOfComment",
             joinColumns = @JoinColumn(name = "comment_id",referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "reply_id",referencedColumnName = "id"))

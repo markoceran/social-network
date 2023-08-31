@@ -28,6 +28,8 @@ import { BannedComponent } from './banned/banned.component';
 import { AddReportPostComponent } from './add-report-post/add-report-post.component';
 import { AddReportCommentComponent } from './add-report-comment/add-report-comment.component';
 import { AddReportUserComponent } from './add-report-user/add-report-user.component';
+import { EditPostComponent } from './edit-post/edit-post.component';
+import { AddReplyOnCommentComponent } from './add-reply-on-comment/add-reply-on-comment.component';
 
 
 
@@ -54,6 +56,8 @@ import { AddReportUserComponent } from './add-report-user/add-report-user.compon
     AddReportPostComponent,
     AddReportCommentComponent,
     AddReportUserComponent,
+    EditPostComponent,
+    AddReplyOnCommentComponent,
     
   ],
   imports: [

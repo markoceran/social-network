@@ -31,6 +31,10 @@ export class PostService {
     return this.http.get<number>('api/posts/lastId');
   }
 
+  getPostById(id:number): Observable<Post> {
+    return this.http.get<Post>('api/posts/' + id);
+  }
+
   getFriendsPosts(username:string): Observable<Array<Post>> {
     return this.http.get<Array<Post>>('api/posts/myFriends/'+ username);
   }
@@ -41,6 +45,15 @@ export class PostService {
 
   orderDesc(posts:Post[]): Observable<Array<Post>> {
     return this.http.put<Array<Post>>('api/posts/orderDesc', posts);
+  }
+
+
+  updatePost(id:number,post:Post): Observable<Post> {
+    return this.http.put<Post>('api/posts/' + id , post);
+  }
+
+  deletePost(id:number): Observable<Post> {
+    return this.http.delete<Post>('api/posts/' + id);
   }
 
 }

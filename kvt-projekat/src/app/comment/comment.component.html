@@ -46,7 +46,7 @@
               <br>
                 
 
-              <div class="row g-2" *ngFor="let c of comments; let commentIndex = index" style="border-bottom: rgb(150, 150, 150) 2px solid;">
+              <div class="row g-2" *ngFor="let c of comments; let commentIndex = index" style="border-bottom: rgb(150, 150, 150) 3px solid;">
                 <div class="container py-5 h-100">
                     <div>
                       <div>
@@ -86,9 +86,9 @@
                       </div>
                     </div>
                 </div>
-                <p style="margin-top: 25px;">{{c.text}}</p>
+                <p>{{c.text}}</p>
                
-                             
+                
                 <ul class="navbar-nav d-flex flex-row">                
                   <li class="nav-item me-3 me-lg-0">
                     <button class="btn btn-link btn-rounded btn-sm" style="color: rgba(255, 119, 0, 0.778);" (click)="heart(c.id, commentIndex)" *ngIf="(!c.isHearted && !c.isLiked && !c.isDisliked) || (c.isHearted && !c.isLiked && !c.isDisliked)">
@@ -118,19 +118,25 @@
                     </button>
                   </li>     
                   <li style="margin-left: 15px;" class="nav-item me-3 me-lg-0">
-                    <!--<button type="button" data-toggle="modal" data-target="#exampleModalScrollable" class="btn btn-link btn-rounded btn-sm" style="color: rgba(0, 0, 0, 0.778);">
-                      <a class="nav-link">
-                        <i class="fab fa-gratipay"></i>
-                          All reactions
-                      </a>
-                    </button>-->
+                    
                     <button type="button" class="btn btn-link btn-rounded btn-sm" (click)="show()" style="color: rgba(0, 0, 0, 0.778);">
                       <a class="nav-link">
                         <i class="fab fa-gratipay"></i>
                           All reactions
                       </a>
                     </button>
-                  </li>              
+
+                  </li>
+                  <li style="margin-left: 15px;" class="nav-item me-3 me-lg-0">
+
+                    <button type="button" class="btn btn-link btn-rounded btn-sm" (click)="show()" style="color: rgba(0, 0, 0, 0.778);">
+                        <a class="nav-link" [routerLink]="['/reply/', c.id]">
+                          <i class="fas fa-reply"></i>
+                          Reply
+                        </a>
+                    </button>
+
+                  </li>                 
                 </ul>
 
                 <div *ngIf="showReactions" style="background-color: rgba(255, 227, 198, 0.787);">
@@ -143,6 +149,120 @@
                 </div>
                       
                 <p style="font-size: 10px; margin-top: 35px;">{{ c.timestamp | date: 'yyyy-MM-dd' }}</p>
+
+                <!---------------------------REPLY-------------------------------------------------------------------------------------------->
+                
+                <div class="row g-2" *ngFor="let r of c.repliesTo; let commentIndex = index">
+                  <h4 style="color: red;">||</h4>
+                 
+                
+                  <div class="container py-5 h-100">
+                      <div>
+                        <div>
+                          <div class="card">            
+                            
+                            <ul class="list-group list-group-light">
+                              <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                  
+                                  <img *ngIf="r.belongsTo.profileImage === undefined" [src]="getImageUrl('avatar.jpg')" alt="" style="width: 45px; height: 45px;margin-left: 15px;" class="rounded-circle" />
+                                  <img *ngIf="r.belongsTo.profileImage !== undefined" [src]="getImageUrl(r.belongsTo.profileImage)" alt="" style="width: 45px; height: 45px;margin-left: 15px;" class="rounded-circle" />
+                                  <div class="ms-3">
+                                    <p class="fw-bold mb-1">{{ r.belongsTo.firstName + ' ' + r.belongsTo.lastName }}</p>
+                                    <p class="text-muted mb-0">username: {{r.belongsTo.username}}</p>
+                                  </div>
+                                </div>                          
+                              </li>
+                            </ul>
+                          </div>
+  
+                          <div class="btn-group-vertical" role="group" aria-label="Vertical button group" style="margin-left: 92%;">      
+                            <div class="btn-group" role="group">
+                              <button
+                                id="btnGroupVerticalDrop4"
+                                type="button"
+                                class="btn btn-link dropdown-toggle"
+                                data-mdb-toggle="dropdown"
+                                aria-expanded="false"
+                              >
+                              </button>
+                              <ul class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop4">
+                                <li><a class="dropdown-item" [routerLink]="['/addReportForComment/', r.id]">Report comment</a></li>                         
+                              </ul>
+                            </div>
+                          </div>
+  
+                        </div>
+                      </div>
+                      <p style="margin-top: 25px;">{{r.text}}</p>
+                 
+                  
+                  <ul class="navbar-nav d-flex flex-row">                
+                    <li class="nav-item me-3 me-lg-0">
+                      <button class="btn btn-link btn-rounded btn-sm" style="color: rgba(255, 119, 0, 0.778);" (click)="heart(r.id, commentIndex)" *ngIf="(!r.isHearted && !r.isLiked && !r.isDisliked) || (r.isHearted && !r.isLiked && !r.isDisliked)">
+                        <a class="nav-link">
+                          <i class="far fa-heart" *ngIf="!r.isHearted && !r.isLiked && !r.isDisliked"></i>
+                          <i class="fas fa-heart" *ngIf="r.isHearted"></i>
+                          Heart
+                        </a>
+                      </button>                  
+                    </li>
+                    <li style="margin-left: 15px;" class="nav-item me-3 me-lg-0">
+                      <button class="btn btn-link btn-rounded btn-sm" style="color: rgba(255, 119, 0, 0.778);" (click)="like(r.id, commentIndex)" *ngIf="(!r.isLiked && !r.isDisliked && !r.isHearted) || (!r.isHearted && r.isLiked && !r.isDisliked)">
+                        <a class="nav-link">
+                          <i class="far fa-thumbs-up" *ngIf="!r.isLiked && !r.isDisliked && !r.isHearted"></i>
+                          <i class="fas fa-thumbs-up" *ngIf="r.isLiked"></i>
+                            Like
+                        </a>
+                      </button>
+                    </li>  
+                    <li style="margin-left: 15px;" class="nav-item me-3 me-lg-0">
+                      <button class="btn btn-link btn-rounded btn-sm" style="color: rgba(255, 119, 0, 0.778);" (click)="dislike(r.id, commentIndex)" *ngIf="(!r.isDisliked && !r.isHearted && !r.isLiked) || (!r.isHearted && !r.isLiked && r.isDisliked)">
+                        <a class="nav-link">
+                          <i class="far fa-thumbs-down" *ngIf="!r.isDisliked && !r.isHearted && !r.isLiked"></i>
+                          <i class="fas fa-thumbs-down" *ngIf="r.isDisliked"></i>
+                            Dislike
+                        </a>
+                      </button>
+                    </li>     
+                    <li style="margin-left: 15px;" class="nav-item me-3 me-lg-0">
+                      
+                      <button type="button" class="btn btn-link btn-rounded btn-sm" (click)="show()" style="color: rgba(0, 0, 0, 0.778);">
+                        <a class="nav-link">
+                          <i class="fab fa-gratipay"></i>
+                            All reactions
+                        </a>
+                      </button>
+  
+                    </li>
+                    <li style="margin-left: 15px;" class="nav-item me-3 me-lg-0">
+  
+                      <button type="button" class="btn btn-link btn-rounded btn-sm" (click)="show()" style="color: rgba(0, 0, 0, 0.778);">
+                          <a class="nav-link" [routerLink]="['/reply/', r.id]">
+                            <i class="fas fa-reply"></i>
+                            Reply
+                          </a>
+                      </button>
+                      
+                    </li>                 
+                  </ul>
+  
+                  <div *ngIf="showReactions" style="background-color: rgba(255, 227, 198, 0.787);">
+                    <h5>All reactions</h5>
+                    <div *ngFor="let reaction of r.reactions" style="border: 1px solid;">
+                        <p>{{reaction.madeBy.firstName }} {{reaction.madeBy.lastName}}</p>
+                        <p>username: {{reaction.madeBy.username}}</p>
+                        <p>{{reaction.type}}</p>
+                    </div>
+                  </div>
+                        
+                  <p style="font-size: 10px; margin-top: 35px;">{{ r.timestamp | date: 'yyyy-MM-dd' }}</p>
+               
+                  </div>          
+                </div>
+
+                <!----------------------------------------------------------------------------------------------------------------------------->
+              
               </div>
             </div>
           </div>

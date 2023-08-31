@@ -1,0 +1,7 @@
+<form [formGroup]="replyForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="text">Text</label>
+      <textarea id="text" formControlName="text" class="form-control" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-success">Reply on comment</button>
+</form>

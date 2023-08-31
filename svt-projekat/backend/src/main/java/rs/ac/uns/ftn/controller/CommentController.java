@@ -131,6 +131,8 @@ public class CommentController {
         Comment createdComment = commentService.save(comment);
 
         replyOn.get().getRepliesTo().add(createdComment);
+        commentService.save(replyOn.get());
+        
         return ResponseEntity.ok(createdComment);
     }
 

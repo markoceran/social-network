@@ -49,6 +49,26 @@
                 <p class="lead fw-normal mb-0">Posts</p>           
               </div>        
               <div class="row g-2" *ngFor="let p of userPosts" style="border-bottom: gray 0.5px solid;">
+
+                <div class="btn-group-vertical" role="group" aria-label="Vertical button group" style="margin-left: 89%; width: 10%;">      
+                  <div class="btn-group" role="group">
+                    <button
+                      id="btnGroupVerticalDrop4"
+                      type="button"
+                      class="btn btn-link dropdown-toggle"
+                      data-mdb-toggle="dropdown"
+                      aria-expanded="false"
+                    >               
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop4">
+                      <li><button class="dropdown-item" (click)="editPost(p.id)">Edit post</button></li>
+                      <li><button class="dropdown-item" (click)="deletePost(p.id)">Delete post</button></li>
+                    </ul>
+                  </div>
+                </div>
+                <br>
+                <br>
+
                 <p style="margin-top: 25px;">{{p.content}}</p>
                 
                   <div *ngFor="let imageName of p.images">

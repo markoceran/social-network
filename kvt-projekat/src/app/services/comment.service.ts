@@ -63,4 +63,19 @@ export class CommentService {
   orderDescDate(comments:Comments[]): Observable<Array<Comments>> {
     return this.http.put<Array<Comments>>('api/comments/orderDescDate', comments);
   }
+
+
+  reply(comment: Comments, commendId:number): Observable<Comments> {
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    const params = { commendId: commendId.toString() };
+
+    return this.http.post<Comments>('api/comments/reply', comment, { headers, params});
+  }
 }

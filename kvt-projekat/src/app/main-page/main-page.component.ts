@@ -200,6 +200,41 @@ export class MainPageComponent implements OnInit{
           ...post,
           creationDate: this.parseDateArrayToDate2(post.creationDate)
         }));
+
+        this.allPosts.forEach(post => {
+          this.reactionService.getPostReaction(post.id).subscribe(
+            (reaction: Reaction[]) => {
+              
+              if(reaction.length>0){
+                reaction.forEach(r => {
+
+                if(r.madeBy.username === this.userService.getUsernameFromToken()){
+                console.log(r);
+                if(r.type === "LIKE"){
+                  post.isLiked = true;
+                }else if(r.type === "DISLIKE"){
+                  post.isDisliked = true;
+                }else{ post.isHearted = true;}
+
+              }
+              });  
+            }
+                        
+            }
+          )
+          this.imageService.getPostImage(post.id).subscribe(
+            (images: any) =>{
+              post.images = images;
+              console.log(images);
+            }
+          )
+          this.imageService.getProfileImageByUser(post.postedBy.username).subscribe(
+            (image: any) =>{
+              post.postedBy.profileImage = image;
+              console.log(image);
+            }
+          )
+        });
       },
       (error) => {
         console.error('Order error', error);
@@ -220,6 +255,41 @@ export class MainPageComponent implements OnInit{
           ...post,
           creationDate: this.parseDateArrayToDate2(post.creationDate)
         }));
+
+        this.allPosts.forEach(post => {
+          this.reactionService.getPostReaction(post.id).subscribe(
+            (reaction: Reaction[]) => {
+              
+              if(reaction.length>0){
+                reaction.forEach(r => {
+
+                if(r.madeBy.username === this.userService.getUsernameFromToken()){
+                console.log(r);
+                if(r.type === "LIKE"){
+                  post.isLiked = true;
+                }else if(r.type === "DISLIKE"){
+                  post.isDisliked = true;
+                }else{ post.isHearted = true;}
+
+              }
+              });  
+            }
+                        
+            }
+          )
+          this.imageService.getPostImage(post.id).subscribe(
+            (images: any) =>{
+              post.images = images;
+              console.log(images);
+            }
+          )
+          this.imageService.getProfileImageByUser(post.postedBy.username).subscribe(
+            (image: any) =>{
+              post.postedBy.profileImage = image;
+              console.log(image);
+            }
+          )
+        });
       },
       (error) => {
         console.error('Order error', error);

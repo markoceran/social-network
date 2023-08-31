@@ -7,7 +7,7 @@ export interface Comments{
     text: string;
     timestamp: Date;
     belongsTo: User;
-    replies: Comments[];
+    repliesTo: Comments[];
     isLiked: boolean;
     isDisliked: boolean;
     isHearted: boolean;

@@ -9,6 +9,7 @@ import { CommentService } from '../services/comment.service';
 import { ReactionService } from '../services/reaction.service';
 import { Reaction } from '../model/reaction';
 import { Comments } from '../model/comment';
+import { Toast, ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-profile',
@@ -22,7 +23,7 @@ export class ProfileComponent implements OnInit{
   showReactions: boolean = false;
   showComments: boolean = false;
 
-  constructor(private commentService:CommentService,private reactionService:ReactionService, private userService: UserServiceService, private postService: PostService, private router:Router,private imageService:ImageService) {} 
+  constructor(private commentService:CommentService,private reactionService:ReactionService, private userService: UserServiceService, private postService: PostService, private router:Router,private imageService:ImageService,private toast:ToastrService) {} 
 
   ngOnInit() {
     
@@ -119,6 +120,32 @@ export class ProfileComponent implements OnInit{
   }
   showComment(){
     this.showComments = !this.showComments
+  }
+
+  
+  editPost(id:number){
+    this.router.navigate(['editPost/', id]);
+  }
+
+  deletePost(id:number){
+
+    this.postService.deletePost(id).subscribe(
+      (data: Post) =>{
+        console.log(data);
+        this.toast.success('Post successfully deleted');
+
+        const index = this.userPosts.findIndex(post => post.id === data.id);
+
+        if (index !== -1) {
+          this.userPosts.splice(index, 1);
+        }
+
+      },
+      (error) => {
+        console.error('Error deleting post:', error);
+      }
+    )
+   
   }
   
 }

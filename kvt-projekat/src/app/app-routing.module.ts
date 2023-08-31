@@ -18,6 +18,8 @@ import { BannedComponent } from './banned/banned.component';
 import { AddReportPostComponent } from './add-report-post/add-report-post.component';
 import { AddReportUserComponent } from './add-report-user/add-report-user.component';
 import { AddReportCommentComponent } from './add-report-comment/add-report-comment.component';
+import { EditPostComponent } from './edit-post/edit-post.component';
+import { AddReplyOnCommentComponent } from './add-reply-on-comment/add-reply-on-comment.component';
 
 const routes: Routes = [
 
@@ -132,6 +134,20 @@ const routes: Routes = [
 		
 		path: 'addReportForComment/:id',
 		component: AddReportCommentComponent,
+	  //canActivate: [RoleGuard],
+		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	},
+	{
+		
+		path: 'editPost/:id',
+		component: EditPostComponent,
+	  //canActivate: [RoleGuard],
+		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	},
+	{
+		
+		path: 'reply/:id',
+		component: AddReplyOnCommentComponent,
 	  //canActivate: [RoleGuard],
 		//data: {expectedRoles: 'ADMIN|WINE_USER'}
 	}

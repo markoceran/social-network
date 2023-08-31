@@ -45,6 +45,7 @@ export class CommentComponent implements OnInit{
           timestamp: this.parseDateArrayToDate(comment.timestamp)
           
       }));
+
       this.comments.forEach(comment => {
 
         this.imageService.getProfileImageByUser(comment.belongsTo.username).subscribe(
@@ -77,6 +78,41 @@ export class CommentComponent implements OnInit{
                       
           }
         )
+
+        comment.repliesTo.forEach(reply=>{
+
+          this.imageService.getProfileImageByUser(reply.belongsTo.username).subscribe(
+            (image: any) =>{
+              reply.belongsTo.profileImage = image;
+              console.log(image);
+            }
+          )
+  
+          this.reactionService.getCommentReaction(reply.id).subscribe(
+            (reaction: Reaction[]) => {
+              
+              if(reaction.length>0){
+                
+                reply.reactions = reaction;
+  
+                reaction.forEach(r => {
+  
+                if(r.madeBy.username === this.userService.getUsernameFromToken()){
+                console.log(r);
+                if(r.type === "LIKE"){
+                  reply.isLiked = true;
+                }else if(r.type === "DISLIKE"){
+                  reply.isDisliked = true;
+                }else{ reply.isHearted = true;}
+  
+              }
+              });  
+            }
+                        
+            }
+          )
+  
+        })
       })
     },
       (error) => {
@@ -230,6 +266,41 @@ export class CommentComponent implements OnInit{
                         
             }
           )
+
+          comment.repliesTo.forEach(reply=>{
+
+            this.imageService.getProfileImageByUser(reply.belongsTo.username).subscribe(
+              (image: any) =>{
+                reply.belongsTo.profileImage = image;
+                console.log(image);
+              }
+            )
+    
+            this.reactionService.getCommentReaction(reply.id).subscribe(
+              (reaction: Reaction[]) => {
+                
+                if(reaction.length>0){
+                  
+                  reply.reactions = reaction;
+    
+                  reaction.forEach(r => {
+    
+                  if(r.madeBy.username === this.userService.getUsernameFromToken()){
+                  console.log(r);
+                  if(r.type === "LIKE"){
+                    reply.isLiked = true;
+                  }else if(r.type === "DISLIKE"){
+                    reply.isDisliked = true;
+                  }else{ reply.isHearted = true;}
+    
+                }
+                });  
+              }
+                          
+              }
+            )
+    
+          })
         })
       },
       (error) => {
@@ -284,6 +355,41 @@ export class CommentComponent implements OnInit{
                         
             }
           )
+
+          comment.repliesTo.forEach(reply=>{
+
+            this.imageService.getProfileImageByUser(reply.belongsTo.username).subscribe(
+              (image: any) =>{
+                reply.belongsTo.profileImage = image;
+                console.log(image);
+              }
+            )
+    
+            this.reactionService.getCommentReaction(reply.id).subscribe(
+              (reaction: Reaction[]) => {
+                
+                if(reaction.length>0){
+                  
+                  reply.reactions = reaction;
+    
+                  reaction.forEach(r => {
+    
+                  if(r.madeBy.username === this.userService.getUsernameFromToken()){
+                  console.log(r);
+                  if(r.type === "LIKE"){
+                    reply.isLiked = true;
+                  }else if(r.type === "DISLIKE"){
+                    reply.isDisliked = true;
+                  }else{ reply.isHearted = true;}
+    
+                }
+                });  
+              }
+                          
+              }
+            )
+    
+          })
         })
       },
       (error) => {
@@ -338,6 +444,41 @@ export class CommentComponent implements OnInit{
                         
             }
           )
+
+          comment.repliesTo.forEach(reply=>{
+
+            this.imageService.getProfileImageByUser(reply.belongsTo.username).subscribe(
+              (image: any) =>{
+                reply.belongsTo.profileImage = image;
+                console.log(image);
+              }
+            )
+    
+            this.reactionService.getCommentReaction(reply.id).subscribe(
+              (reaction: Reaction[]) => {
+                
+                if(reaction.length>0){
+                  
+                  reply.reactions = reaction;
+    
+                  reaction.forEach(r => {
+    
+                  if(r.madeBy.username === this.userService.getUsernameFromToken()){
+                  console.log(r);
+                  if(r.type === "LIKE"){
+                    reply.isLiked = true;
+                  }else if(r.type === "DISLIKE"){
+                    reply.isDisliked = true;
+                  }else{ reply.isHearted = true;}
+    
+                }
+                });  
+              }
+                          
+              }
+            )
+    
+          })
         })
       },
       (error) => {
@@ -394,6 +535,41 @@ export class CommentComponent implements OnInit{
                         
             }
           )
+
+          comment.repliesTo.forEach(reply=>{
+
+            this.imageService.getProfileImageByUser(reply.belongsTo.username).subscribe(
+              (image: any) =>{
+                reply.belongsTo.profileImage = image;
+                console.log(image);
+              }
+            )
+    
+            this.reactionService.getCommentReaction(reply.id).subscribe(
+              (reaction: Reaction[]) => {
+                
+                if(reaction.length>0){
+                  
+                  reply.reactions = reaction;
+    
+                  reaction.forEach(r => {
+    
+                  if(r.madeBy.username === this.userService.getUsernameFromToken()){
+                  console.log(r);
+                  if(r.type === "LIKE"){
+                    reply.isLiked = true;
+                  }else if(r.type === "DISLIKE"){
+                    reply.isDisliked = true;
+                  }else{ reply.isHearted = true;}
+    
+                }
+                });  
+              }
+                          
+              }
+            )
+    
+          })
         })
       },
       (error) => {
@@ -448,6 +624,41 @@ export class CommentComponent implements OnInit{
                         
             }
           )
+
+          comment.repliesTo.forEach(reply=>{
+
+            this.imageService.getProfileImageByUser(reply.belongsTo.username).subscribe(
+              (image: any) =>{
+                reply.belongsTo.profileImage = image;
+                console.log(image);
+              }
+            )
+    
+            this.reactionService.getCommentReaction(reply.id).subscribe(
+              (reaction: Reaction[]) => {
+                
+                if(reaction.length>0){
+                  
+                  reply.reactions = reaction;
+    
+                  reaction.forEach(r => {
+    
+                  if(r.madeBy.username === this.userService.getUsernameFromToken()){
+                  console.log(r);
+                  if(r.type === "LIKE"){
+                    reply.isLiked = true;
+                  }else if(r.type === "DISLIKE"){
+                    reply.isDisliked = true;
+                  }else{ reply.isHearted = true;}
+    
+                }
+                });  
+              }
+                          
+              }
+            )
+    
+          })
         })
       },
       (error) => {
@@ -502,6 +713,41 @@ export class CommentComponent implements OnInit{
                         
             }
           )
+
+          comment.repliesTo.forEach(reply=>{
+
+            this.imageService.getProfileImageByUser(reply.belongsTo.username).subscribe(
+              (image: any) =>{
+                reply.belongsTo.profileImage = image;
+                console.log(image);
+              }
+            )
+    
+            this.reactionService.getCommentReaction(reply.id).subscribe(
+              (reaction: Reaction[]) => {
+                
+                if(reaction.length>0){
+                  
+                  reply.reactions = reaction;
+    
+                  reaction.forEach(r => {
+    
+                  if(r.madeBy.username === this.userService.getUsernameFromToken()){
+                  console.log(r);
+                  if(r.type === "LIKE"){
+                    reply.isLiked = true;
+                  }else if(r.type === "DISLIKE"){
+                    reply.isDisliked = true;
+                  }else{ reply.isHearted = true;}
+    
+                }
+                });  
+              }
+                          
+              }
+            )
+    
+          })
         })
       },
       (error) => {
@@ -558,6 +804,41 @@ export class CommentComponent implements OnInit{
                         
             }
           )
+
+          comment.repliesTo.forEach(reply=>{
+
+            this.imageService.getProfileImageByUser(reply.belongsTo.username).subscribe(
+              (image: any) =>{
+                reply.belongsTo.profileImage = image;
+                console.log(image);
+              }
+            )
+    
+            this.reactionService.getCommentReaction(reply.id).subscribe(
+              (reaction: Reaction[]) => {
+                
+                if(reaction.length>0){
+                  
+                  reply.reactions = reaction;
+    
+                  reaction.forEach(r => {
+    
+                  if(r.madeBy.username === this.userService.getUsernameFromToken()){
+                  console.log(r);
+                  if(r.type === "LIKE"){
+                    reply.isLiked = true;
+                  }else if(r.type === "DISLIKE"){
+                    reply.isDisliked = true;
+                  }else{ reply.isHearted = true;}
+    
+                }
+                });  
+              }
+                          
+              }
+            )
+    
+          })
         })
       },
       (error) => {
@@ -612,6 +893,41 @@ export class CommentComponent implements OnInit{
                         
             }
           )
+
+          comment.repliesTo.forEach(reply=>{
+
+            this.imageService.getProfileImageByUser(reply.belongsTo.username).subscribe(
+              (image: any) =>{
+                reply.belongsTo.profileImage = image;
+                console.log(image);
+              }
+            )
+    
+            this.reactionService.getCommentReaction(reply.id).subscribe(
+              (reaction: Reaction[]) => {
+                
+                if(reaction.length>0){
+                  
+                  reply.reactions = reaction;
+    
+                  reaction.forEach(r => {
+    
+                  if(r.madeBy.username === this.userService.getUsernameFromToken()){
+                  console.log(r);
+                  if(r.type === "LIKE"){
+                    reply.isLiked = true;
+                  }else if(r.type === "DISLIKE"){
+                    reply.isDisliked = true;
+                  }else{ reply.isHearted = true;}
+    
+                }
+                });  
+              }
+                          
+              }
+            )
+    
+          })
         })
       },
       (error) => {

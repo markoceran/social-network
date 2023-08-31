@@ -44,7 +44,7 @@ public class PostServiceImpl implements PostService {
         if (toUpdate.isPresent()) {
 
             toUpdate.get().setContent(post.getContent());
-            toUpdate.get().setCreationDate(post.getCreationDate());
+            toUpdate.get().setIsDeleted(post.getIsDeleted());
             postRepository.save(toUpdate.get());
 
             return toUpdate.get();
@@ -60,7 +60,8 @@ public class PostServiceImpl implements PostService {
 
         Optional<Post> post = this.getById(id);
         if(post.isPresent()){
-            postRepository.deleteById(id);
+            post.get().setIsDeleted(true);
+            this.update(post.get().getId(), post.get());
             return post.get();
         }else {return null;}
 
