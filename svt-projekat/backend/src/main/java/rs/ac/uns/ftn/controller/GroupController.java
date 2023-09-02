@@ -13,6 +13,11 @@ import rs.ac.uns.ftn.service.GroupAdminService;
 import rs.ac.uns.ftn.service.GroupService;
 import rs.ac.uns.ftn.service.UserService;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.transaction.Transactional;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,13 +39,14 @@ public class GroupController {
     @Autowired
     private GroupAdminService groupAdminService;
 
+
     @GetMapping
     public ResponseEntity<List<Groupp>> getAllGroups() {
         List<Groupp> allGroups = groupService.getAll();
         List<Groupp> groups = new ArrayList<>();
 
-        for(Groupp g:allGroups){
-            if(!g.getIsSuspended()){
+        for (Groupp g : allGroups) {
+            if (!g.getIsSuspended()) {
                 groups.add(g);
             }
         }
@@ -49,7 +55,7 @@ public class GroupController {
     }
 
     @GetMapping("/my")
-    public ResponseEntity<List<Groupp>> getMyGroups(@RequestHeader("Authorization") String token){
+    public ResponseEntity<List<Groupp>> getMyGroups(@RequestHeader("Authorization") String token) {
 
         String tokenValue = token.replace("Bearer ", "");
 
@@ -62,8 +68,8 @@ public class GroupController {
 
         List<Groupp> groupps = new ArrayList<>();
 
-        for(Groupp g: groupService.getAll()){
-            if(!g.getIsSuspended() && g.getGroupAdmins().stream().filter(u->u.getUsername().equals(user.getUsername())).findAny().orElse(null) != null){
+        for (Groupp g : groupService.getAll()) {
+            if (!g.getIsSuspended() && g.getGroupAdmins().stream().filter(u -> u.getUsername().equals(user.getUsername())).findAny().orElse(null) != null) {
                 groupps.add(g);
             }
         }
@@ -93,31 +99,19 @@ public class GroupController {
         }
 
 
-        GroupAdmin groupAdmin = new GroupAdmin();
-        if(user.getRole().equals(Roles.USER)){
+        if (user.getRole().equals(Roles.USER)) {
 
+            userService.setRoleAsGroupAdmin(user);
 
-            groupAdmin.setId(user.getId());
-            groupAdmin.setEmail(user.getEmail());
-            groupAdmin.setUsername(user.getUsername());
-            groupAdmin.setPassword(user.getPassword());
-            groupAdmin.setFirstName(user.getFirstName());
-            groupAdmin.setLastName(user.getLastName());
-            groupAdmin.setFriendsWith(user.getFriendsWith());
-            groupAdmin.setLastLogin(user.getLastLogin());
-            groupAdmin.setRole(Roles.GROUP_ADMIN);
-
-            userService.update(user.getId(), groupAdmin);
-            groupAdmin.setUsername("");
-            groupAdminService.save(groupAdmin);
         }
+
+
+        GroupAdmin groupAdminFind = groupAdminService.findByUsername(user.getUsername());
+        group.getGroupAdmins().add(groupAdminFind);
+
 
         group.setCreationDate(LocalDateTime.now());
         group.setIsSuspended(false);
-
-
-        group.getGroupAdmins().add(groupAdmin);
-
 
         Groupp createdGroup = groupService.save(group);
         return ResponseEntity.ok(createdGroup);
@@ -143,4 +137,42 @@ public class GroupController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/find/{unos}")
+    //@PreAuthorize("isAuthenticated()")
+    public List<Groupp> findGroup(@PathVariable String unos, @RequestHeader("Authorization") String token) {
+
+        String tokenValue = token.replace("Bearer ", "");
+
+        String username = tokenUtils.getUsernameFromToken(tokenValue);
+
+
+        List<Groupp> sve = groupService.getAll();
+        List<Groupp> rezultat = new ArrayList<>();
+
+        boolean valid = true;
+
+        if (!sve.isEmpty()) {
+            for (Groupp g : sve) {
+
+                if (g.getName().toLowerCase().contains(unos.toLowerCase())) {
+
+                    for(GroupAdmin admin : g.getGroupAdmins()){
+                        if (admin.getUsername().equals(username)) {
+                            valid = false;
+                        }
+                    }
+
+                    if (valid) {
+                        rezultat.add(g);
+                    }
+                }
+
+            }
+        }
+
+
+        return rezultat;
+    }
+
 }

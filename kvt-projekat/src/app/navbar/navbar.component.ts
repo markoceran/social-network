@@ -3,6 +3,7 @@ import { User } from '../model/user.model';
 import { UserServiceService } from '../services/user.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-navbar',
@@ -13,11 +14,13 @@ export class NavbarComponent implements OnInit{
  
   username: any;
   findUserForm: FormGroup;
+  loggedUser!: User;
   
   constructor(
     private userService: UserServiceService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private toast: ToastrService
   ) {
     this.findUserForm = this.fb.group({
       input: [null, Validators.required]
@@ -28,6 +31,17 @@ export class NavbarComponent implements OnInit{
   ngOnInit() {
     
     this.username = this.userService.getUsernameFromToken();
+    
+    this.userService.getProfileData(this.username).subscribe(
+      (user: User) => {
+        this.loggedUser = user;
+        
+      },
+      (error) => {
+        console.error('Error get user data:', error);
+        this.toast.error('Error get user data!');
+      }
+    );
 
   }
 

@@ -3,6 +3,7 @@ import { User } from "./user.model";
 import { Image } from "./image";
 import { Reaction } from "./reaction";
 import { Comments } from "./comment";
+import { Group } from "./group";
 
 export interface Post{
     
@@ -17,6 +18,7 @@ export interface Post{
     comments:Comments[];
     reactions:Reaction[];
     isDeleted: boolean;
+    group:Group;
 
 }
   

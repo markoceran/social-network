@@ -42,10 +42,11 @@ public class Groupp {
             inverseJoinColumns = @JoinColumn(name = "post_id",referencedColumnName = "id"))
     private Set<Post> contains = new HashSet<Post>();
 
-    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "AdminOfGroup",
             joinColumns = @JoinColumn(name = "group_id",referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "admin_id",referencedColumnName = "id"))
+            inverseJoinColumns = @JoinColumn(name = "admin_id",referencedColumnName = "id"),
+            uniqueConstraints = {})
     private Set<GroupAdmin> groupAdmins = new HashSet<GroupAdmin>();
 
 

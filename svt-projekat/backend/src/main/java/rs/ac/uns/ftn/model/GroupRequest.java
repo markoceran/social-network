@@ -26,9 +26,9 @@ public class GroupRequest {
     @Column(name = "at")
     private LocalDateTime at;
 
-    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     private Groupp forr;
 
-    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     private User from;
 }

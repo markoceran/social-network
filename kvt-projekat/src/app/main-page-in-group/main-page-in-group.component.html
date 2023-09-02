@@ -1,33 +1,29 @@
 <app-navbar></app-navbar>
 
 <section class="h-100 gradient-custom-2">
+
     <div class="container py-5 h-100">
+
+      <h5 style="color: rgba(60, 75, 125, 0.752); text-align: center; margin-bottom: 40px;">Group: {{group.name}}</h5>
+
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col col-lg-9 col-xl-7">
           <div class="card"> 
             <div class="card-body p-4 text-black">
-                
-              <div class="btn-group-vertical" role="group" aria-label="Vertical button group" style="margin-left: 89%;">      
-                <div class="btn-group" role="group">
-                  <button
-                    id="btnGroupVerticalDrop4"
-                    type="button"
-                    class="btn btn-link dropdown-toggle"
-                    data-mdb-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                  Filter
-                  </button>
-                  <ul class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop4">
-                    <li><button class="dropdown-item" (click)="orderAsc()">Order ascending</button></li>
-                    <li><button class="dropdown-item" (click)="orderDesc()">Order descending</button></li>
-                  </ul>
-                </div>
-              </div>
-              <br>
-              <br>
 
-              <div class="row g-2" *ngFor="let p of allPosts; let postIndex = index" style="border-bottom: rgb(150, 150, 150) 1px solid;">
+                <ul class="navbar-nav d-flex flex-row">
+                    
+                    <li class="nav-item me-3 me-lg-0">
+                        <a class="nav-link" [routerLink]="['/addPostInGroup', groupId]">
+                            <i class="fas fa-photo-film"></i>
+                            Add post in group
+                        </a>
+                    </li>
+                    
+                </ul>
+            
+
+              <div class="row g-2" *ngFor="let p of groupPosts; let postIndex = index" style="border-bottom: rgb(150, 150, 150) 1px solid;">
                 <div class="container py-5 h-100">
                     <div>
                       <div>
@@ -36,13 +32,13 @@
                           <ul class="list-group list-group-light">
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                               <div class="d-flex align-items-center">
+                                
                                 <img *ngIf="p.postedBy.profileImage === undefined" [src]="getImageUrl('avatar.jpg')" alt="" style="width: 45px; height: 45px;margin-left: 15px;" class="rounded-circle" />
                                 <img *ngIf="p.postedBy.profileImage !== undefined" [src]="getImageUrl(p.postedBy.profileImage)" alt="" style="width: 45px; height: 45px;margin-left: 15px;" class="rounded-circle" />
                                 <div class="ms-3">
                                   <p class="fw-bold mb-1">{{ p.postedBy.firstName + ' ' + p.postedBy.lastName }}</p>
                                   <p class="text-muted mb-0">username: {{p.postedBy.username}}</p>
-                                  <a class="fw-bold mb-1" *ngIf="p.group" [routerLink]="['/mainPageGroup/', p.group.id]" >Group: {{p.group.name}}</a>
-                                </div>                  
+                                </div>
                               </div>                          
                             </li>
                           </ul>               
@@ -70,31 +66,6 @@
                     </div>
                 </div>
                 <p style="margin-top: 25px;">{{p.content}}</p>
-               
-
-                
-                <!------<div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
-                  <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                  </div>
-                  <div class="carousel-inner"> 
-                    
-                    <div *ngFor="let imageName of p.images; let i = index" [ngClass]="{'carousel-item': true, 'active': i === 0}">
-                      <img [src]="getImageUrl(imageName)" class="d-block w-100" alt="Image">
-                    </div>
-                    
-                  </div>
-                  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden"></span>
-                  </button>
-                  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden"></span>
-                  </button>
-              </div>------>
                 
               <div *ngFor="let imageName of p.images">
                 <img [src]="getImageUrl(imageName)" class="d-block w-100" alt="Image">

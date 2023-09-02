@@ -3,32 +3,89 @@
 <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="input-group">
-            <input type="search" class="form-control rounded" placeholder="Find group" aria-label="Search" aria-describedby="search-addon" />
-            <button type="button" class="btn btn-info">search</button>
+            <input id="unos" type="search" class="form-control rounded" placeholder="Find group" aria-label="Search" aria-describedby="search-addon" />
+            <button type="button" class="btn btn-info" (click)="findGroup()">search</button>
         </div>
         <button type="button" class="btn btn-success" (click)="addGroup()">Create group</button>
     </div>
 </div>
 
+<section class="h-100 gradient-custom-2" *ngIf="search">
+  <h4>Search result:</h4>
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-lg-9 col-xl-7">
+        <div class="card">            
+          
+          <ul class="list-group list-group-light">
+            <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let g of searchGroup">
+              <div class="d-flex align-items-center">
+                <i class="fas fa-users" style="margin-left: 20px;"></i>
+                <div class="ms-3">
+                  <p class="fw-bold mb-1">{{ g.name }}</p>
+                  <p class="text-muted mb-0">Description: {{g.description}}</p>
+                  <p class="text-muted mb-0" id="date">Creation date: {{g.creationDate | date: 'yyyy-MM-dd HH:mm' }}</p>
+                </div>
+              </div>
+              <ng-container >
+                <button class="btn btn-link btn-rounded btn-sm" (click)="addRequest(g.id)">Join</button>
+              </ng-container>
+              <!--<ng-container >
+                <p class="btn btn-link btn-rounded btn-sm" style="color: orange;">Request already sent</p>
+              </ng-container>
+              <ng-container >
+                <p class="btn btn-link btn-rounded btn-sm" style="color: seagreen;">Joined</p>
+              </ng-container>--->
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="h-100 gradient-custom-2">
-    <h4>My groups:</h4>
+    <h4 style="color: rgba(60, 75, 125, 0.752);">My groups:</h4>
     <div class="container py-5 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col col-lg-9 col-xl-7">
-          <div class="card">            
+          <div class="card" *ngFor="let g of groups">            
             
             <ul class="list-group list-group-light">
-              <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let g of groups">
+              <li class="list-group-item d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center">
-                  <i class="fas fa-users"></i>
+                  <i class="fas fa-users" style="margin-left: 20px;"></i>
                   <div class="ms-3">
-                    <p class="fw-bold mb-1">{{ g.name }}</p>
+                    <a class="fw-bold mb-1" [routerLink]="['/mainPageGroup/', g.id]" >{{ g.name }}</a>
                     <p class="text-muted mb-0">Description: {{g.description}}</p>
                     <p class="text-muted mb-0" id="date">Creation date: {{g.creationDate | date: 'yyyy-MM-dd HH:mm' }}</p>
                   </div>
                 </div>
+                <button class="btn btn-link btn-rounded btn-sm" (click)="showRequests()">Requests</button>
               </li>
             </ul>
+
+            <div *ngIf="show" style="border: gray 1px solid; margin-bottom: 15px;">
+              <h5 style="color: rgba(83, 103, 168, 0.752); text-align: center; margin-top: 10px;">Requests:</h5>
+              <ul class="list-group list-group-light">
+                  <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let r of g.groupRequests">
+                    <div class="d-flex align-items-center">
+              
+                      <img *ngIf="r.from.profileImage === undefined" [src]="getImageUrl('avatar.jpg')" alt="" style="width: 45px; height: 45px;margin-left: 15px;" class="rounded-circle" />
+                      <img *ngIf="r.from.profileImage !== undefined" [src]="getImageUrl(r.from.profileImage)" alt="" style="width: 45px; height: 45px;margin-left: 15px;" class="rounded-circle" />
+
+                      <div class="ms-3">
+                        <p class="fw-bold mb-1">{{ r.from.firstName + ' ' + r.from.lastName }}</p>
+                        <p class="text-muted mb-0">username: {{r.from.username}}</p>
+                        <p class="text-muted mb-0" id="date">{{r.createdAt | date: 'yyyy-MM-dd HH:mm' }}</p>
+                      </div>
+                    </div>
+                    <button class="btn btn-link btn-rounded btn-sm" (click)="accept(r.id)"  style="color: green;">Accept</button>
+                    <button class="btn btn-link btn-rounded btn-sm" (click)="deny(r.id)"  style="color: red;">Deny</button>
+                  </li>
+              </ul>
+            </div>
+
           </div>
         </div>
       </div>

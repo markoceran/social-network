@@ -1,11 +1,13 @@
 package rs.ac.uns.ftn.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.model.*;
+import rs.ac.uns.ftn.security.TokenUtils;
 import rs.ac.uns.ftn.service.GroupAdminService;
 import rs.ac.uns.ftn.service.GroupRequestService;
 import rs.ac.uns.ftn.service.GroupService;
@@ -30,6 +32,10 @@ public class GroupRequestController {
     private UserService userService;
 
     @Autowired
+    private TokenUtils tokenUtils;
+
+
+    @Autowired
     private GroupAdminService groupAdminService;
 
     @GetMapping("/{id}")
@@ -41,7 +47,7 @@ public class GroupRequestController {
         if (groupp.isPresent()) {
 
             for(GroupRequest g:allGroupRequest){
-                if(!g.getApproved() && g.getForr().equals(groupp) && g.getAt().equals(null)){
+                if(!g.getApproved() && g.getForr().getId().equals(groupp.get().getId()) && g.getAt() == null){
                     requests.add(g);
                 }
             }
@@ -54,15 +60,20 @@ public class GroupRequestController {
     }
 
     @PostMapping
-    public ResponseEntity<GroupRequest> createRequest(@RequestParam Long id) {
+    public ResponseEntity<GroupRequest> createRequest(@RequestParam Long id, @RequestHeader("Authorization") String token) {
 
         Optional<Groupp> groupp = groupService.getById(id);
 
-        if (groupp.isPresent()) {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String tokenValue = token.replace("Bearer ", "");
 
-            String username = authentication.getName();
-            User user = userService.findByUsername(username);
+        String username = tokenUtils.getUsernameFromToken(tokenValue);
+        User user = userService.findByUsername(username);
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        if (groupp.isPresent()) {
 
             GroupRequest groupRequest = new GroupRequest();
             groupRequest.setApproved(false);
@@ -90,14 +101,17 @@ public class GroupRequestController {
 
             if (user.getRole().equals(Roles.USER)) {
 
-                user.setRole(Roles.GROUP_ADMIN);
-                groupAdminService.update(user.getId(), (GroupAdmin) user);
+                userService.setRoleAsGroupAdmin(user);
+
             }
 
-            groupp.getGroupAdmins().add((GroupAdmin) user);
+            GroupAdmin groupAdminFind = groupAdminService.findByUsername(user.getUsername());
+            groupp.getGroupAdmins().add(groupAdminFind);
+
             request.get().setAt(LocalDateTime.now());
             request.get().setApproved(true);
             groupRequestService.update(id, request.get());
+            groupService.update(groupp.getId(), groupp);
 
             return ResponseEntity.ok(request.get());
         }else {
@@ -112,9 +126,7 @@ public class GroupRequestController {
 
         if (request.isPresent()) {
 
-            request.get().setAt(LocalDateTime.now());
-            request.get().setApproved(false);
-            groupRequestService.update(id, request.get());
+            groupRequestService.delete(id);
 
             return ResponseEntity.ok(request.get());
         }else {

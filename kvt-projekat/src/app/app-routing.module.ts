@@ -20,6 +20,8 @@ import { AddReportUserComponent } from './add-report-user/add-report-user.compon
 import { AddReportCommentComponent } from './add-report-comment/add-report-comment.component';
 import { EditPostComponent } from './edit-post/edit-post.component';
 import { AddReplyOnCommentComponent } from './add-reply-on-comment/add-reply-on-comment.component';
+import { MainPageInGroupComponent } from './main-page-in-group/main-page-in-group.component';
+import { AddPostInGroupComponent } from './add-post-in-group/add-post-in-group.component';
 
 const routes: Routes = [
 
@@ -148,6 +150,20 @@ const routes: Routes = [
 		
 		path: 'reply/:id',
 		component: AddReplyOnCommentComponent,
+	  //canActivate: [RoleGuard],
+		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	},
+	{
+		
+		path: 'mainPageGroup/:id',
+		component: MainPageInGroupComponent,
+	  //canActivate: [RoleGuard],
+		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	},
+	{
+		
+		path: 'addPostInGroup/:id',
+		component: AddPostInGroupComponent,
 	  //canActivate: [RoleGuard],
 		//data: {expectedRoles: 'ADMIN|WINE_USER'}
 	}

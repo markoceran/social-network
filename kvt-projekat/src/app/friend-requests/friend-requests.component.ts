@@ -52,9 +52,6 @@ export class FriendRequestsComponent implements OnInit{
       (data: any) => {
         console.log(data);  
         this.toastr.success('Request was successfully accepted!');
-
-        /*const index = this.requests.findIndex(request => request.id === id);
-        this.requests.splice(index, 1);*/
         window.location.reload();
         
       },
@@ -70,9 +67,6 @@ export class FriendRequestsComponent implements OnInit{
       (data: any) => {
         console.log(data);  
         this.toastr.success('Request was successfully denied!');
-
-        /*const index = this.requests.findIndex(request => request.id === id);
-        this.requests.splice(index, 1);*/
         window.location.reload();
         
       },

@@ -23,8 +23,26 @@ export class PostService {
     return this.http.post<Post>('api/posts', post, { headers });
   }
 
+  createPostInGroup(groupId:number, post: Post): Observable<Post> {
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    const params = { groupId: groupId.toString() };
+
+    return this.http.post<Post>('api/posts/createPostInGroup', post, { headers,params });
+  }
+
   getMyPosts(username:string): Observable<Array<Post>> {
     return this.http.get<Array<Post>>('api/posts/my/'+ username);
+  }
+
+  getPostsFromMyGroups(username:string): Observable<Array<Post>> {
+    return this.http.get<Array<Post>>('api/posts/myGroupsPosts/'+ username);
   }
  
   getLastId(): Observable<number> {
@@ -56,4 +74,7 @@ export class PostService {
     return this.http.delete<Post>('api/posts/' + id);
   }
 
+  getGroupPosts(id:number): Observable<Array<Post>> {
+    return this.http.get<Array<Post>>('api/posts/groupPost/'+ id);
+  }
 }

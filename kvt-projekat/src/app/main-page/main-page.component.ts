@@ -8,6 +8,8 @@ import { Toast, ToastrService } from 'ngx-toastr';
 import { Reaction } from '../model/reaction';
 import { ImageService } from '../services/image.service';
 import { Router } from '@angular/router';
+import { GroupService } from '../services/group.service';
+import { Group } from '../model/group';
 
 @Component({
   selector: 'app-main-page',
@@ -18,6 +20,7 @@ export class MainPageComponent implements OnInit{
 
   friendPosts!: Post[]; 
   myPosts!: Post[];
+  postsFromMyGroups: Post[] = [];
   user!: User;
   allPosts!: Post[];
 
@@ -25,7 +28,7 @@ export class MainPageComponent implements OnInit{
   isDisliked: boolean = false;
   isHearted: boolean = false;
 
-  constructor(private userService: UserServiceService, private postService: PostService, private reactionService: ReactionService, private toast:ToastrService, private imageService:ImageService,private router:Router) {} 
+  constructor(private groupService:GroupService, private userService: UserServiceService, private postService: PostService, private reactionService: ReactionService, private toast:ToastrService, private imageService:ImageService,private router:Router) {} 
 
   ngOnInit() {
     const username = this.userService.getUsernameFromToken();
@@ -36,7 +39,7 @@ export class MainPageComponent implements OnInit{
           ...post,
           creationDate: this.parseDateArrayToDate(post.creationDate)
         }));
-        this.fetchFriendPosts(username); 
+        this.fetchOtherPosts(username); 
       },
       (error) => {
         console.error('Error fetching user data:', error);
@@ -44,49 +47,68 @@ export class MainPageComponent implements OnInit{
     );
   }
   
-  fetchFriendPosts(username: string) {
+  fetchOtherPosts(username: string) {
     this.postService.getFriendsPosts(username).subscribe(
       (data: any) => {
         this.friendPosts = data.map((post: any) => ({
           ...post,
           creationDate: this.parseDateArrayToDate(post.creationDate)
         }));
-        this.mergePosts();
 
-        this.allPosts.forEach(post => {
-          this.reactionService.getPostReaction(post.id).subscribe(
-            (reaction: Reaction[]) => {
-              
-              if(reaction.length>0){
-                reaction.forEach(r => {
+        this.groupService.getMyGroups().subscribe(
+          (groups: any) => {
+            groups.forEach((g: Group)=>{
+              g.contains.forEach((p: Post)=>{
+                p.group = g;
+                this.postsFromMyGroups.push(p);
+              })
+            })
 
-                if(r.madeBy.username === this.userService.getUsernameFromToken()){
-                console.log(r);
-                if(r.type === "LIKE"){
-                  post.isLiked = true;
-                }else if(r.type === "DISLIKE"){
-                  post.isDisliked = true;
-                }else{ post.isHearted = true;}
+            this.postsFromMyGroups = this.postsFromMyGroups.map((post: any) => ({
+              ...post,
+              creationDate: this.parseDateArrayToDate(post.creationDate)
+            }));
 
-              }
-              });  
-            }
-                        
-            }
-          )
-          this.imageService.getPostImage(post.id).subscribe(
-            (images: any) =>{
-              post.images = images;
-              console.log(images);
-            }
-          )
-          this.imageService.getProfileImageByUser(post.postedBy.username).subscribe(
-            (image: any) =>{
-              post.postedBy.profileImage = image;
-              console.log(image);
-            }
-          )
-        });
+            this.mergePosts();
+
+            this.allPosts.forEach(post => {
+              this.reactionService.getPostReaction(post.id).subscribe(
+                (reaction: Reaction[]) => {
+                  
+                  if(reaction.length>0){
+                    reaction.forEach(r => {
+    
+                    if(r.madeBy.username === this.userService.getUsernameFromToken()){
+                    console.log(r);
+                    if(r.type === "LIKE"){
+                      post.isLiked = true;
+                    }else if(r.type === "DISLIKE"){
+                      post.isDisliked = true;
+                    }else{ post.isHearted = true;}
+    
+                  }
+                  });  
+                }
+                            
+                }
+              )
+              this.imageService.getPostImage(post.id).subscribe(
+                (images: any) =>{
+                  post.images = images;
+                  console.log(images);
+                }
+              )
+              this.imageService.getProfileImageByUser(post.postedBy.username).subscribe(
+                (image: any) =>{
+                  post.postedBy.profileImage = image;
+                  console.log(image);
+                }
+              )
+            });
+
+          }
+        );
+
 
       },
       (error) => {
@@ -161,7 +183,7 @@ export class MainPageComponent implements OnInit{
   }
 
   mergePosts() {
-    this.allPosts = [...this.friendPosts, ...this.myPosts]; 
+    this.allPosts = [...this.friendPosts, ...this.myPosts, ...this.postsFromMyGroups]; 
     this.shuffleArray(this.allPosts);
     console.log(this.allPosts); 
   }

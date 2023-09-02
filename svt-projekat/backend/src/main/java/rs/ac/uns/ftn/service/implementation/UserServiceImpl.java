@@ -15,6 +15,10 @@ import rs.ac.uns.ftn.repository.UserRepository;
 import rs.ac.uns.ftn.service.GroupAdminService;
 import rs.ac.uns.ftn.service.UserService;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -29,6 +33,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private GroupAdminRepository groupAdminRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Autowired
     private GroupAdminService groupAdminService;
@@ -125,20 +132,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User setRoleAsGroupAdmin(Long id) {
-        Optional<User> toUpdate = this.getById(id);
+    @Transactional
+    public void setRoleAsGroupAdmin(User user) {
+        // Create and execute an update query using JPQL
+        String jpql = "UPDATE User SET type = :value1, role = :value2 WHERE username = :value3";
+        Query query = entityManager.createQuery(jpql);
+        query.setParameter("value1", "GA");
+        query.setParameter("value2", Roles.GROUP_ADMIN);
+        query.setParameter("value3", user.getUsername());
 
-        if (toUpdate.isPresent()) {
+        int updatedCount = query.executeUpdate();
 
-            toUpdate.get().setRole(Roles.GROUP_ADMIN);
-
-            groupAdminRepository.save((GroupAdmin) toUpdate.get());
-
-            return toUpdate.get();
-
-        } else {
-            return null;
-        }
     }
 
     @Override

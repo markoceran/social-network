@@ -33,4 +33,20 @@ export class GroupService {
 
     return this.http.get<Array<Group>>('api/groups/my', {headers});
   }
+
+  getGroupById(id:number): Observable<Group> {
+    return this.http.get<Group>('api/groups/' + id);
+  }
+
+  findGroup(unos:String): Observable<Array<Group>> {
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<Array<Group>>('api/groups/find/' + unos, {headers});
+  }
 }

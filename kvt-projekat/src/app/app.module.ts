@@ -30,6 +30,8 @@ import { AddReportCommentComponent } from './add-report-comment/add-report-comme
 import { AddReportUserComponent } from './add-report-user/add-report-user.component';
 import { EditPostComponent } from './edit-post/edit-post.component';
 import { AddReplyOnCommentComponent } from './add-reply-on-comment/add-reply-on-comment.component';
+import { MainPageInGroupComponent } from './main-page-in-group/main-page-in-group.component';
+import { AddPostInGroupComponent } from './add-post-in-group/add-post-in-group.component';
 
 
 
@@ -58,6 +60,8 @@ import { AddReplyOnCommentComponent } from './add-reply-on-comment/add-reply-on-
     AddReportUserComponent,
     EditPostComponent,
     AddReplyOnCommentComponent,
+    MainPageInGroupComponent,
+    AddPostInGroupComponent,
     
   ],
   imports: [
