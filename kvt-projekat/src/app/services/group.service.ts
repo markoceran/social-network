@@ -34,6 +34,11 @@ export class GroupService {
     return this.http.get<Array<Group>>('api/groups/my', {headers});
   }
 
+  getAllGroups(): Observable<Array<Group>> {
+
+    return this.http.get<Array<Group>>('api/groups');
+  }
+
   getGroupById(id:number): Observable<Group> {
     return this.http.get<Group>('api/groups/' + id);
   }

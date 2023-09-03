@@ -32,6 +32,7 @@ import { EditPostComponent } from './edit-post/edit-post.component';
 import { AddReplyOnCommentComponent } from './add-reply-on-comment/add-reply-on-comment.component';
 import { MainPageInGroupComponent } from './main-page-in-group/main-page-in-group.component';
 import { AddPostInGroupComponent } from './add-post-in-group/add-post-in-group.component';
+import { GroupAdminComponent } from './group-admin/group-admin.component';
 
 
 
@@ -62,6 +63,7 @@ import { AddPostInGroupComponent } from './add-post-in-group/add-post-in-group.c
     AddReplyOnCommentComponent,
     MainPageInGroupComponent,
     AddPostInGroupComponent,
+    GroupAdminComponent,
     
   ],
   imports: [

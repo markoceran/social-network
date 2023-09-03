@@ -79,4 +79,11 @@ export class UserServiceService {
     return this.http.put('api/users/editPassword', null, {headers, params});
   }
 
+  deleteAdminFromGroup(groupId:number, groupAdminId:number): Observable<any> {
+
+    const params = { groupId: groupId.toString(), groupAdminId: groupAdminId.toString()};
+
+    return this.http.delete('api/users/deleteGroupAdmin', {params});
+  }
+
 }

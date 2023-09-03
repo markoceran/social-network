@@ -69,6 +69,12 @@
                         Banned
                     </a>
                 </li>
+                <li class="nav-item me-3 me-lg-0" *ngIf="loggedUser.role === 'ADMIN'">
+                    <a class="nav-link" [routerLink]="['/groupAdmin']">
+                        <i class="fas fa-users-gear"></i>
+                        Group admin
+                    </a>
+                </li>
                 <li class="nav-item me-3 me-lg-0">
                     <a class="nav-link" [routerLink]="['/profile/', username]">
                         <i class="fas fa-user text-white"></i>

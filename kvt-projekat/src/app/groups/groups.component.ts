@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Group } from '../model/group';
 import { Router } from '@angular/router';
 import { GroupService } from '../services/group.service';
@@ -12,7 +12,7 @@ import { ImageService } from '../services/image.service';
   templateUrl: './groups.component.html',
   styleUrls: ['./groups.component.css']
 })
-export class GroupsComponent {
+export class GroupsComponent implements OnInit{
 
   groups!: Group[];
   searchGroup!: Group[];

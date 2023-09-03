@@ -13,24 +13,20 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.uns.ftn.model.Administrator;
-import rs.ac.uns.ftn.model.Banned;
-import rs.ac.uns.ftn.model.User;
+import rs.ac.uns.ftn.model.*;
 import rs.ac.uns.ftn.model.dto.JwtAuthenticationRequest;
 import rs.ac.uns.ftn.model.dto.UserDTO;
 import rs.ac.uns.ftn.model.dto.UserTokenState;
 import rs.ac.uns.ftn.security.TokenUtils;
 import rs.ac.uns.ftn.service.AdministratorService;
 import rs.ac.uns.ftn.service.BannedService;
+import rs.ac.uns.ftn.service.GroupService;
 import rs.ac.uns.ftn.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/users")
@@ -42,7 +38,8 @@ public class UserController {
     @Autowired
     private AdministratorService administratorService;
 
-
+    @Autowired
+    private GroupService groupService;
     @Autowired
     AuthenticationManager authenticationManager;
 
@@ -255,6 +252,51 @@ public class UserController {
         }
     }
 
+    @DeleteMapping("/deleteGroupAdmin")
+    public ResponseEntity<GroupAdmin> deleteGroupAdmin(@RequestParam Long groupId, @RequestParam Long groupAdminId) throws Exception {
+
+
+        Optional<Groupp> group = groupService.getById(groupId);
+
+
+        GroupAdmin deleted = null;
+        boolean valid = true;
+
+        if(!group.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        for(GroupAdmin a : group.get().getGroupAdmins()){
+            if(a.getId().equals(groupAdminId)){
+                group.get().getGroupAdmins().remove(a);
+
+                deleted = a;
+
+                break;
+            }
+        }
+        groupService.update(groupId, group.get());
+
+        List<Groupp> allGroup = groupService.getAll();
+
+        for(Groupp g:allGroup){
+            if(!g.getGroupAdmins().isEmpty()){
+                for(GroupAdmin admin : g.getGroupAdmins()) {
+
+                    if (admin.getId().equals(groupAdminId)) {
+                        valid = false;
+                    }
+                }
+            }
+        }
+
+        if (valid) {
+            userService.deleteRoleGroupAdmin(deleted);
+        }
+
+        return ResponseEntity.ok(deleted);
+
+    }
 
 }
 

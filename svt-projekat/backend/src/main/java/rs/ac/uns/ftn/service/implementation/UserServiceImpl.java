@@ -134,7 +134,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void setRoleAsGroupAdmin(User user) {
-        // Create and execute an update query using JPQL
+
         String jpql = "UPDATE User SET type = :value1, role = :value2 WHERE username = :value3";
         Query query = entityManager.createQuery(jpql);
         query.setParameter("value1", "GA");
@@ -146,19 +146,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User deleteRoleAsGroupAdmin(Long id) {
-        Optional<GroupAdmin> toUpdate = this.groupAdminService.getById(id);
+    @Transactional
+    public void deleteRoleGroupAdmin(GroupAdmin user) {
 
-        if (toUpdate.isPresent()) {
+        String jpql = "UPDATE User SET type = :value1, role = :value2 WHERE username = :value3";
+        Query query = entityManager.createQuery(jpql);
+        query.setParameter("value1", "U");
+        query.setParameter("value2", Roles.USER);
+        query.setParameter("value3", user.getUsername());
 
-            toUpdate.get().setRole(Roles.USER);
+        int updatedCount = query.executeUpdate();
 
-            userRepository.save(toUpdate.get());
-
-            return toUpdate.get();
-
-        } else {
-            return null;
-        }
     }
 }

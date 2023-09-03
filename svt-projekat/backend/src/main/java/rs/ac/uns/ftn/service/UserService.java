@@ -26,6 +26,6 @@ public interface UserService {
 
     void setRoleAsGroupAdmin(User user);
 
-    User deleteRoleAsGroupAdmin(Long id);
+    void deleteRoleGroupAdmin(GroupAdmin user);
 
 }
