@@ -25,43 +25,106 @@ export class CommentService {
   }
 
   getComments(postId:number): Observable<Array<Comments>> {
-    return this.http.get<Array<Comments>>('api/comments/postComments/'+ postId);
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<Array<Comments>>('api/comments/postComments/'+ postId, {headers});
   }
 
 
   orderAscLikes(comments:Comments[]): Observable<Array<Comments>> {
-    return this.http.put<Array<Comments>>('api/comments/orderAscLikes', comments);
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.put<Array<Comments>>('api/comments/orderAscLikes', comments, {headers});
   }
 
   orderAscDislikes(comments:Comments[]): Observable<Array<Comments>> {
-    return this.http.put<Array<Comments>>('api/comments/orderAscDislikes', comments);
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.put<Array<Comments>>('api/comments/orderAscDislikes', comments, {headers});
   }
 
   orderAscHearts(comments:Comments[]): Observable<Array<Comments>> {
-    return this.http.put<Array<Comments>>('api/comments/orderAscHearts', comments);
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.put<Array<Comments>>('api/comments/orderAscHearts', comments, {headers});
   }
 
 
   orderDescLikes(comments:Comments[]): Observable<Array<Comments>> {
-    return this.http.put<Array<Comments>>('api/comments/orderDescLikes', comments);
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.put<Array<Comments>>('api/comments/orderDescLikes', comments, {headers});
   }
 
   orderDescDislikes(comments:Comments[]): Observable<Array<Comments>> {
-    return this.http.put<Array<Comments>>('api/comments/orderDescDislikes', comments);
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.put<Array<Comments>>('api/comments/orderDescDislikes', comments, {headers});
   }
 
   orderDescHearts(comments:Comments[]): Observable<Array<Comments>> {
-    return this.http.put<Array<Comments>>('api/comments/orderDescHearts', comments);
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.put<Array<Comments>>('api/comments/orderDescHearts', comments, {headers});
   }
 
 
 
   orderAscDate(comments:Comments[]): Observable<Array<Comments>> {
-    return this.http.put<Array<Comments>>('api/comments/orderAscDate', comments);
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.put<Array<Comments>>('api/comments/orderAscDate', comments, {headers});
   }
 
   orderDescDate(comments:Comments[]): Observable<Array<Comments>> {
-    return this.http.put<Array<Comments>>('api/comments/orderDescDate', comments);
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.put<Array<Comments>>('api/comments/orderDescDate', comments, {headers});
   }
 
 

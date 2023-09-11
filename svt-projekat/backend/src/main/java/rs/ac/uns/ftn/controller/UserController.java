@@ -18,10 +18,7 @@ import rs.ac.uns.ftn.model.dto.JwtAuthenticationRequest;
 import rs.ac.uns.ftn.model.dto.UserDTO;
 import rs.ac.uns.ftn.model.dto.UserTokenState;
 import rs.ac.uns.ftn.security.TokenUtils;
-import rs.ac.uns.ftn.service.AdministratorService;
-import rs.ac.uns.ftn.service.BannedService;
-import rs.ac.uns.ftn.service.GroupService;
-import rs.ac.uns.ftn.service.UserService;
+import rs.ac.uns.ftn.service.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,6 +41,9 @@ public class UserController {
     AuthenticationManager authenticationManager;
 
     @Autowired
+    GroupAdminService groupAdminService;
+
+    @Autowired
     TokenUtils tokenUtils;
 
     @Autowired
@@ -60,20 +60,17 @@ public class UserController {
 
 
     @GetMapping("/all")
-    @PreAuthorize("hasRole('ADMIN')")
     public List<User> loadAll() {
         return this.userService.getAll();
     }
 
     @GetMapping("/profile/{username}")
-    //@PreAuthorize("isAuthenticated()")
-    public User user(@PathVariable String username, HttpServletResponse response) {
+    public User user(@PathVariable String username) {
         //response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         return this.userService.findByUsername(username);
     }
 
     @GetMapping("/{unos}")
-    //@PreAuthorize("isAuthenticated()")
     public List<User> findUsers(@PathVariable String unos, @RequestHeader("Authorization") String token) {
 
         String tokenValue = token.replace("Bearer ", "");
@@ -134,11 +131,15 @@ public class UserController {
         boolean isValid = true;
 
         List<Banned> banneds = bannedService.getAll();
-        for (Banned b : banneds) {
-            if (b.getUser().getUsername().equals(authenticationRequest.getUsername())) {
-                isValid = false;
+
+        if(!banneds.isEmpty()){
+            for (Banned b : banneds) {
+                if (b.getUser() != null && b.getUser().getUsername().equals(authenticationRequest.getUsername()) && b.getBy2() != null) {
+                    isValid = false;
+                }
             }
         }
+
 
         if (isValid) {
             // Ukoliko kredencijali nisu ispravni, logovanje nece biti uspesno, desice se
@@ -178,19 +179,6 @@ public class UserController {
         responseBody.put("message", "Logged out successfully");
 
         return ResponseEntity.ok(responseBody);
-    }
-
-    @PostMapping("/addAdmin")
-    public ResponseEntity<UserDTO> addAdmin(@RequestBody @Validated UserDTO newUser) {
-
-        Administrator createdUser = administratorService.createAdmin(newUser);
-
-        if (createdUser == null) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
-        }
-        UserDTO userDTO = new UserDTO(createdUser);
-
-        return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
     }
 
     @PutMapping("/editProfile")
@@ -252,51 +240,6 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/deleteGroupAdmin")
-    public ResponseEntity<GroupAdmin> deleteGroupAdmin(@RequestParam Long groupId, @RequestParam Long groupAdminId) throws Exception {
-
-
-        Optional<Groupp> group = groupService.getById(groupId);
-
-
-        GroupAdmin deleted = null;
-        boolean valid = true;
-
-        if(!group.isPresent()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        for(GroupAdmin a : group.get().getGroupAdmins()){
-            if(a.getId().equals(groupAdminId)){
-                group.get().getGroupAdmins().remove(a);
-
-                deleted = a;
-
-                break;
-            }
-        }
-        groupService.update(groupId, group.get());
-
-        List<Groupp> allGroup = groupService.getAll();
-
-        for(Groupp g:allGroup){
-            if(!g.getGroupAdmins().isEmpty()){
-                for(GroupAdmin admin : g.getGroupAdmins()) {
-
-                    if (admin.getId().equals(groupAdminId)) {
-                        valid = false;
-                    }
-                }
-            }
-        }
-
-        if (valid) {
-            userService.deleteRoleGroupAdmin(deleted);
-        }
-
-        return ResponseEntity.ok(deleted);
-
-    }
 
 }
 

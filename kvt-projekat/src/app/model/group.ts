@@ -1,6 +1,7 @@
 import { GroupAdmin } from "./groupAdmin";
 import { GroupRequest } from "./groupRequest";
 import { Post } from "./post.model";
+import { User } from "./user.model";
 
 export interface Group {
     id: number;
@@ -11,5 +12,6 @@ export interface Group {
     suspendedReason: string | null;
     contains: Post[];
     groupAdmins: GroupAdmin[];
+    groupUsers: User[];
     groupRequests: GroupRequest[];
 }

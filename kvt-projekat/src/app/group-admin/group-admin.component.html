@@ -13,8 +13,12 @@
                     <a class="fw-bold mb-1" [routerLink]="['/mainPageGroup/', g.id]" >{{ g.name }}</a>
                     <p class="text-muted mb-0">Description: {{g.description}}</p>
                     <p class="text-muted mb-0" id="date">Creation date: {{g.creationDate | date: 'yyyy-MM-dd HH:mm' }}</p>
+                    <p style="color: rgba(214, 56, 56, 0.657);">Is suspended: {{g.isSuspended}}</p>
+                    <p style="color: rgba(214, 56, 56, 0.657);">Suspended reason: {{g.suspendedReason}}</p>
                   </div>
                 </div>
+                
+                <button *ngIf="!g.isSuspended" class="btn btn-link btn-rounded btn-sm"><a style="color: rgba(255, 0, 0, 0.721);" class="nav-link" [routerLink]="['/suspendGroup/', g.id]">Suspend group</a></button>
                 <button class="btn btn-link btn-rounded btn-sm" (click)="showAdmin()">Group admin</button>
               </li>
             </ul>
@@ -25,12 +29,12 @@
                   <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let a of g.groupAdmins">
                     <div class="d-flex align-items-center">
               
-                      <img *ngIf="a.profileImage === undefined" [src]="getImageUrl('avatar.jpg')" alt="" style="width: 45px; height: 45px;margin-left: 15px;" class="rounded-circle" />
-                      <img *ngIf="a.profileImage !== undefined" [src]="getImageUrl(a.profileImage)" alt="" style="width: 45px; height: 45px;margin-left: 15px;" class="rounded-circle" />
+                      <img *ngIf="a.user.profileImage === undefined" [src]="getImageUrl('avatar.jpg')" alt="" style="width: 45px; height: 45px;margin-left: 15px;" class="rounded-circle" />
+                      <img *ngIf="a.user.profileImage !== undefined" [src]="getImageUrl(a.user.profileImage)" alt="" style="width: 45px; height: 45px;margin-left: 15px;" class="rounded-circle" />
 
                       <div class="ms-3">
-                        <p class="fw-bold mb-1">{{ a.firstName + ' ' + a.lastName }}</p>
-                        <p class="text-muted mb-0">username: {{a.username}}</p>
+                        <p class="fw-bold mb-1">{{ a.user.firstName + ' ' + a.user.lastName }}</p>
+                        <p class="text-muted mb-0">username: {{a.user.username}}</p>
                       </div>
                     </div>
                     <button class="btn btn-link btn-rounded btn-sm" (click)="remove(g.id, a.id)"  style="color: red;">Remove</button>

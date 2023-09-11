@@ -6,6 +6,7 @@ import { GroupService } from '../services/group.service';
 import { ToastrService } from 'ngx-toastr';
 import { GroupRequestService } from '../services/group-request.service';
 import { UserServiceService } from '../services/user.service';
+import { GroupAdmin } from '../model/groupAdmin';
 
 @Component({
   selector: 'app-group-admin',
@@ -32,15 +33,26 @@ export class GroupAdminComponent implements OnInit{
           ...group,
           creationDate: this.parseDateArrayToDate(group.creationDate)
         }));
+        
 
         this.groups.forEach(group=>{
-          group.groupAdmins.forEach(admin=>{
-            this.imageService.getProfileImageByUser(admin.username).subscribe(
-              (image: any) =>{
-                admin.profileImage = image;
-              }
-            )
-          })
+
+          this.groupService.getGroupAdmins(group.id).subscribe(
+            (data: GroupAdmin[]) => {
+              console.log(data);  
+              group.groupAdmins = data; 
+
+              group.groupAdmins.forEach(admin=>{
+              this.imageService.getProfileImageByUser(admin.user.username).subscribe(
+                (image: any) =>{
+                  admin.user.profileImage = image;
+                }
+              )
+              })
+
+            }
+          )          
+          
         })
         
 

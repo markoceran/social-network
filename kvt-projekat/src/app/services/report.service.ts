@@ -53,22 +53,52 @@ export class ReportService {
   }
 
   getByPost(): Observable<Array<Report>> {
-    return this.http.get<Array<Report>>('api/reports/allPost');
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<Array<Report>>('api/reports/allPost', {headers});
   }
 
   getByComment(): Observable<Array<Report>> {
-    return this.http.get<Array<Report>>('api/reports/allComment');
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<Array<Report>>('api/reports/allComment', {headers});
   }
 
   getByUser(): Observable<Array<Report>> {
-    return this.http.get<Array<Report>>('api/reports/allUser');
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<Array<Report>>('api/reports/allUser', {headers});
   }
 
   acceptReportForPost(id:number): Observable<ReportReason> {
 
     const params = {id: id.toString()};
+    const token = localStorage.getItem('user');
 
-    return this.http.post<ReportReason>('api/reports/acceptReportForPost', null, {params});
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.post<ReportReason>('api/reports/acceptReportForPost', null, {headers,params});
   }
 
   acceptReportForUser(id:number): Observable<ReportReason> {
@@ -87,14 +117,26 @@ export class ReportService {
   acceptReportForComment(id:number): Observable<ReportReason> {
 
     const params = {id: id.toString()};
+    const token = localStorage.getItem('user');
 
-    return this.http.post<ReportReason>('api/reports/acceptReportForComment', null, {params});
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.post<ReportReason>('api/reports/acceptReportForComment', null, {headers,params});
   }
 
   denyReport(id:number): Observable<ReportReason> {
 
     const params = {id: id.toString()};
+    const token = localStorage.getItem('user');
 
-    return this.http.post<ReportReason>('api/reports/denyReport', null, {params});
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.post<ReportReason>('api/reports/denyReport', null, {headers,params});
   }
 }

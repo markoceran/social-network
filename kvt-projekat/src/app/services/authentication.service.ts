@@ -16,10 +16,6 @@ export class AuthenticationService {
 		return this.http.post('api/users/login', {username: auth.username, password: auth.password}, {headers: this.headers, responseType: 'json'});
 	}
 
-	logout(): Observable<any> {
-		return this.http.get('api/logOut', {headers: this.headers, responseType: 'text'});
-	}
-
 	isLoggedIn(): boolean {
 		if (!localStorage.getItem('user')) {
 				return false;

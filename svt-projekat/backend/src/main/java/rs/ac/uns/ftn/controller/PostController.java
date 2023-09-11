@@ -6,13 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.uns.ftn.model.Groupp;
-import rs.ac.uns.ftn.model.Post;
-import rs.ac.uns.ftn.model.User;
+import rs.ac.uns.ftn.model.*;
 import rs.ac.uns.ftn.security.TokenUtils;
-import rs.ac.uns.ftn.service.GroupService;
-import rs.ac.uns.ftn.service.PostService;
-import rs.ac.uns.ftn.service.UserService;
+import rs.ac.uns.ftn.service.*;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
@@ -33,6 +29,12 @@ public class PostController {
 
     @Autowired
     private GroupService groupService;
+
+    @Autowired
+    private GroupAdminService groupAdminService;
+
+    @Autowired
+    private GroupRequestService groupRequestService;
 
     @Autowired
     TokenUtils tokenUtils;
@@ -175,7 +177,9 @@ public class PostController {
         List<Groupp> myGroups = new ArrayList<>();
 
         for (Groupp g : groupService.getAll()) {
-            if (!g.getIsSuspended() && g.getGroupAdmins().stream().filter(u -> u.getUsername().equals(user.getUsername())).findAny().orElse(null) != null) {
+            List<User> groupUsers = getGroupUsers(g.getId());
+            List<GroupAdmin> groupAdmins = getGroupAdmins(g.getId());
+            if (!g.getIsSuspended() && (groupAdmins.stream().filter(u -> u.getUser().getUsername().equals(user.getUsername())).findAny().orElse(null) != null || groupUsers.stream().filter(u -> u.getUsername().equals(user.getUsername())).findAny().orElse(null) != null))  {
                 myGroups.add(g);
             }
         }
@@ -261,5 +265,35 @@ public class PostController {
         List<Post> list = postService.orderDesc(posts);
 
         return ResponseEntity.ok(list);
+    }
+
+
+    public List<User> getGroupUsers(Long groupId) {
+
+        List<GroupRequest> groupRequests = groupRequestService.getAll();
+        List<User> groupUsers = new ArrayList<>();
+
+        for(GroupRequest r:groupRequests){
+            if(r.getApproved() == true && r.getForr().getIsSuspended() == false && r.getForr().getId() == groupId){
+                groupUsers.add(r.getFrom());
+            }
+        }
+
+        return groupUsers;
+    }
+
+
+    public List<GroupAdmin> getGroupAdmins(Long groupId) {
+
+        List<GroupAdmin> admins = groupAdminService.getAll();
+        List<GroupAdmin> groupAdmins = new ArrayList<>();
+
+        for(GroupAdmin a:admins){
+            if(a.getGroup().getId() == groupId){
+                groupAdmins.add(a);
+            }
+        }
+
+        return groupAdmins;
     }
 }

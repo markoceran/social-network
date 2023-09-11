@@ -34,7 +34,6 @@ public class GroupRequestController {
     @Autowired
     private TokenUtils tokenUtils;
 
-
     @Autowired
     private GroupAdminService groupAdminService;
 
@@ -98,15 +97,6 @@ public class GroupRequestController {
         if (request.isPresent()) {
             User user = request.get().getFrom();
             Groupp groupp = request.get().getForr();
-
-            if (user.getRole().equals(Roles.USER)) {
-
-                userService.setRoleAsGroupAdmin(user);
-
-            }
-
-            GroupAdmin groupAdminFind = groupAdminService.findByUsername(user.getUsername());
-            groupp.getGroupAdmins().add(groupAdminFind);
 
             request.get().setAt(LocalDateTime.now());
             request.get().setApproved(true);

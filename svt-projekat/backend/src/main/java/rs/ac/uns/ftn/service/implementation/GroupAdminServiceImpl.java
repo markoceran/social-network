@@ -23,6 +23,9 @@ public class GroupAdminServiceImpl implements GroupAdminService {
 
     @Autowired
     GroupAdminRepository groupAdminRepository;
+    @Autowired
+    UserRepository userRepository;
+
 
     @Override
     public List<GroupAdmin> getAll() {
@@ -46,7 +49,7 @@ public class GroupAdminServiceImpl implements GroupAdminService {
     @Override
     public GroupAdmin update(Long id, GroupAdmin groupAdmin) {
 
-        Optional<GroupAdmin> toUpdate = this.getById(id);
+        /*Optional<GroupAdmin> toUpdate = this.getById(id);
 
         if (toUpdate.isPresent()) {
 
@@ -61,8 +64,10 @@ public class GroupAdminServiceImpl implements GroupAdminService {
 
         } else {
             return null;
-        }
+        }*/
 
+
+        return groupAdmin;
     }
 
     @Override
@@ -70,7 +75,7 @@ public class GroupAdminServiceImpl implements GroupAdminService {
 
         List<GroupAdmin> svi = this.getAll();
         for(GroupAdmin u : svi){
-            if(u.getUsername().equals(username)){
+            if(u.getUser().getUsername().equals(username)){
                 return u;
             }
         }
@@ -79,11 +84,30 @@ public class GroupAdminServiceImpl implements GroupAdminService {
     }
 
     @Override
-    public GroupAdmin delete(Long id) {
-        Optional<GroupAdmin> groupAdmin = this.getById(id);
-        if(groupAdmin.isPresent()){
-            groupAdminRepository.deleteById(id);
-            return groupAdmin.get();
-        }else {return null;}
+    public GroupAdmin delete(Long userId, Long groupId) {
+
+        List<GroupAdmin> all = this.getAll();
+
+        for(GroupAdmin g:all) {
+            if (g.getUser().getId().equals(userId) && g.getGroup().getId().equals(groupId)) {
+                groupAdminRepository.delete(g);
+                return g;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void deleteAllAdmins(Long groupId) {
+
+        List<GroupAdmin> all = this.getAll();
+
+        for(GroupAdmin g:all) {
+            if (g.getGroup().getId().equals(groupId)) {
+                groupAdminRepository.delete(g);
+
+            }
+        }
+
     }
 }

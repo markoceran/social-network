@@ -9,9 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.model.*;
 import rs.ac.uns.ftn.security.TokenUtils;
-import rs.ac.uns.ftn.service.GroupAdminService;
-import rs.ac.uns.ftn.service.GroupService;
-import rs.ac.uns.ftn.service.UserService;
+import rs.ac.uns.ftn.service.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -34,10 +32,16 @@ public class GroupController {
     private UserService userService;
 
     @Autowired
+    private GroupRequestService groupRequestService;
+
+    @Autowired
     private TokenUtils tokenUtils;
 
     @Autowired
     private GroupAdminService groupAdminService;
+
+    @Autowired
+    private BannedService bannedService;
 
 
     @GetMapping
@@ -46,12 +50,42 @@ public class GroupController {
         List<Groupp> groups = new ArrayList<>();
 
         for (Groupp g : allGroups) {
-            if (!g.getIsSuspended()) {
-                groups.add(g);
-            }
+
+            groups.add(g);
+
         }
 
         return ResponseEntity.ok(groups);
+    }
+
+    @GetMapping("/groupUsers/{groupId}")
+    public ResponseEntity<List<User>> getGroupUsers(@PathVariable Long groupId) {
+
+        List<GroupRequest> groupRequests = groupRequestService.getAll();
+        List<User> groupUsers = new ArrayList<>();
+
+        for(GroupRequest r:groupRequests){
+            if(r.getApproved() == true && r.getForr().getIsSuspended() == false && r.getForr().getId() == groupId){
+                groupUsers.add(r.getFrom());
+            }
+        }
+
+        return ResponseEntity.ok(groupUsers);
+    }
+
+    @GetMapping("/groupAdmins/{groupId}")
+    public ResponseEntity<List<GroupAdmin>> getGroupAdmins(@PathVariable Long groupId) {
+
+        List<GroupAdmin> admins = groupAdminService.getAll();
+        List<GroupAdmin> groupAdmins = new ArrayList<>();
+
+        for(GroupAdmin a:admins){
+            if(a.getGroup().getId() == groupId){
+                groupAdmins.add(a);
+            }
+        }
+
+        return ResponseEntity.ok(groupAdmins);
     }
 
     @GetMapping("/my")
@@ -67,10 +101,27 @@ public class GroupController {
         }
 
         List<Groupp> groupps = new ArrayList<>();
+        List<Banned> allBanned = bannedService.getAll();
+        List<Banned> allBannedUsersInGroup = new ArrayList<>();
+
+        if(!allBanned.isEmpty()){
+            for(Banned b:allBanned){
+                if(b.getBy1() != null){
+                    allBannedUsersInGroup.add(b);
+                }
+            }
+        }
+
 
         for (Groupp g : groupService.getAll()) {
-            if (!g.getIsSuspended() && g.getGroupAdmins().stream().filter(u -> u.getUsername().equals(user.getUsername())).findAny().orElse(null) != null) {
-                groupps.add(g);
+            List<User> groupUsers = this.getGroupUsers(g.getId()).getBody();
+            List<GroupAdmin> groupAdmins= this.getGroupAdmins(g.getId()).getBody();
+            if (!g.getIsSuspended() && (groupUsers.stream().filter(u -> u.getUsername().equals(user.getUsername())).findAny().orElse(null) != null || groupAdmins.stream().filter(u -> u.getUser().getUsername().equals(user.getUsername())).findAny().orElse(null) != null)) {
+
+                if(allBannedUsersInGroup.isEmpty() || (!allBannedUsersInGroup.isEmpty() && allBannedUsersInGroup.stream().filter(b -> !(b.getGroup().getId().equals(g.getId()) && b.getUser().getUsername().equals(user.getUsername()))).findAny().orElse(null) != null)){
+                    groupps.add(g);
+                }
+
             }
         }
         return ResponseEntity.ok(groupps);
@@ -102,19 +153,20 @@ public class GroupController {
         if (user.getRole().equals(Roles.USER)) {
 
             userService.setRoleAsGroupAdmin(user);
+            user = userService.findByUsername(username);
 
         }
 
-
-        GroupAdmin groupAdminFind = groupAdminService.findByUsername(user.getUsername());
-        group.getGroupAdmins().add(groupAdminFind);
-
-
         group.setCreationDate(LocalDateTime.now());
         group.setIsSuspended(false);
+        groupService.save(group);
 
-        Groupp createdGroup = groupService.save(group);
-        return ResponseEntity.ok(createdGroup);
+        GroupAdmin groupAdmin = new GroupAdmin();
+        groupAdmin.setUser(user);
+        groupAdmin.setGroup(group);
+        groupAdminService.save(groupAdmin);
+
+        return ResponseEntity.ok(group);
     }
 
     @PutMapping("/{id}")
@@ -154,13 +206,18 @@ public class GroupController {
 
         if (!sve.isEmpty()) {
             for (Groupp g : sve) {
+                if (!g.getIsSuspended() && g.getName().toLowerCase().contains(unos.toLowerCase())) {
 
-                if (g.getName().toLowerCase().contains(unos.toLowerCase())) {
+                    List<User> groupUsers = this.getGroupUsers(g.getId()).getBody();
+                    List<GroupAdmin> groupAdmins = this.getGroupAdmins(g.getId()).getBody();
 
-                    for(GroupAdmin admin : g.getGroupAdmins()){
-                        if (admin.getUsername().equals(username)) {
-                            valid = false;
+                    for (GroupAdmin admin : groupAdmins) {
+                        for (User user : groupUsers) {
+                            if (admin.getUser().getUsername().equals(username) || user.getUsername().equals(username)) {
+                                valid = false;
+                            }
                         }
+
                     }
 
                     if (valid) {
@@ -175,4 +232,75 @@ public class GroupController {
         return rezultat;
     }
 
+    @PutMapping("/suspend/{id}")
+    public ResponseEntity<Groupp> suspendGroup(@PathVariable Long id, @RequestParam String suspendedReason) {
+
+        Optional<Groupp> group = groupService.getById(id);
+
+        if (group.isPresent()) {
+
+            group.get().setIsSuspended(true);
+            group.get().setSuspendedReason(suspendedReason);
+            groupAdminService.deleteAllAdmins(id);
+
+            Groupp updated = groupService.update(group.get().getId(), group.get());
+
+            return ResponseEntity.ok(updated);
+
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+
+    }
+
+    @DeleteMapping("/deleteGroupAdmin")
+    public ResponseEntity<GroupAdmin> deleteGroupAdmin(@RequestParam Long groupId, @RequestParam Long groupAdminId) throws Exception {
+
+
+        Optional<Groupp> group = groupService.getById(groupId);
+        Optional<GroupAdmin> groupAdmin = groupAdminService.getById(groupAdminId);
+
+        GroupAdmin deleted = null;
+        boolean valid = true;
+
+        if(!group.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        List<GroupAdmin> groupAdmins = this.getGroupAdmins(groupId).getBody();
+
+        for(GroupAdmin a : groupAdmins){
+            if(a.getId().equals(groupAdminId)){
+                //groupAdminService.delete(a.getUser().getId(), groupId);
+
+                deleted = a;
+
+                groupAdminService.delete(a.getUser().getId(), groupId);
+
+                break;
+            }
+        }
+        //groupService.update(groupId, group.get());
+
+        List<Groupp> allGroup = groupService.getAll();
+
+        for(Groupp g:allGroup){
+            List<GroupAdmin> groupAdminsThis = this.getGroupAdmins(g.getId()).getBody();
+            if(!groupAdminsThis.isEmpty()){
+                for(GroupAdmin admin : groupAdminsThis) {
+
+                    if (admin.getUser().getId().equals(groupAdmin.get().getUser().getId())) {
+                        valid = false;
+                    }
+                }
+            }
+        }
+
+        if (valid) {
+            userService.deleteRoleGroupAdmin(deleted);
+        }
+
+        return ResponseEntity.ok(deleted);
+
+    }
 }

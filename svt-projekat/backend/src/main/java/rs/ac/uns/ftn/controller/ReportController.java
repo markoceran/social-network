@@ -82,35 +82,6 @@ public class ReportController {
     }
 
 
-    /*@GetMapping
-    public ResponseEntity<List<FriendRequest>> getFriendRequest(@RequestHeader("Authorization") String token) {
-
-        List<FriendRequest> allFriendRequest = friendRequestService.getAll();
-        List<FriendRequest> requests = new ArrayList<>();
-
-        String tokenValue = token.replace("Bearer ", "");
-
-        String username = tokenUtils.getUsernameFromToken(tokenValue);
-        User user = userService.findByUsername(username);
-
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        if(!allFriendRequest.isEmpty()){
-
-            for (FriendRequest f : allFriendRequest) {
-                if (!f.getApproved() && f.getForr().equals(user) && f.getAt().equals(LocalDateTime.of(1, 1, 1, 1, 1))) {
-                    requests.add(f);
-                }
-            }
-        }
-
-        return ResponseEntity.ok(requests);
-
-
-    }*/
-
     @PostMapping("/createForPost")
     public ResponseEntity<Report> createForPost(@RequestParam Long id, @RequestParam String reason, @RequestHeader("Authorization") String token) {
 

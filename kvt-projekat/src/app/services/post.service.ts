@@ -38,43 +38,123 @@ export class PostService {
   }
 
   getMyPosts(username:string): Observable<Array<Post>> {
-    return this.http.get<Array<Post>>('api/posts/my/'+ username);
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<Array<Post>>('api/posts/my/'+ username, {headers});
   }
 
   getPostsFromMyGroups(username:string): Observable<Array<Post>> {
-    return this.http.get<Array<Post>>('api/posts/myGroupsPosts/'+ username);
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<Array<Post>>('api/posts/myGroupsPosts/'+ username, {headers});
   }
  
   getLastId(): Observable<number> {
-    return this.http.get<number>('api/posts/lastId');
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<number>('api/posts/lastId', {headers});
   }
 
   getPostById(id:number): Observable<Post> {
-    return this.http.get<Post>('api/posts/' + id);
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<Post>('api/posts/' + id, {headers});
   }
 
   getFriendsPosts(username:string): Observable<Array<Post>> {
-    return this.http.get<Array<Post>>('api/posts/myFriends/'+ username);
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<Array<Post>>('api/posts/myFriends/'+ username, {headers});
   }
 
   orderAsc(posts:Post[]): Observable<Array<Post>> {
-    return this.http.put<Array<Post>>('api/posts/orderAsc', posts);
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.put<Array<Post>>('api/posts/orderAsc', posts, {headers});
   }
 
   orderDesc(posts:Post[]): Observable<Array<Post>> {
-    return this.http.put<Array<Post>>('api/posts/orderDesc', posts);
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.put<Array<Post>>('api/posts/orderDesc', posts, {headers});
   }
 
 
   updatePost(id:number,post:Post): Observable<Post> {
-    return this.http.put<Post>('api/posts/' + id , post);
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.put<Post>('api/posts/' + id , post, {headers});
   }
 
   deletePost(id:number): Observable<Post> {
-    return this.http.delete<Post>('api/posts/' + id);
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.delete<Post>('api/posts/' + id, {headers});
   }
 
   getGroupPosts(id:number): Observable<Array<Post>> {
-    return this.http.get<Array<Post>>('api/posts/groupPost/'+ id);
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<Array<Post>>('api/posts/groupPost/'+ id, {headers});
   }
 }

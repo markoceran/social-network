@@ -16,7 +16,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import rs.ac.uns.ftn.service.implementation.UserDetailsServiceImpl;
+
 
 @Configuration
 @EnableWebSecurity
@@ -68,26 +70,54 @@ public class WebSecurityConfig {
 
         // sve neautentifikovane zahteve obradi uniformno i posalji 401 gresku
         //http.exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint);
+        // umetni custom filter TokenAuthenticationFilter kako bi se vrsila provera JWT tokena umesto cistih korisnickog imena i lozinke (koje radi BasicAuthenticationFilter)
+        //.addFilterBefore(new AuthenticationTokenFilter(userDetailsService(), tokenUtils), BasicAuthenticationFilter.class)
         http.authorizeRequests()
-//                .antMatchers("/h2-console/**").permitAll()	// /h2-console/** ako se koristi H2 baza)
-                .antMatchers(HttpMethod.POST, "/users/login").permitAll()
-                .antMatchers(HttpMethod.POST, "/users/signup").permitAll()
-                .antMatchers("/users/logout").permitAll()
-                .antMatchers("/users/profile/**").permitAll()
+
+                //.antMatchers("/h2-console/**").permitAll()	// /h2-console/** ako se koristi H2 baza)
+
+
+
+                .antMatchers("/users").permitAll()
                 .antMatchers("/users/**").permitAll()
                 .antMatchers("/posts/**").permitAll()
                 .antMatchers("/posts").permitAll()
                 .antMatchers("/friendRequest").permitAll()
                 .antMatchers("/friendRequest/**").permitAll()
-                .antMatchers("/users/addAdmin").permitAll()
                 .antMatchers("/comments/**").permitAll()
                 .antMatchers("/images/**").permitAll()
-                .antMatchers("/groups/**").permitAll()
-                .antMatchers("/groups").permitAll()
                 .antMatchers("/reactions/**").permitAll()
                 .antMatchers("/reports/**").permitAll()
                 .antMatchers("/banneds/**").permitAll()
+                .antMatchers("/groups/**").permitAll()
+                .antMatchers("/groups").permitAll()
+                .antMatchers("/groupRequest").permitAll()
                 .antMatchers("/groupRequest/**").permitAll()
+
+
+                /*.antMatchers("/users/all").hasRole("ADMIN")
+                .antMatchers("/groups/deleteGroupAdmin").hasRole("ADMIN")
+
+
+                .antMatchers("/groups/**").permitAll()
+                .antMatchers("/groups").permitAll()
+
+                .antMatchers("/groupRequest/**").permitAll()
+
+
+
+                .antMatchers("/reports/allPost").hasRole("ADMIN")
+                .antMatchers("/reports/allComment").hasRole("ADMIN")
+                .antMatchers("/reports/allUser").hasRole("ADMIN")
+
+                .antMatchers("/reports/acceptReportForPost").hasRole("ADMIN")
+                .antMatchers("/reports/acceptReportForComment").hasRole("ADMIN")
+                .antMatchers("/reports/acceptReportForUser").hasRole("ADMIN")
+                .antMatchers("/reports/denyReport").hasRole("ADMIN")
+
+                .antMatchers("/banneds/**").hasRole("ADMIN")*/
+
+
                 //.antMatchers(HttpMethod.GET, "/api/clubs/{id}/**").access("@webSecurity.checkClubId(authentication,request,#id)")
                 // ukoliko ne zelimo da koristimo @PreAuthorize anotacije nad metodama kontrolera, moze se iskoristiti hasRole() metoda da se ogranici
                 // koji tip korisnika moze da pristupi odgovarajucoj ruti. Npr. ukoliko zelimo da definisemo da ruti 'admin' moze da pristupi
@@ -96,11 +126,11 @@ public class WebSecurityConfig {
 
                 // za svaki drugi zahtev korisnik mora biti autentifikovan
                 .anyRequest().authenticated().and()
+
                 // za development svrhe ukljuci konfiguraciju za CORS iz WebConfig klase
                 .cors().and();
 
-                // umetni custom filter TokenAuthenticationFilter kako bi se vrsila provera JWT tokena umesto cistih korisnickog imena i lozinke (koje radi BasicAuthenticationFilter)
-                //.addFilterBefore(new AuthenticationTokenFilter(userDetailsService(), tokenUtils), BasicAuthenticationFilter.class);
+
 
         // zbog jednostavnosti primera ne koristimo Anti-CSRF token (https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html)
         http.csrf().disable();
@@ -119,6 +149,7 @@ public class WebSecurityConfig {
         // Zahtevi koji se mecuju za web.ignoring().antMatchers() nemaju pristup SecurityContext-u
         // Dozvoljena POST metoda na ruti /users/login, za svaki drugi tip HTTP metode greska je 401 Unauthorized
         return (web) -> web.ignoring().antMatchers(HttpMethod.POST, "/users/login")
+                .antMatchers(HttpMethod.POST, "/users/signup")
 
                 // Ovim smo dozvolili pristup statickim resursima aplikacije
                 .antMatchers(HttpMethod.GET, "/", "/webjars/**", "/*.html", "favicon.ico",

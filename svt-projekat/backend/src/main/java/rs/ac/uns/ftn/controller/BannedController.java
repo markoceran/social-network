@@ -5,9 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.model.*;
-import rs.ac.uns.ftn.service.AdministratorService;
-import rs.ac.uns.ftn.service.BannedService;
-import rs.ac.uns.ftn.service.UserService;
+import rs.ac.uns.ftn.service.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -23,6 +21,12 @@ public class BannedController {
 
     @Autowired
     private BannedService bannedService;
+
+    @Autowired
+    private GroupService groupService;
+
+    @Autowired
+    private GroupAdminService groupAdminService;
 
 
     @GetMapping("/all")
@@ -40,9 +44,15 @@ public class BannedController {
         List<User> users = new ArrayList<>();
         List<Banned> all = bannedService.getAll();
 
-        for(Banned b:all){
-            users.add(b.getUser());
+        if(!all.isEmpty()){
+            for(Banned b:all){
+                if(b.getBy2() != null){
+                    users.add(b.getUser());
+                }
+
+            }
         }
+
 
         return ResponseEntity.ok(users);
 
@@ -57,13 +67,16 @@ public class BannedController {
 
         if (user.isPresent()) {
 
-            for(Banned b:all){
+            if(!all.isEmpty()){
+                for(Banned b:all){
 
-                if(b.getUser().getUsername().equals(user.get().getUsername())){
-                   deleted = bannedService.delete(b.getId());
+                    if(b.getUser().getUsername().equals(user.get().getUsername()) && b.getBy2() != null){
+                        deleted = bannedService.delete(b.getId());
+                    }
+
                 }
-
             }
+
 
             return ResponseEntity.ok(deleted);
 
@@ -72,4 +85,55 @@ public class BannedController {
         }
     }
 
+    @PostMapping("/createForGroupUser")
+    public ResponseEntity<Banned> create(@RequestParam Long groupId, @RequestParam Long userId, @RequestParam Long groupAdminId) {
+
+        Optional<User> user = userService.getById(userId);
+        Optional<Groupp> group = groupService.getById(groupId);
+        Optional<GroupAdmin> groupAdmin = groupAdminService.getById(groupAdminId);
+
+        if (user.isPresent() && group.isPresent()) {
+
+            Banned banned = new Banned();
+            banned.setTimestamp(LocalDate.now());
+            banned.setGroup(group.get());
+            banned.setUser(user.get());
+            banned.setBy1(groupAdmin.get());
+
+            bannedService.save(banned);
+
+            return ResponseEntity.ok(banned);
+
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("/deleteForUserInGroup")
+    public ResponseEntity<Banned> deleteForUserInGroup(@RequestParam Long id, @RequestParam Long groupId) {
+
+        Optional<User> user = userService.getById(id);
+        List<Banned> all = bannedService.getAll();
+
+        Banned deleted = null;
+
+        if (user.isPresent()) {
+
+            if(!all.isEmpty()){
+                for(Banned b:all){
+
+                    if(b.getUser().getUsername().equals(user.get().getUsername()) && b.getBy1() != null && b.getGroup().getId().equals(groupId)){
+                        deleted = bannedService.delete(b.getId());
+                    }
+
+                }
+            }
+
+
+            return ResponseEntity.ok(deleted);
+
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

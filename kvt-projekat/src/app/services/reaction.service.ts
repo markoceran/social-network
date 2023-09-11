@@ -89,11 +89,27 @@ export class ReactionService {
   }
 
   getPostReaction(id:number): Observable<Array<Reaction>> {
-    return this.http.get<Array<Reaction>>('api/reactions/byPost/'+ id);
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<Array<Reaction>>('api/reactions/byPost/'+ id, {headers});
   }
  
   getCommentReaction(id:number): Observable<Array<Reaction>> {
-    return this.http.get<Array<Reaction>>('api/reactions/byComment/'+ id);
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<Array<Reaction>>('api/reactions/byComment/'+ id, {headers});
   }
 
 }

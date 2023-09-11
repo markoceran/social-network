@@ -25,7 +25,7 @@ public class Post {
     @Column(name = "creationDate",nullable = false)
     private LocalDateTime creationDate;
 
-    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     private User postedBy;
 
     @Column(name = "isDeleted",nullable = false)

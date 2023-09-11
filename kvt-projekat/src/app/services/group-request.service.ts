@@ -26,7 +26,14 @@ export class GroupRequestService {
 
   getRequests(id:number): Observable<GroupRequest[]> {
 
-    return this.http.get<GroupRequest[]>('api/groupRequest/' + id);
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<GroupRequest[]>('api/groupRequest/' + id, {headers});
   }
 
 
@@ -34,15 +41,27 @@ export class GroupRequestService {
   accept(id: number): Observable<any> {
 
     const params = { id: id.toString() };
+    const token = localStorage.getItem('user');
 
-    return this.http.post<any>('api/groupRequest/accept', null, {params});
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.post<any>('api/groupRequest/accept', null, {headers,params});
   }
 
   deny(id: number): Observable<any> {
 
     const params = { id: id.toString() };
+    const token = localStorage.getItem('user');
 
-    return this.http.post<any>('api/groupRequest/deny', null, {params});
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.post<any>('api/groupRequest/deny', null, {headers, params});
   }
 
 }

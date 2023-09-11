@@ -16,7 +16,15 @@ export class UserServiceService {
 
 
   getProfileData(username: string): Observable<any> {
-    return this.http.get<any>('api/users/profile/' + username);
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<any>('api/users/profile/' + username, {headers});
   }
 
   getUsernameFromToken(): any {
@@ -50,7 +58,15 @@ export class UserServiceService {
   }
 
   logout(): Observable<any> {
-    return this.http.post('api/users/logout', null);
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.post('api/users/logout', null, {headers});
   }
 
   editProfileData(user:User): Observable<any> {
@@ -82,8 +98,14 @@ export class UserServiceService {
   deleteAdminFromGroup(groupId:number, groupAdminId:number): Observable<any> {
 
     const params = { groupId: groupId.toString(), groupAdminId: groupAdminId.toString()};
+    const token = localStorage.getItem('user');
 
-    return this.http.delete('api/users/deleteGroupAdmin', {params});
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.delete('api/groups/deleteGroupAdmin', {headers, params});
   }
 
 }

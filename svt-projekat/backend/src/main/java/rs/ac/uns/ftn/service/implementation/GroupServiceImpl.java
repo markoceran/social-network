@@ -50,7 +50,6 @@ public class GroupServiceImpl implements GroupService {
             toUpdate.get().setSuspendedReason(group.getSuspendedReason());
             toUpdate.get().setIsSuspended(group.getIsSuspended());
             toUpdate.get().setContains(group.getContains());
-            toUpdate.get().setGroupAdmins(group.getGroupAdmins());
 
             groupRepository.save(toUpdate.get());
 
@@ -69,7 +68,7 @@ public class GroupServiceImpl implements GroupService {
         Optional<Groupp> groupp = this.getById(id);
         if(groupp.isPresent()){
             groupp.get().setIsSuspended(true);
-            groupRepository.save(groupp.get());
+            this.update(id, groupp.get());
             return groupp.get();
         }else {return null;}
 

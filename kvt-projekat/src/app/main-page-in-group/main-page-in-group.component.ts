@@ -10,6 +10,10 @@ import { ReactionService } from '../services/reaction.service';
 import { Reaction } from '../model/reaction';
 import { UserServiceService } from '../services/user.service';
 import { Group } from '../model/group';
+import { GroupRequest } from '../model/groupRequest';
+import { User } from '../model/user.model';
+import { GroupAdmin } from '../model/groupAdmin';
+import { BannedService } from '../services/banned.service';
 
 @Component({
   selector: 'app-main-page-in-group',
@@ -21,8 +25,12 @@ export class MainPageInGroupComponent implements OnInit{
   groupId!:number;
   groupPosts!: Post[];
   group!: Group;
+  showRequest: boolean = false;
+  showUser: boolean = false;
+  groupRequests!: GroupRequest[];
+  loggedUser!: User;
 
-  constructor(private userService:UserServiceService, private reactionService:ReactionService, private postService:PostService,private imageService:ImageService, private route: ActivatedRoute, private router: Router, private groupService:GroupService,private toast: ToastrService,private groupRequestService:GroupRequestService ){
+  constructor(private bannedService:BannedService, private userService:UserServiceService, private reactionService:ReactionService, private postService:PostService,private imageService:ImageService, private route: ActivatedRoute, private router: Router, private groupService:GroupService,private toast: ToastrService,private groupRequestService:GroupRequestService ){
   }
 
   ngOnInit(): void {
@@ -39,6 +47,17 @@ export class MainPageInGroupComponent implements OnInit{
         console.log(group);
       }
     )
+
+    this.userService.getProfileData(this.userService.getUsernameFromToken()).subscribe(
+      (data: any) => {
+        console.log(data);  
+        this.loggedUser = data;   
+      },
+      (error: any) => {
+        console.error('Error getting user:', error);
+        this.toast.error('Error getting user!');
+      }
+    );
 
 
     this.postService.getGroupPosts(this.groupId).subscribe(
@@ -87,6 +106,49 @@ export class MainPageInGroupComponent implements OnInit{
         console.error('Error fetching user data:', error);
       }
     );
+
+    this.groupRequestService.getRequests(this.groupId).subscribe(
+      (requests: GroupRequest[]) =>{
+
+        requests.forEach(request=>{
+          this.imageService.getProfileImageByUser(request.from.username).subscribe(
+            (image: any) =>{
+              request.from.profileImage = image;
+              console.log(image);
+            }
+          )
+        })
+
+        this.groupRequests = requests.map((request: any) => ({
+          ...request,
+          createdAt: this.parseDateArrayToDate(request.createdAt)
+        }));
+       
+      }
+    )
+
+    this.groupService.getGroupUsers(this.groupId).subscribe(
+      (users: any) => {
+        console.log(users);  
+        this.group.groupUsers = users;   
+      },
+      (error: any) => {
+        console.error('Error getting group user:', error);
+        this.toast.error('Error getting group user!');
+      }
+    );
+
+    this.groupService.getGroupAdmins(this.groupId).subscribe(
+      (admins: any) => {
+        console.log(admins);  
+        this.group.groupAdmins = admins;   
+      },
+      (error: any) => {
+        console.error('Error getting group admin:', error);
+        this.toast.error('Error getting group admin!');
+      }
+    );
+
   }
   
 
@@ -151,6 +213,104 @@ export class MainPageInGroupComponent implements OnInit{
     this.router.navigate(['comments/', postId]);
   }
 
+  isUserAdmin(userToCheck:User, adminList:GroupAdmin[]) {
+    if(adminList !== undefined){
+      return adminList.some(admin => admin.user.username === userToCheck.username);
+    }
+    return false;
+  }
+
+  groupAdmin(){
+
+    const admin = this.group.groupAdmins.find(admin => admin.user.username === this.loggedUser.username);
+    return admin ? admin.id : 0;
+
+  }
+
+  blockUser(groupId:number, userId:number, groupAdminId:number){
+
+    this.bannedService.banUserInGroup(groupId, userId, groupAdminId).subscribe(
+      (data: any) => {
+        console.log(data);  
+        this.toast.success('User successfully banned!')
+      },
+      (error: any) => {
+        console.error('Error:', error);
+        this.toast.error('Error!');
+      }
+    );
+  }
+
+  unblockUser(id:number, groupId:number){
+
+    this.bannedService.unbanUserInGroup(id, groupId).subscribe(
+      (data: any) => {
+        console.log(data);  
+        this.toast.success('User successfully unbanned!')
+      },
+      (error: any) => {
+        console.error('Error:', error);
+        this.toast.error('Error!');
+      }
+    );
+  }
+
+  deleteGroup(id:number){
+
+    this.groupService.deleteGroup(id).subscribe(
+      (data: any) => {
+        console.log(data);  
+        this.toast.success('Group successfully deleted!');
+        this.router.navigate(['/group']);
+      },
+      (error: any) => {
+        console.error('Error:', error);
+        this.toast.error('Error!');
+      }
+    );
+  }
+  
+  showRequests(){
+
+    this.showRequest = !this.showRequest;
+
+  }
+
+  showUsers(){
+
+    this.showUser = !this.showUser;
+
+  }
+
+  accept(id:number){
+    this.groupRequestService.accept(id).subscribe(
+      (data: any) => {
+        console.log(data);  
+        this.toast.success('Request was successfully accepted!');
+        window.location.reload();
+        
+      },
+      (error) => {
+        this.toast.error('Error accept request!');
+        console.error('Error accept request:', error);
+        
+    });
+  }
+
+  deny(id:number){
+    this.groupRequestService.deny(id).subscribe(
+      (data: any) => {
+        console.log(data);  
+        this.toast.success('Request was successfully denied!');
+        window.location.reload();
+        
+      },
+      (error) => {
+        this.toast.error('Error deny request!');
+        console.error('Error deny request:', error);
+        
+    });
+  }
   
   getImageUrl(imageName: string): string {
     return `http://localhost:4200/api/images/getImage/${imageName}`;

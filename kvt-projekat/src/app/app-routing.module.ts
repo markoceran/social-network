@@ -23,6 +23,10 @@ import { AddReplyOnCommentComponent } from './add-reply-on-comment/add-reply-on-
 import { MainPageInGroupComponent } from './main-page-in-group/main-page-in-group.component';
 import { AddPostInGroupComponent } from './add-post-in-group/add-post-in-group.component';
 import { GroupAdminComponent } from './group-admin/group-admin.component';
+import { SuspendGroupComponent } from './suspend-group/suspend-group.component';
+import { EditGroupComponent } from './edit-group/edit-group.component';
+import { RoleGuardService } from './guards/role-guard.service';
+import { LoginGuardService } from './guards/login-guard.service';
 
 const routes: Routes = [
 
@@ -30,153 +34,162 @@ const routes: Routes = [
 		
 		path: '',
 		component: LoginComponent,
-	  //canActivate: [RoleGuard],
-		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+		canActivate: [LoginGuardService]
 	},
 	{
 		
 		path: 'main',
 		component: MainPageComponent,
-	  //canActivate: [RoleGuard],
-		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	  	canActivate: [RoleGuardService],
+		data: {expectedRoles: 'ADMIN|USER|GROUP_ADMIN'}
 	},
 	{
-		
 		path: 'profile/:username',
 		component: ProfileComponent,
-	  //canActivate: [RoleGuard],
-		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	  	canActivate: [RoleGuardService],
+		data: {expectedRoles: 'ADMIN|USER|GROUP_ADMIN'}
 	},
 	{
 		path: 'posts/add',
 		component: AddPostComponent,
-	  //canActivate: [RoleGuard],
-		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	  	canActivate: [RoleGuardService],
+		data: {expectedRoles: 'ADMIN|USER|GROUP_ADMIN'}
 	},
 	{
 		path: 'users/search/:input',
 		component: SearchComponent,
-	  //canActivate: [RoleGuard],
-		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	    canActivate: [RoleGuardService],
+		data: {expectedRoles: 'ADMIN|USER|GROUP_ADMIN'}
 	},
 	{
 		path: 'friendRequests',
 		component: FriendRequestsComponent,
-	  //canActivate: [RoleGuard],
-		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	    canActivate: [RoleGuardService],
+		data: {expectedRoles: 'ADMIN|USER|GROUP_ADMIN'}
 	},
 	{
 		path: 'user/logout',
 		component: LogoutComponent,
-	  //canActivate: [RoleGuard],
-		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	    canActivate: [RoleGuardService],
+		data: {expectedRoles: 'ADMIN|USER|GROUP_ADMIN'}
 	},
 	{
 		path: 'group',
 		component: GroupsComponent,
-	  //canActivate: [RoleGuard],
-		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	    canActivate: [RoleGuardService],
+		data: {expectedRoles: 'ADMIN|USER|GROUP_ADMIN'}
 	},
 	{
 		path: 'group/add',
 		component: AddGroupComponent,
-	  //canActivate: [RoleGuard],
-		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	    canActivate: [RoleGuardService],
+		data: {expectedRoles: 'ADMIN|USER|GROUP_ADMIN'}
 	},
 	{
 		path: 'register',
-		component: RegistrationComponent,
-	  //canActivate: [RoleGuard],
-		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+		component: RegistrationComponent
 	},
 	{
 		path: 'addProfileImage',
 		component: AddProfileImageComponent,
-	  //canActivate: [RoleGuard],
-		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	    canActivate: [RoleGuardService],
+		data: {expectedRoles: 'ADMIN|USER|GROUP_ADMIN'}
 	},
 	{
 		path: 'comments/:postId',
 		component: CommentComponent,
-	  //canActivate: [RoleGuard],
-		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	    canActivate: [RoleGuardService],
+		data: {expectedRoles: 'ADMIN|USER|GROUP_ADMIN'}
 	},
 	{
 		path: 'editProfile',
 		component: EditProfileComponent,
-	  //canActivate: [RoleGuard],
-		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	    canActivate: [RoleGuardService],
+		data: {expectedRoles: 'ADMIN|USER|GROUP_ADMIN'}
 	},
 	{
 		path: 'report',
 		component: ReportComponent,
-	  //canActivate: [RoleGuard],
-		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	    canActivate: [RoleGuardService],
+		data: {expectedRoles: 'ADMIN'}
 	},
 	{
 		path: 'banned',
 		component: BannedComponent,
-	  //canActivate: [RoleGuard],
-		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	    canActivate: [RoleGuardService],
+		data: {expectedRoles: 'ADMIN'}
 	},
 	{
 		
 		path: 'addReportForPost/:id',
 		component: AddReportPostComponent,
-	  //canActivate: [RoleGuard],
-		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	    canActivate: [RoleGuardService],
+		data: {expectedRoles: 'ADMIN|USER|GROUP_ADMIN'}
 	},
 	{
 		
 		path: 'addReportForUser/:id',
 		component: AddReportUserComponent,
-	  //canActivate: [RoleGuard],
-		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	    canActivate: [RoleGuardService],
+		data: {expectedRoles: 'ADMIN|USER|GROUP_ADMIN'}
 	},
 	{
 		
 		path: 'addReportForComment/:id',
 		component: AddReportCommentComponent,
-	  //canActivate: [RoleGuard],
-		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	    canActivate: [RoleGuardService],
+		data: {expectedRoles: 'ADMIN|USER|GROUP_ADMIN'}
 	},
 	{
 		
 		path: 'editPost/:id',
 		component: EditPostComponent,
-	  //canActivate: [RoleGuard],
-		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	    canActivate: [RoleGuardService],
+		data: {expectedRoles: 'ADMIN|USER|GROUP_ADMIN'}
 	},
 	{
 		
 		path: 'reply/:id',
 		component: AddReplyOnCommentComponent,
-	  //canActivate: [RoleGuard],
-		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	    canActivate: [RoleGuardService],
+		data: {expectedRoles: 'ADMIN|USER|GROUP_ADMIN'}
 	},
 	{
 		
 		path: 'mainPageGroup/:id',
 		component: MainPageInGroupComponent,
-	  //canActivate: [RoleGuard],
-		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	    canActivate: [RoleGuardService],
+		data: {expectedRoles: 'ADMIN|USER|GROUP_ADMIN'}
 	},
 	{
 		
 		path: 'addPostInGroup/:id',
 		component: AddPostInGroupComponent,
-	  //canActivate: [RoleGuard],
-		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	    canActivate: [RoleGuardService],
+		data: {expectedRoles: 'ADMIN|USER|GROUP_ADMIN'}
 	},
 	{
 		
 		path: 'groupAdmin',
 		component: GroupAdminComponent,
-	  //canActivate: [RoleGuard],
-		//data: {expectedRoles: 'ADMIN|WINE_USER'}
+	    canActivate: [RoleGuardService],
+		data: {expectedRoles: 'ADMIN'}
+	},
+	{
+		
+		path: 'suspendGroup/:id',
+		component: SuspendGroupComponent,
+	    canActivate: [RoleGuardService],
+		data: {expectedRoles: 'ADMIN'}
+	},
+	{
+		
+		path: 'editGroup/:id',
+		component: EditGroupComponent,
+	    canActivate: [RoleGuardService],
+		data: {expectedRoles: 'GROUP_ADMIN'}
 	}
 ];
-
 
 
 
