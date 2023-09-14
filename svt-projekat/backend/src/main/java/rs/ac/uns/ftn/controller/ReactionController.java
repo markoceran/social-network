@@ -211,10 +211,20 @@ public class ReactionController {
     }
 
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Reaction> deleteReaction(@PathVariable Long id) {
-        Reaction deleted = reactionService.delete(id);
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<Reaction> deleteReaction(@PathVariable Long postId, @RequestParam String username) {
+
+        List<Reaction> allReactions = reactionService.getAll();
+        Reaction deleted = null;
+
+        for(Reaction r:allReactions){
+            if(r.getPost().getId().equals(postId) && r.getMadeBy().getUsername().equals(username)){
+                deleted = r;
+            }
+        }
+
         if (deleted != null) {
+            reactionService.delete(deleted.getId());
             return ResponseEntity.ok(deleted);
         } else {
             return ResponseEntity.notFound().build();

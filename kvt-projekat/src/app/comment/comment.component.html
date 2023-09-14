@@ -60,7 +60,8 @@
                                 <img *ngIf="c.belongsTo.profileImage !== undefined" [src]="getImageUrl(c.belongsTo.profileImage)" alt="" style="width: 45px; height: 45px;margin-left: 15px;" class="rounded-circle" />
                                 <div class="ms-3">
                                   <p class="fw-bold mb-1">{{ c.belongsTo.firstName + ' ' + c.belongsTo.lastName }}</p>
-                                  <p class="text-muted mb-0">username: {{c.belongsTo.username}}</p>
+                                  <p class="text-muted mb-0" *ngIf="!c.belongsTo.displayName">username: {{c.belongsTo.username}}</p>
+                                  <p class="text-muted mb-0" *ngIf="c.belongsTo.displayName">name: {{c.belongsTo.displayName}}</p>
                                 </div>
                               </div>                          
                             </li>

@@ -24,6 +24,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/users")
@@ -52,10 +54,13 @@ public class UserController {
     @Autowired
     UserDetailsService userDetailsService;
 
+    private final Logger logger;
+
     private final PasswordEncoder passwordEncoder;
 
     public UserController(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
+        this.logger = Logger.getLogger(String.valueOf(UserController.class));
     }
 
 
@@ -67,6 +72,7 @@ public class UserController {
     @GetMapping("/profile/{username}")
     public User user(@PathVariable String username) {
         //response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        logger.info("Find user with username");
         return this.userService.findByUsername(username);
     }
 
@@ -79,6 +85,7 @@ public class UserController {
         User user = userService.findByUsername(username);
 
         if (user == null) {
+            logger.info("User is not present");
             return (List<User>) ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
@@ -93,7 +100,7 @@ public class UserController {
             }
         }
 
-
+        logger.info("Users found successfully");
         return rezultat;
     }
 
@@ -108,17 +115,24 @@ public class UserController {
         for (User u : sviKorisnici) {
             if (u.getUsername().equals(newUser.getUsername()) || !newUser.getEmail().contains("@")) {
                 isValid = false;
+                logger.info("Email is not valid");
             }
         }
 
         if (isValid) {
             createdUser = userService.createUser(newUser);
+            logger.info("User is created");
         } else {
             createdUser = null;
+            logger.info("User is not created");
+
         }
 
         if (createdUser == null) {
+
+            logger.info("User is null");
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+
         }
         UserDTO userDTO = new UserDTO(createdUser);
 
@@ -136,6 +150,7 @@ public class UserController {
             for (Banned b : banneds) {
                 if (b.getUser() != null && b.getUser().getUsername().equals(authenticationRequest.getUsername()) && b.getBy2() != null) {
                     isValid = false;
+                    logger.info("User is bannned");
                 }
             }
         }
@@ -161,9 +176,13 @@ public class UserController {
 
             userService.update(loggedUser.getId(), loggedUser);
 
+            logger.info("Token is created");
+
             // Vrati token kao odgovor na uspesnu autentifikaciju
             return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
         }
+
+        logger.info("User is unauthorized");
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
@@ -178,6 +197,8 @@ public class UserController {
         Map<String, String> responseBody = new HashMap<>();
         responseBody.put("message", "Logged out successfully");
 
+        logger.info("Logged out successfully");
+
         return ResponseEntity.ok(responseBody);
     }
 
@@ -190,12 +211,14 @@ public class UserController {
         User loggedUser = userService.findByUsername(username);
 
         if (loggedUser == null) {
+            logger.info("Logged user is not present");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
         List<User> allUser = userService.getAll();
         for (User u : allUser) {
             if (!loggedUser.getUsername().equals(user.getUsername()) && u.getUsername().equals(user.getUsername())) {
+                logger.info("FORBIDDEN");
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
         }
@@ -205,8 +228,10 @@ public class UserController {
 
         User updated = userService.update(loggedUser.getId(), user);
         if (updated != null) {
+            logger.info("Success");
             return ResponseEntity.ok(updated);
         } else {
+            logger.info("Not found");
             return ResponseEntity.notFound().build();
         }
     }
@@ -222,6 +247,7 @@ public class UserController {
         User loggedUser = userService.findByUsername(username);
 
         if (loggedUser == null) {
+            logger.info("User is not present");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
@@ -234,8 +260,10 @@ public class UserController {
         }
 
         if (updated != null) {
+            logger.info("Success");
             return ResponseEntity.ok(updated);
         } else {
+            logger.info("Bad request");
             return ResponseEntity.badRequest().build();
         }
     }

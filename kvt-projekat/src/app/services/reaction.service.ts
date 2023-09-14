@@ -112,4 +112,19 @@ export class ReactionService {
     return this.http.get<Array<Reaction>>('api/reactions/byComment/'+ id, {headers});
   }
 
+  deleteReaction(postId:number, username:string): Observable<any> {
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    const params = { username: username.toString() };
+
+    return this.http.delete<any>('api/reactions/'+ postId, {headers,params});
+  }
+  
+
 }

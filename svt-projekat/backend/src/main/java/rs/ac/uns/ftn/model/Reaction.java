@@ -26,14 +26,14 @@ public class Reaction {
 
     @Column(name = "timestamp",nullable = false)
     private LocalDate timestamp;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     @Nullable
     private Post post;
 
-    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     private User madeBy;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     @Nullable
     private Comment comment;
 }

@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.LogManager;
 
 @RestController
 @RequestMapping("/banneds")
@@ -27,6 +28,7 @@ public class BannedController {
 
     @Autowired
     private GroupAdminService groupAdminService;
+
 
 
     @GetMapping("/all")
@@ -52,7 +54,6 @@ public class BannedController {
 
             }
         }
-
 
         return ResponseEntity.ok(users);
 

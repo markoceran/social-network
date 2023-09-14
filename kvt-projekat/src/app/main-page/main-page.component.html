@@ -40,7 +40,8 @@
                                 <img *ngIf="p.postedBy.profileImage !== undefined" [src]="getImageUrl(p.postedBy.profileImage)" alt="" style="width: 45px; height: 45px;margin-left: 15px;" class="rounded-circle" />
                                 <div class="ms-3">
                                   <p class="fw-bold mb-1">{{ p.postedBy.firstName + ' ' + p.postedBy.lastName }}</p>
-                                  <p class="text-muted mb-0">username: {{p.postedBy.username}}</p>
+                                  <p class="text-muted mb-0" *ngIf="p.postedBy.displayName">name: {{p.postedBy.displayName}}</p>
+                                  <p class="text-muted mb-0"*ngIf="!p.postedBy.displayName">username: {{p.postedBy.username}}</p>
                                   <a class="fw-bold mb-1" *ngIf="p.group" [routerLink]="['/mainPageGroup/', p.group.id]" >Group: {{p.group.name}}</a>
                                 </div>                  
                               </div>                          
@@ -109,7 +110,12 @@
                         <i class="fas fa-heart" *ngIf="p.isHearted"></i>
                         Heart
                       </a>
-                    </button>                  
+                    </button> 
+                    <button class="btn btn-link btn-rounded btn-sm" (click)="deleteReaction(p.id)" *ngIf="p.isHearted">
+                      <a class="nav-link">
+                        Unheart
+                      </a>
+                    </button>                 
                   </li>
                   <li style="margin-left: 15px;" class="nav-item me-3 me-lg-0">
                     <button class="btn btn-link btn-rounded btn-sm" style="color: green;" (click)="like(p.id, postIndex)" *ngIf="(!p.isLiked && !p.isDisliked && !p.isHearted) || (!p.isHearted && p.isLiked && !p.isDisliked)">
@@ -119,6 +125,11 @@
                           Like
                       </a>
                     </button>
+                    <button class="btn btn-link btn-rounded btn-sm" (click)="deleteReaction(p.id)" *ngIf="p.isLiked">
+                      <a class="nav-link">
+                        Unlike
+                      </a>                   
+                    </button>   
                   </li>  
                   <li style="margin-left: 15px;" class="nav-item me-3 me-lg-0">
                     <button class="btn btn-link btn-rounded btn-sm" style="color: red;" (click)="dislike(p.id, postIndex)" *ngIf="(!p.isDisliked && !p.isHearted && !p.isLiked) || (!p.isHearted && !p.isLiked && p.isDisliked)">
@@ -128,6 +139,11 @@
                           Dislike
                       </a>
                     </button>
+                    <button class="btn btn-link btn-rounded btn-sm" (click)="deleteReaction(p.id)" *ngIf="p.isDisliked">
+                      <a class="nav-link">
+                       Undislike 
+                      </a>                 
+                    </button>   
                   </li> 
                   <li style="margin-left: 15px;" class="nav-item me-3 me-lg-0">
                     <button class="btn btn-link btn-rounded btn-sm" style="color: rgb(133, 133, 133);" (click)="comments(p.id)">

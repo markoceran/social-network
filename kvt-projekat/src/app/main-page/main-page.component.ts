@@ -209,6 +209,16 @@ export class MainPageComponent implements OnInit{
     }
   }
 
+  deleteReaction(postId:number){
+
+    const username = this.userService.getUsernameFromToken();
+    this.reactionService.deleteReaction(postId, username).subscribe(
+      (data: any) =>{
+        console.log(data);
+        window.location.reload();
+      }
+    )
+  }
 
   orderAsc(){
 

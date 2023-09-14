@@ -95,16 +95,23 @@ public class WebSecurityConfig {
                 .antMatchers("/groupRequest/**").permitAll()
 
 
-                /*.antMatchers("/users/all").hasRole("ADMIN")
-                .antMatchers("/groups/deleteGroupAdmin").hasRole("ADMIN")
+                /*.antMatchers("/users/**").permitAll()
+                .antMatchers("/users/all").hasRole("ADMIN")
 
+
+                .antMatchers("/posts").permitAll()
+                .antMatchers("/friendRequest").permitAll()
+                .antMatchers("/comments").permitAll()
+                .antMatchers("/images").permitAll()
+                .antMatchers("/reactions").permitAll()
 
                 .antMatchers("/groups/**").permitAll()
                 .antMatchers("/groups").permitAll()
 
                 .antMatchers("/groupRequest/**").permitAll()
 
-
+                .antMatchers("/groups/deleteGroupAdmin").hasRole("ADMIN")
+                .antMatchers("/groups/suspend").hasRole("ADMIN")
 
                 .antMatchers("/reports/allPost").hasRole("ADMIN")
                 .antMatchers("/reports/allComment").hasRole("ADMIN")
@@ -115,7 +122,7 @@ public class WebSecurityConfig {
                 .antMatchers("/reports/acceptReportForUser").hasRole("ADMIN")
                 .antMatchers("/reports/denyReport").hasRole("ADMIN")
 
-                .antMatchers("/banneds/**").hasRole("ADMIN")*/
+                .antMatchers("/banneds/**").hasRole("ADMIN","GROUP_ADMIN")*/
 
 
                 //.antMatchers(HttpMethod.GET, "/api/clubs/{id}/**").access("@webSecurity.checkClubId(authentication,request,#id)")

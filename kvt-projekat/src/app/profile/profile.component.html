@@ -27,7 +27,6 @@
               <div class="ms-3" style="margin-top: 130px;">
                 <h5>{{ user.firstName + ' ' + user.lastName }}</h5>
                 <p>username: {{user.username}}</p>
-                
               </div>
             </div>
             <div class="p-4 text-black" style="background-color: #f8f9fa;">
@@ -42,6 +41,8 @@
               <div class="mb-5">
                 <p class="lead fw-normal mb-1">About</p>
                 <div class="p-4" style="background-color: #f8f9fa;">
+                  <p *ngIf="user.displayName">display name: {{user.displayName}}</p>
+                  <br>
                   <p class="font-italic mb-1">{{user.description}}</p>
                 </div>
               </div>
