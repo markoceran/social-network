@@ -93,6 +93,7 @@ public class WebSecurityConfig {
                 .antMatchers("/groups").permitAll()
                 .antMatchers("/groupRequest").permitAll()
                 .antMatchers("/groupRequest/**").permitAll()
+                .antMatchers("/search/**").permitAll()
 
 
                 /*.antMatchers("/users/**").permitAll()

@@ -35,6 +35,7 @@ import { AddPostInGroupComponent } from './add-post-in-group/add-post-in-group.c
 import { GroupAdminComponent } from './group-admin/group-admin.component';
 import { SuspendGroupComponent } from './suspend-group/suspend-group.component';
 import { EditGroupComponent } from './edit-group/edit-group.component';
+import { AddGroupWithPDFComponent } from './add-group-with-pdf/add-group-with-pdf.component';
 
 
 
@@ -68,6 +69,7 @@ import { EditGroupComponent } from './edit-group/edit-group.component';
     GroupAdminComponent,
     SuspendGroupComponent,
     EditGroupComponent,
+    AddGroupWithPDFComponent,
     
   ],
   imports: [

@@ -2,11 +2,15 @@ package rs.ac.uns.ftn.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.PdfUtils;
 import rs.ac.uns.ftn.model.Comment;
+import rs.ac.uns.ftn.model.GroupDocument;
 import rs.ac.uns.ftn.model.Groupp;
+import rs.ac.uns.ftn.repository.GroupDocumentRepository;
 import rs.ac.uns.ftn.repository.GroupRepository;
 import rs.ac.uns.ftn.service.GroupService;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +19,12 @@ public class GroupServiceImpl implements GroupService {
 
     @Autowired
     GroupRepository groupRepository;
+
+    @Autowired
+    private GroupDocumentRepository groupDocumentRepository;
+
+    @Autowired
+    private MinioService minioService;
 
     @Override
     public List<Groupp> getAll() {
@@ -25,7 +35,6 @@ public class GroupServiceImpl implements GroupService {
     public Optional<Groupp> getById(Long id) {
         return groupRepository.findById(id);
     }
-
     @Override
     public Groupp save(Groupp group) {
 
@@ -36,6 +45,7 @@ public class GroupServiceImpl implements GroupService {
         }
 
     }
+
 
     @Override
     public Groupp update(Long id, Groupp group) {

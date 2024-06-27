@@ -129,4 +129,16 @@ export class GroupService {
     return this.http.delete<Group>('api/groups/'+ id , {headers});
   }
 
+  createGroupWithPDF(formData: FormData): Observable<Group> {
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.post<Group>('api/groups/saveWithPdf', formData, {headers});
+  }
+
+
 }

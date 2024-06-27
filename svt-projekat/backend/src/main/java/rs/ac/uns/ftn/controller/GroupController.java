@@ -7,15 +7,21 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import rs.ac.uns.ftn.PdfUtils;
 import rs.ac.uns.ftn.model.*;
+import rs.ac.uns.ftn.repository.GroupDocumentRepository;
 import rs.ac.uns.ftn.security.TokenUtils;
 import rs.ac.uns.ftn.service.*;
+import rs.ac.uns.ftn.service.implementation.MinioService;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +48,12 @@ public class GroupController {
 
     @Autowired
     private BannedService bannedService;
+
+    @Autowired
+    private GroupDocumentRepository groupDocumentRepository;
+
+    @Autowired
+    private MinioService minioService;
 
 
     @GetMapping
@@ -167,6 +179,65 @@ public class GroupController {
         groupAdminService.save(groupAdmin);
 
         return ResponseEntity.ok(group);
+    }
+
+    @PostMapping("/saveWithPdf")
+    public ResponseEntity<GroupDocument> saveGroupWithPdf(@RequestPart("group") Groupp group,
+                                                          @RequestPart("pdfFile") MultipartFile pdfFile,
+                                                          @RequestHeader("Authorization") String token) {
+        String tokenValue = token.replace("Bearer ", "");
+
+        String username = tokenUtils.getUsernameFromToken(tokenValue);
+        User user = userService.findByUsername(username);
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+
+        if (user.getRole().equals(Roles.USER)) {
+
+            userService.setRoleAsGroupAdmin(user);
+            user = userService.findByUsername(username);
+
+        }
+
+        group.setCreationDate(LocalDateTime.now());
+        group.setIsSuspended(false);
+        Groupp savedGroup = groupService.save(group);
+
+        GroupAdmin groupAdmin = new GroupAdmin();
+        groupAdmin.setUser(user);
+        groupAdmin.setGroup(group);
+        groupAdminService.save(groupAdmin);
+
+        try {
+            // Upload PDF to MinIO
+            String pdfFileName = "group-" + savedGroup.getId() + ".pdf";
+            try (InputStream pdfInputStream = pdfFile.getInputStream()) {
+                minioService.uploadFile("group-bucket", pdfFileName, pdfInputStream, pdfFile.getSize(), "application/pdf");
+            }
+
+            // Extract text from PDF
+            String pdfDescription;
+            try (InputStream pdfInputStream = pdfFile.getInputStream()) {
+                pdfDescription = PdfUtils.extractTextFromPdf(pdfInputStream);
+            }
+
+            // Create Elasticsearch document
+            GroupDocument groupDocument = new GroupDocument();
+            groupDocument.setId(savedGroup.getId());
+            groupDocument.setName(savedGroup.getName());
+            groupDocument.setDescription(savedGroup.getDescription());
+            groupDocument.setPdfDescription(pdfDescription);
+
+            groupDocumentRepository.save(groupDocument);
+
+            return ResponseEntity.ok(groupDocument);
+        } catch (Exception e) {
+            // Handle exception
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @PutMapping("/{id}")

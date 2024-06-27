@@ -27,6 +27,7 @@ import { SuspendGroupComponent } from './suspend-group/suspend-group.component';
 import { EditGroupComponent } from './edit-group/edit-group.component';
 import { RoleGuardService } from './guards/role-guard.service';
 import { LoginGuardService } from './guards/login-guard.service';
+import { AddGroupWithPDFComponent } from './add-group-with-pdf/add-group-with-pdf.component';
 
 const routes: Routes = [
 
@@ -188,7 +189,13 @@ const routes: Routes = [
 		component: EditGroupComponent,
 	    canActivate: [RoleGuardService],
 		data: {expectedRoles: 'GROUP_ADMIN'}
-	}
+	},
+	{
+		path: 'group/addWithPdf',
+		component: AddGroupWithPDFComponent,
+	    canActivate: [RoleGuardService],
+		data: {expectedRoles: 'ADMIN|USER|GROUP_ADMIN'}
+	},
 ];
 
 

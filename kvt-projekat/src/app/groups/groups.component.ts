@@ -51,6 +51,10 @@ export class GroupsComponent implements OnInit{
     this.router.navigate(['group/add']);
   }
 
+  addGroupWithPdf(){
+    this.router.navigate(['group/addWithPdf']);
+  }
+
   findGroup(){
 
     this.search = true;
