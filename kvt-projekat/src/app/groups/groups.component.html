@@ -2,9 +2,11 @@
 
 <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
+      <input id="unos" type="search" class="form-control rounded" placeholder="Find group" aria-label="Search" aria-describedby="search-addon" />
         <div class="input-group">
-            <input id="unos" type="search" class="form-control rounded" placeholder="Find group" aria-label="Search" aria-describedby="search-addon" />
-            <button type="button" class="btn btn-info" (click)="findGroup()">search</button>
+            <button type="button" class="btn btn-info" (click)="findGroupByName()">search by name</button>
+            <button type="button" class="btn btn-info" (click)="findGroupByDescription()">search by description</button>
+            <button type="button" class="btn btn-info" (click)="findGroupByPDFDescription()">search by pdf description</button>
         </div>
         <button type="button" class="btn btn-success" (click)="addGroup()">Create group</button>
         <button type="button" class="btn btn-success" (click)="addGroupWithPdf()">Create group with pdf</button>
@@ -24,8 +26,7 @@
                 <i class="fas fa-users" style="margin-left: 20px;"></i>
                 <div class="ms-3">
                   <p class="fw-bold mb-1">{{ g.name }}</p>
-                  <p class="text-muted mb-0">Description: {{g.description}}</p>
-                  <p class="text-muted mb-0" id="date">Creation date: {{g.creationDate | date: 'yyyy-MM-dd HH:mm' }}</p>
+                  <p class="fw-bold mb-1">Post count: {{ g.postCount }}</p>
                 </div>
               </div>
               <ng-container >

@@ -8,6 +8,10 @@ import { GroupRequest } from '../model/groupRequest';
 import { ImageService } from '../services/image.service';
 import { User } from '../model/user.model';
 import { UserServiceService } from '../services/user.service';
+import { GroupDocument } from '../model/groupDocument';
+import { PostService } from '../services/post.service';
+import { Post } from '../model/post.model';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-groups',
@@ -17,11 +21,12 @@ import { UserServiceService } from '../services/user.service';
 export class GroupsComponent implements OnInit{
 
   groups!: Group[];
-  searchGroup!: Group[];
+  searchGroup!: GroupDocument[];
   search: boolean = false;
+  postCount: number = 0;
 
 
-  constructor(private userService:UserServiceService, private imageService:ImageService, private router: Router, private groupService:GroupService,private toastr: ToastrService,private groupRequestService:GroupRequestService ){
+  constructor(private postService:PostService, private imageService:ImageService, private router: Router, private groupService:GroupService,private toastr: ToastrService,private groupRequestService:GroupRequestService ){
   }
 
   ngOnInit(): void {
@@ -55,25 +60,88 @@ export class GroupsComponent implements OnInit{
     this.router.navigate(['group/addWithPdf']);
   }
 
-  findGroup(){
+  async getGroupPostCount(id: number): Promise<number> {
+    try {
+        const posts: Post[] | undefined = await this.postService.getGroupPosts(id).toPromise();
+        if(posts!=undefined){
+          return posts.length;
+        }else{
+          return 0;
+        }
+    } catch (error) {
+        console.error('Error getting group posts:', error);
+        return 0;
+    }
+  }
+
+  
+  findGroupByName(){
 
     this.search = true;
 
     const unos = document.querySelector('#unos') as HTMLInputElement;
 
-    this.groupService.findGroup(unos.value).subscribe(
-      (data: any) => {
-        console.log(data);  
-        this.searchGroup = data;   
-        this.searchGroup = data.map((group: any) => ({
-          ...group,
-          creationDate: this.parseDateArrayToDate(group.creationDate)
-        }));
+    this.groupService.findGroupByName(unos.value).subscribe(
+      async (data: any) => {
+          console.log(data);
+          this.searchGroup = await Promise.all(data.map(async (group: any) => {
+              const postCount = await this.getGroupPostCount(group.id);
+              return {
+                  ...group,
+                  postCount: postCount
+              };
+          }));
       },
       (error) => {
-        console.error('Error get groups:', error);
-        this.toastr.error('Error get groups!');
-    });
+          console.error('Error getting groups:', error);
+          this.toastr.error('Error getting groups!');
+      });
+  }
+
+  findGroupByDescription(){
+
+    this.search = true;
+
+    const unos = document.querySelector('#unos') as HTMLInputElement;
+
+    this.groupService.findGroupByDescription(unos.value).subscribe(
+      async (data: any) => {
+          console.log(data);
+          this.searchGroup = await Promise.all(data.map(async (group: any) => {
+              const postCount = await this.getGroupPostCount(group.id);
+              return {
+                  ...group,
+                  postCount: postCount
+              };
+          }));
+      },
+      (error) => {
+          console.error('Error getting groups:', error);
+          this.toastr.error('Error getting groups!');
+      });
+  }
+
+  findGroupByPDFDescription(){
+
+    this.search = true;
+
+    const unos = document.querySelector('#unos') as HTMLInputElement;
+
+    this.groupService.findGroupByPDFDescription(unos.value).subscribe(
+      async (data: any) => {
+          console.log(data);
+          this.searchGroup = await Promise.all(data.map(async (group: any) => {
+              const postCount = await this.getGroupPostCount(group.id);
+              return {
+                  ...group,
+                  postCount: postCount
+              };
+          }));
+      },
+      (error) => {
+          console.error('Error getting groups:', error);
+          this.toastr.error('Error getting groups!');
+      });
   }
 
   addRequest(id:number){

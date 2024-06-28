@@ -25,7 +25,7 @@ public class GroupSearchController {
         return groupSearchService.searchGroupsByDescription(description);
     }
 
-    @GetMapping("/search/groups/pdfdescription")
+    @GetMapping("/search/groups/pdfDescription")
     public List<GroupDocument> searchGroupsByPdfDescription(@RequestParam String pdfDescription) {
         return groupSearchService.searchGroupsByPdfDescription(pdfDescription);
     }

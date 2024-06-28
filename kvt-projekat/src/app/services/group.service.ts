@@ -4,6 +4,7 @@ import { Group } from '../model/group';
 import { Observable } from 'rxjs';
 import { GroupAdmin } from '../model/groupAdmin';
 import { User } from '../model/user.model';
+import { GroupDocument } from '../model/groupDocument';
 
 @Injectable({
   providedIn: 'root'
@@ -57,8 +58,7 @@ export class GroupService {
     return this.http.get<Group>('api/groups/' + id, {headers});
   }
 
-  findGroup(unos:String): Observable<Array<Group>> {
-
+  findGroupByName(name: string): Observable<GroupDocument[]> {
     const token = localStorage.getItem('user');
 
     const headers = new HttpHeaders({
@@ -66,7 +66,35 @@ export class GroupService {
       'Authorization': `Bearer ${token}`
     });
 
-    return this.http.get<Array<Group>>('api/groups/find/' + unos, {headers});
+    const url = `api/search/groups/name?name=${name}`;
+
+    return this.http.get<GroupDocument[]>(url, { headers });
+  }
+
+  findGroupByDescription(description: string): Observable<GroupDocument[]> {
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    const url = `api/search/groups/description?description=${description}`;
+
+    return this.http.get<GroupDocument[]>(url, { headers });
+  }
+
+  findGroupByPDFDescription(pdfDescription: string): Observable<GroupDocument[]> {
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    const url = `api/search/groups/pdfDescription?pdfDescription=${pdfDescription}`;
+
+    return this.http.get<GroupDocument[]>(url, { headers });
   }
 
   suspendGroup(id:number, suspendedReason:String): Observable<any> {

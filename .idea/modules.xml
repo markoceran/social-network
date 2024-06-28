@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/serverske-veb-tehnologije-projekat.iml" filepath="$PROJECT_DIR$/.idea/serverske-veb-tehnologije-projekat.iml" />
-      <module fileurl="file://$PROJECT_DIR$/svt-projekat/backend/svt-projekat.iml" filepath="$PROJECT_DIR$/svt-projekat/backend/svt-projekat.iml" />
     </modules>
   </component>
 </project>

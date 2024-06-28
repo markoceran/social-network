@@ -1,0 +1,5 @@
+curl -XGET "http://localhost:9200/groups/_search"
+
+PS C:\Users\Nikola\Desktop\Ostalo\social-network\svt-projekat\backend\src\main\resources> docker-compose up -d
+
+ng serve --proxy-config proxy.conf.json
