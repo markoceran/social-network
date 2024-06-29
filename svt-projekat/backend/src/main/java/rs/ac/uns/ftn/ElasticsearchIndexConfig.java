@@ -28,9 +28,13 @@ public class ElasticsearchIndexConfig {
     @PostConstruct
     public void setUpIndex() {
         try {
-            String indexName = "groups";
-            if (!indexExists(client, indexName)) {
-                createIndexWithMapping(client, indexName);
+            String indexGroupName = "groups";
+            if (!indexExists(client, indexGroupName)) {
+                createGroupIndexWithMapping(client, indexGroupName);
+            }
+            String indexPostName = "posts";
+            if (!indexExists(client, indexPostName)) {
+                createPostIndexWithMapping(client, indexPostName);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -42,12 +46,8 @@ public class ElasticsearchIndexConfig {
         return client.indices().exists(request, RequestOptions.DEFAULT);
     }
 
-    private void deleteIndex(RestHighLevelClient client, String indexName) throws IOException {
-        DeleteIndexRequest request = new DeleteIndexRequest(indexName);
-        client.indices().delete(request, RequestOptions.DEFAULT);
-    }
 
-    private void createIndexWithMapping(RestHighLevelClient client, String indexName) throws IOException {
+    private void createGroupIndexWithMapping(RestHighLevelClient client, String indexName) throws IOException {
         CreateIndexRequest request = new CreateIndexRequest(indexName);
         request.settings(Settings.builder()
                 .put("index.number_of_shards", 1)
@@ -60,6 +60,26 @@ public class ElasticsearchIndexConfig {
                 "    \"name\": { \"type\": \"text\" },\n" +
                 "    \"description\": { \"type\": \"text\" },\n" +
                 "    \"pdfDescription\": { \"type\": \"text\" }\n" +
+                "  }\n" +
+                "}";
+
+        request.mapping(mapping, XContentType.JSON);
+        client.indices().create(request, RequestOptions.DEFAULT);
+    }
+
+    private void createPostIndexWithMapping(RestHighLevelClient client, String indexName) throws IOException {
+        CreateIndexRequest request = new CreateIndexRequest(indexName);
+        request.settings(Settings.builder()
+                .put("index.number_of_shards", 1)
+                .put("index.number_of_replicas", 1)
+        );
+
+        String mapping = "{\n" +
+                "  \"properties\": {\n" +
+                "    \"id\": { \"type\": \"long\" },\n" +
+                "    \"title\": { \"type\": \"text\" },\n" +
+                "    \"content\": { \"type\": \"text\" },\n" +
+                "    \"pdfContent\": { \"type\": \"text\" }\n" +
                 "  }\n" +
                 "}";
 

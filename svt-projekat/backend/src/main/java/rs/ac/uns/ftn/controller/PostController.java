@@ -3,14 +3,16 @@ package rs.ac.uns.ftn.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import rs.ac.uns.ftn.PdfUtils;
 import rs.ac.uns.ftn.model.*;
+import rs.ac.uns.ftn.repository.PostDocumentRepository;
 import rs.ac.uns.ftn.security.TokenUtils;
 import rs.ac.uns.ftn.service.*;
+import rs.ac.uns.ftn.service.implementation.MinioService;
 
-import javax.servlet.http.HttpSession;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +41,12 @@ public class PostController {
     @Autowired
     TokenUtils tokenUtils;
 
+    @Autowired
+    private PostDocumentRepository postDocumentRepository;
+
+    @Autowired
+    private MinioService minioService;
+
     /*@GetMapping("/lastId")
     public ResponseEntity<Long> getLastId(){
         List<Post> svi = postService.getAll();
@@ -65,6 +73,53 @@ public class PostController {
 
         Post createdPost = postService.save(post);
         return ResponseEntity.ok(createdPost);
+    }
+
+    @PostMapping("/saveWithPdf")
+    public ResponseEntity<PostDocument> savePostWithPdf(@RequestPart("post") PostDocument postDocumentFromRequest,
+                                                          @RequestPart("pdfFile") MultipartFile pdfFile,
+                                                          @RequestHeader("Authorization") String token) {
+        String tokenValue = token.replace("Bearer ", "");
+
+        String username = tokenUtils.getUsernameFromToken(tokenValue);
+        User user = userService.findByUsername(username);
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        Post post = new Post();
+        post.setContent(postDocumentFromRequest.getContent());
+        post.setPostedBy(user);
+        post.setIsDeleted(false);
+        post.setCreationDate(LocalDateTime.now());
+
+        Post createdPost = postService.save(post);
+
+        try {
+            // Upload PDF to MinIO
+            String pdfFileName = "post-" + createdPost.getId() + ".pdf";
+            try (InputStream pdfInputStream = pdfFile.getInputStream()) {
+                minioService.uploadFile("post-bucket", pdfFileName, pdfInputStream, pdfFile.getSize(), "application/pdf");
+            }
+
+            // Extract text from PDF
+            String pdfContent;
+            try (InputStream pdfInputStream = pdfFile.getInputStream()) {
+                pdfContent = PdfUtils.extractTextFromPdf(pdfInputStream);
+            }
+
+            // Create Elasticsearch document
+            postDocumentFromRequest.setId(createdPost.getId());
+            postDocumentFromRequest.setPdfContent(pdfContent);
+
+            postDocumentRepository.save(postDocumentFromRequest);
+
+            return ResponseEntity.ok(postDocumentFromRequest);
+        } catch (Exception e) {
+            // Handle exception
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @PostMapping("/createPostInGroup")

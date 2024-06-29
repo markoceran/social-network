@@ -3,6 +3,7 @@ import { Post } from '../model/post.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ArrayType } from '@angular/compiler';
+import { PostDocument } from '../model/postDocument';
 
 @Injectable({
   providedIn: 'root'
@@ -157,4 +158,55 @@ export class PostService {
 
     return this.http.get<Array<Post>>('api/posts/groupPost/'+ id, {headers});
   }
+
+  createPostWithPDF(formData: FormData): Observable<PostDocument> {
+
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.post<PostDocument>('api/posts/saveWithPdf', formData, {headers});
+  }
+
+  findPostByTitle(title: string): Observable<PostDocument[]> {
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    const url = `api/search/posts/title?title=${title}`;
+
+    return this.http.get<PostDocument[]>(url, { headers });
+  }
+
+  findPostByContent(content: string): Observable<PostDocument[]> {
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    const url = `api/search/posts/content?content=${content}`;
+
+    return this.http.get<PostDocument[]>(url, { headers });
+  }
+
+  findPostByPdfContent(pdfContent: string): Observable<PostDocument[]> {
+    const token = localStorage.getItem('user');
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    const url = `api/search/posts/pdfContent?pdfContent=${pdfContent}`;
+
+    return this.http.get<PostDocument[]>(url, { headers });
+  }
+
 }

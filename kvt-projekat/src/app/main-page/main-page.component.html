@@ -1,5 +1,36 @@
 <app-navbar></app-navbar>
-
+<div class="container py-5 h-100">
+  <div class="row d-flex justify-content-center align-items-center h-100">
+    <input id="unos" type="search" class="form-control rounded" placeholder="Find post" aria-label="Search" aria-describedby="search-addon" />
+      <div class="input-group">
+          <button type="button" class="btn btn-info" (click)="findPostByTitle()">search by title</button>
+          <button type="button" class="btn btn-info" (click)="findPostByContent()">search by content</button>
+          <button type="button" class="btn btn-info" (click)="findPostByPdfContent()">search by pdf content</button>
+      </div>
+  </div>
+</div>
+<section class="h-100 gradient-custom-2" *ngIf="search">
+  <h4>Search result:</h4>
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-lg-9 col-xl-7">
+        <div class="card">            
+          <ul class="list-group list-group-light" style="border: 1px solid gray;">
+            <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let p of searchPost">
+              <div class="d-flex align-items-center">
+                <i class="fas fa-photo-film" style="margin-left: 20px;"></i>
+                <div class="ms-3">
+                  <p class="fw-bold mb-1">Title: {{ p.title }}</p>
+                  <p class="fw-bold mb-1">Content: {{ p.content }}</p>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 <section class="h-100 gradient-custom-2">
     <div class="container py-5 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">

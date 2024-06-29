@@ -10,6 +10,7 @@ import { ImageService } from '../services/image.service';
 import { Router } from '@angular/router';
 import { GroupService } from '../services/group.service';
 import { Group } from '../model/group';
+import { PostDocument } from '../model/postDocument';
 
 @Component({
   selector: 'app-main-page',
@@ -23,6 +24,8 @@ export class MainPageComponent implements OnInit{
   postsFromMyGroups: Post[] = [];
   user!: User;
   allPosts!: Post[];
+  searchPost!: PostDocument[];
+  search: boolean = false;
 
   isLiked: boolean = false;
   isDisliked: boolean = false;
@@ -330,5 +333,51 @@ export class MainPageComponent implements OnInit{
     
   }
   
+  findPostByTitle(){
+    this.search = true;
 
+    const unos = document.querySelector('#unos') as HTMLInputElement;
+
+    this.postService.findPostByTitle(unos.value).subscribe(
+      (data: any) => {
+        console.log(data);
+        this.searchPost = data
+      },
+      (error) => {
+        console.error('Error getting posts:', error);
+        this.toast.error('Error getting posts!');
+      });
+  }
+
+  findPostByContent(){
+    this.search = true;
+
+    const unos = document.querySelector('#unos') as HTMLInputElement;
+
+    this.postService.findPostByContent(unos.value).subscribe(
+      (data: any) => {
+        console.log(data);
+        this.searchPost = data
+      },
+      (error) => {
+        console.error('Error getting posts:', error);
+        this.toast.error('Error getting posts!');
+      });
+  }
+
+  findPostByPdfContent(){
+    this.search = true;
+
+    const unos = document.querySelector('#unos') as HTMLInputElement;
+
+    this.postService.findPostByPdfContent(unos.value).subscribe(
+      (data: any) => {
+        console.log(data);
+        this.searchPost = data
+      },
+      (error) => {
+        console.error('Error getting posts:', error);
+        this.toast.error('Error getting posts!');
+      });
+  }
 }

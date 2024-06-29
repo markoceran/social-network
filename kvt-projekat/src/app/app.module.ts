@@ -36,6 +36,7 @@ import { GroupAdminComponent } from './group-admin/group-admin.component';
 import { SuspendGroupComponent } from './suspend-group/suspend-group.component';
 import { EditGroupComponent } from './edit-group/edit-group.component';
 import { AddGroupWithPDFComponent } from './add-group-with-pdf/add-group-with-pdf.component';
+import { AddPostWithPdfComponent } from './add-post-with-pdf/add-post-with-pdf.component';
 
 
 
@@ -70,6 +71,7 @@ import { AddGroupWithPDFComponent } from './add-group-with-pdf/add-group-with-pd
     SuspendGroupComponent,
     EditGroupComponent,
     AddGroupWithPDFComponent,
+    AddPostWithPdfComponent,
     
   ],
   imports: [
