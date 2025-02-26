@@ -4,10 +4,10 @@
     <div class="container py-5 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col col-lg-9 col-xl-7">
-          <div class="card"> 
+          <div class="card">
             <div class="card-body p-4 text-black">
-                
-              <div class="btn-group-vertical" role="group" aria-label="Vertical button group" style="margin-left: 89%;">      
+
+              <div class="btn-group-vertical" role="group" aria-label="Vertical button group" style="margin-left: 89%;">
                 <div class="btn-group" role="group">
                   <button
                     id="btnGroupVerticalDrop4"
@@ -31,8 +31,8 @@
                 <div class="container py-5 h-100">
                     <div>
                       <div>
-                        <div class="card">            
-                          
+                        <div class="card">
+
                           <ul class="list-group list-group-light">
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                               <div class="d-flex align-items-center">
@@ -43,14 +43,14 @@
                                   <p class="text-muted mb-0" *ngIf="p.postedBy.displayName">name: {{p.postedBy.displayName}}</p>
                                   <p class="text-muted mb-0"*ngIf="!p.postedBy.displayName">username: {{p.postedBy.username}}</p>
                                   <a class="fw-bold mb-1" *ngIf="p.group" [routerLink]="['/mainPageGroup/', p.group.id]" >Group: {{p.group.name}}</a>
-                                </div>                  
-                              </div>                          
+                                </div>
+                              </div>
                             </li>
-                          </ul>               
+                          </ul>
 
                         </div>
-                        
-                        <div class="btn-group-vertical" role="group" aria-label="Vertical button group" style="margin-left: 92%;">      
+
+                        <div class="btn-group-vertical" role="group" aria-label="Vertical button group" style="margin-left: 92%;">
                           <div class="btn-group" role="group">
                             <button
                               id="btnGroupVerticalDrop4"
@@ -66,26 +66,26 @@
                             </ul>
                           </div>
                         </div>
-                        
+
                       </div>
                     </div>
                 </div>
                 <p style="margin-top: 25px;">{{p.content}}</p>
-               
 
-                
+
+
                 <!------<div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
                   <div class="carousel-indicators">
                     <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                     <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
                     <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
                   </div>
-                  <div class="carousel-inner"> 
-                    
+                  <div class="carousel-inner">
+
                     <div *ngFor="let imageName of p.images; let i = index" [ngClass]="{'carousel-item': true, 'active': i === 0}">
                       <img [src]="getImageUrl(imageName)" class="d-block w-100" alt="Image">
                     </div>
-                    
+
                   </div>
                   <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -96,55 +96,55 @@
                     <span class="visually-hidden"></span>
                   </button>
               </div>------>
-                
+
               <div *ngFor="let imageName of p.images">
                 <img [src]="getImageUrl(imageName)" class="d-block w-100" alt="Image">
               </div>
-                               
 
-                <ul class="navbar-nav d-flex flex-row">                
+
+                <ul class="navbar-nav d-flex flex-row">
                   <li class="nav-item me-3 me-lg-0">
-                    <button class="btn btn-link btn-rounded btn-sm" style="color: blue;" (click)="heart(p.id, postIndex)" *ngIf="(!p.isHearted && !p.isLiked && !p.isDisliked) || (p.isHearted && !p.isLiked && !p.isDisliked)">
+                    <button class="btn btn-link btn-rounded btn-sm" style="color: blue;" (click)="heart(p.id, postIndex)" *ngIf="(!p.isHearted && !p.isLiked && !p.isDisliked)">
                       <a class="nav-link">
-                        <i class="far fa-heart" *ngIf="!p.isHearted && !p.isLiked && !p.isDisliked"></i>
-                        <i class="fas fa-heart" *ngIf="p.isHearted"></i>
+                        <i class="far fa-heart"></i>
                         Heart
                       </a>
-                    </button> 
-                    <button class="btn btn-link btn-rounded btn-sm" (click)="deleteReaction(p.id)" *ngIf="p.isHearted">
+                    </button>
+                    <button class="btn btn-link btn-rounded btn-sm" (click)="deleteReaction(p.id, postIndex)" *ngIf="p.isHearted">
                       <a class="nav-link">
-                        Unheart
+                        <i class="fas fa-heart"></i>
+                        Heart
                       </a>
-                    </button>                 
+                    </button>
                   </li>
                   <li style="margin-left: 15px;" class="nav-item me-3 me-lg-0">
-                    <button class="btn btn-link btn-rounded btn-sm" style="color: green;" (click)="like(p.id, postIndex)" *ngIf="(!p.isLiked && !p.isDisliked && !p.isHearted) || (!p.isHearted && p.isLiked && !p.isDisliked)">
+                    <button class="btn btn-link btn-rounded btn-sm" style="color: green;" (click)="like(p.id, postIndex)" *ngIf="(!p.isLiked && !p.isDisliked && !p.isHearted)">
                       <a class="nav-link">
-                        <i class="far fa-thumbs-up" *ngIf="!p.isLiked && !p.isDisliked && !p.isHearted"></i>
-                        <i class="fas fa-thumbs-up" *ngIf="p.isLiked"></i>
+                        <i class="far fa-thumbs-up"></i>
                           Like
                       </a>
                     </button>
-                    <button class="btn btn-link btn-rounded btn-sm" (click)="deleteReaction(p.id)" *ngIf="p.isLiked">
+                    <button class="btn btn-link btn-rounded btn-sm" (click)="deleteReaction(p.id, postIndex)" *ngIf="p.isLiked">
                       <a class="nav-link">
-                        Unlike
-                      </a>                   
-                    </button>   
-                  </li>  
+                        <i class="fas fa-thumbs-up"></i>
+                        Like
+                      </a>
+                    </button>
+                  </li>
                   <li style="margin-left: 15px;" class="nav-item me-3 me-lg-0">
-                    <button class="btn btn-link btn-rounded btn-sm" style="color: red;" (click)="dislike(p.id, postIndex)" *ngIf="(!p.isDisliked && !p.isHearted && !p.isLiked) || (!p.isHearted && !p.isLiked && p.isDisliked)">
+                    <button class="btn btn-link btn-rounded btn-sm" style="color: red;" (click)="dislike(p.id, postIndex)" *ngIf="(!p.isDisliked && !p.isHearted && !p.isLiked)">
                       <a class="nav-link">
-                        <i class="far fa-thumbs-down" *ngIf="!p.isDisliked && !p.isHearted && !p.isLiked"></i>
-                        <i class="fas fa-thumbs-down" *ngIf="p.isDisliked"></i>
+                        <i class="far fa-thumbs-down"></i>
                           Dislike
                       </a>
                     </button>
-                    <button class="btn btn-link btn-rounded btn-sm" (click)="deleteReaction(p.id)" *ngIf="p.isDisliked">
+                    <button class="btn btn-link btn-rounded btn-sm" (click)="deleteReaction(p.id, postIndex)" *ngIf="p.isDisliked">
                       <a class="nav-link">
-                       Undislike 
-                      </a>                 
-                    </button>   
-                  </li> 
+                        <i class="fas fa-thumbs-down" *ngIf="p.isDisliked"></i>
+                        Dislike
+                      </a>
+                    </button>
+                  </li>
                   <li style="margin-left: 15px;" class="nav-item me-3 me-lg-0">
                     <button class="btn btn-link btn-rounded btn-sm" style="color: rgb(133, 133, 133);" (click)="comments(p.id)">
                       <a class="nav-link">
@@ -152,8 +152,8 @@
                           Comments
                       </a>
                     </button>
-                  </li>                    
-                </ul>            
+                  </li>
+                </ul>
                 <p style="font-size: 10px; margin-top: 35px;">{{ p.creationDate | date: 'yyyy-MM-dd HH:mm' }}</p>
               </div>
             </div>

@@ -18,7 +18,7 @@ import { Group } from '../model/group';
 })
 export class MainPageComponent implements OnInit{
 
-  friendPosts!: Post[]; 
+  friendPosts!: Post[];
   myPosts!: Post[];
   postsFromMyGroups: Post[] = [];
   user!: User;
@@ -28,25 +28,25 @@ export class MainPageComponent implements OnInit{
   isDisliked: boolean = false;
   isHearted: boolean = false;
 
-  constructor(private groupService:GroupService, private userService: UserServiceService, private postService: PostService, private reactionService: ReactionService, private toast:ToastrService, private imageService:ImageService,private router:Router) {} 
+  constructor(private groupService:GroupService, private userService: UserServiceService, private postService: PostService, private reactionService: ReactionService, private toast:ToastrService, private imageService:ImageService,private router:Router) {}
 
   ngOnInit() {
     const username = this.userService.getUsernameFromToken();
-    
+
     this.postService.getMyPosts(username).subscribe(
       (userData: any) => {
         this.myPosts = userData.map((post: any) => ({
           ...post,
           creationDate: this.parseDateArrayToDate(post.creationDate)
         }));
-        this.fetchOtherPosts(username); 
+        this.fetchOtherPosts(username);
       },
       (error) => {
         console.error('Error fetching user data:', error);
       }
     );
   }
-  
+
   fetchOtherPosts(username: string) {
     this.postService.getFriendsPosts(username).subscribe(
       (data: any) => {
@@ -74,10 +74,10 @@ export class MainPageComponent implements OnInit{
             this.allPosts.forEach(post => {
               this.reactionService.getPostReaction(post.id).subscribe(
                 (reaction: Reaction[]) => {
-                  
+
                   if(reaction.length>0){
                     reaction.forEach(r => {
-    
+
                     if(r.madeBy.username === this.userService.getUsernameFromToken()){
                     console.log(r);
                     if(r.type === "LIKE"){
@@ -85,11 +85,11 @@ export class MainPageComponent implements OnInit{
                     }else if(r.type === "DISLIKE"){
                       post.isDisliked = true;
                     }else{ post.isHearted = true;}
-    
+
                   }
-                  });  
+                  });
                 }
-                            
+
                 }
               )
               this.imageService.getPostImage(post.id).subscribe(
@@ -116,17 +116,17 @@ export class MainPageComponent implements OnInit{
       }
     );
   }
-  
+
 
   heart(id: number, postIndex: number){
 
     this.reactionService.heartPost(id).subscribe(
       (data: any) => {
-        
+
         console.log(data);
         this.toast.success('You add heart on post');
         this.allPosts[postIndex].isHearted = true;
-    
+
         this.allPosts[postIndex].isLiked = false;
         this.allPosts[postIndex].isDisliked = false;
       },
@@ -141,11 +141,11 @@ export class MainPageComponent implements OnInit{
 
     this.reactionService.likePost(id).subscribe(
       (data: any) => {
-       
+
         console.log(data);
         this.toast.success('You add like on post');
         this.allPosts[postIndex].isLiked = true;
-       
+
         this.allPosts[postIndex].isHearted = false;
         this.allPosts[postIndex].isDisliked = false;
       },
@@ -156,14 +156,14 @@ export class MainPageComponent implements OnInit{
   }
 
   dislike(id: number, postIndex: number){
-    
+
     this.reactionService.dislikePost(id).subscribe(
       (data: any) => {
-        
+
         console.log(data);
         this.toast.success('You add dislike on post');
         this.allPosts[postIndex].isDisliked = true;
-        
+
         this.allPosts[postIndex].isHearted = false;
         this.allPosts[postIndex].isLiked = false;
       },
@@ -177,15 +177,15 @@ export class MainPageComponent implements OnInit{
     this.router.navigate(['comments/', postId]);
   }
 
-  
+
   getImageUrl(imageName: string): string {
     return `http://localhost:4200/api/images/getImage/${imageName}`;
   }
 
   mergePosts() {
-    this.allPosts = [...this.friendPosts, ...this.myPosts, ...this.postsFromMyGroups]; 
+    this.allPosts = [...this.friendPosts, ...this.myPosts, ...this.postsFromMyGroups];
     this.shuffleArray(this.allPosts);
-    console.log(this.allPosts); 
+    console.log(this.allPosts);
   }
 
   parseDateArrayToDate(dateArray: number[]): Date {
@@ -209,13 +209,15 @@ export class MainPageComponent implements OnInit{
     }
   }
 
-  deleteReaction(postId:number){
+  deleteReaction(postId:number, postIndex: number){
 
     const username = this.userService.getUsernameFromToken();
     this.reactionService.deleteReaction(postId, username).subscribe(
       (data: any) =>{
         console.log(data);
-        window.location.reload();
+        this.allPosts[postIndex].isHearted = false;
+        this.allPosts[postIndex].isLiked = false;
+        this.allPosts[postIndex].isDisliked = false;
       }
     )
   }
@@ -223,7 +225,7 @@ export class MainPageComponent implements OnInit{
   orderAsc(){
 
     console.log(this.allPosts);
-    
+
     this.postService.orderAsc(this.allPosts).subscribe(
       (data: Post[]) => {
         console.log(data);
@@ -236,7 +238,7 @@ export class MainPageComponent implements OnInit{
         this.allPosts.forEach(post => {
           this.reactionService.getPostReaction(post.id).subscribe(
             (reaction: Reaction[]) => {
-              
+
               if(reaction.length>0){
                 reaction.forEach(r => {
 
@@ -249,9 +251,9 @@ export class MainPageComponent implements OnInit{
                 }else{ post.isHearted = true;}
 
               }
-              });  
+              });
             }
-                        
+
             }
           )
           this.imageService.getPostImage(post.id).subscribe(
@@ -272,13 +274,13 @@ export class MainPageComponent implements OnInit{
         console.error('Order error', error);
       }
     );
-    
+
   }
 
   orderDesc(){
 
     console.log(this.allPosts);
-    
+
     this.postService.orderDesc(this.allPosts).subscribe(
       (data: Post[]) => {
         console.log(data);
@@ -291,7 +293,7 @@ export class MainPageComponent implements OnInit{
         this.allPosts.forEach(post => {
           this.reactionService.getPostReaction(post.id).subscribe(
             (reaction: Reaction[]) => {
-              
+
               if(reaction.length>0){
                 reaction.forEach(r => {
 
@@ -304,9 +306,9 @@ export class MainPageComponent implements OnInit{
                 }else{ post.isHearted = true;}
 
               }
-              });  
+              });
             }
-                        
+
             }
           )
           this.imageService.getPostImage(post.id).subscribe(
@@ -327,8 +329,8 @@ export class MainPageComponent implements OnInit{
         console.error('Order error', error);
       }
     );
-    
+
   }
-  
+
 
 }

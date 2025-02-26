@@ -52,7 +52,7 @@ public class ImageController {
     @Autowired
     private TokenUtils tokenUtils;
 
-    private String uploadDir = "C:\\Users\\marko\\Desktop\\serverske-veb-tehnologije-projekat\\svt-projekat\\backend\\uploads";
+    private String uploadDir = "svt-projekat\\backend\\uploads";
 
 
     @GetMapping("/{postId}")
