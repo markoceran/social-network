@@ -5,22 +5,23 @@ Connectify is a vibrant social network application designed to help users connec
 - **Frontend**: HTML, CSS, TypeScript, Angular, Node.js
 - **Backend**: Java, Spring Boot
 - **Database**: MySQL
-- **Authentication**: JWT (JSON Web Tokens)
+- **Authentication**: JWT
 - **Authorization**: RBAC
 
 ## Installation and Setup
 To run this project locally, follow these steps:
 
 1. Clone the repository:
-   git clone repository-url
+   git clone repository-url.
 
 2. Set up the database:
-Create a new database in MySQL using: create database drustvenamreza.
+Create a new database in MySQL using: create database socialnetwork.
+Set up datasource url to socialnetwork database and other parameters in application.properties.
 
-3. Run the backend application:
+4. Run the backend application:
 Navigate to the backend directory and run: mvn spring-boot:run.
    
-4. Run the frontend application:
+5. Run the frontend application:
 Navigate to the frontend directory and run: npm install then ng serve.
 
 Open the project at: http://localhost:4200
