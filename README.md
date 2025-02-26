@@ -25,3 +25,11 @@ Navigate to the backend directory and run: mvn spring-boot:run.
 Navigate to the frontend directory and run: npm install then ng serve --proxy-config proxy.conf.json.
 
 Open the project at: http://localhost:4200
+
+![Login and register](assets/screenshots/Login-and-register.png)
+![Main page](assets/screenshots/Main-page.png)
+![Profile page](assets/screenshots/Profile-page.png)
+![Find friends](assets/screenshots/Find-friends-page.png)
+![Friend requests](assets/screenshots/Friend-requests-page.png)
+![Group page](assets/screenshots/Group-page.png)
+![Group page](assets/screenshots/Group-page-2.png)
