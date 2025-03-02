@@ -30,7 +30,7 @@ Open the project at: http://localhost:4200
 ![Main page](assets/screenshots/Main-page.png)
 ![Main page2](assets/screenshots/Main-page2.png)
 ![Comments](assets/screenshots/Comments.png)
-
+![Profile page](assets/screenshots/Profile-page.png)
 ![Find friends](assets/screenshots/Find-friends-page.png)
 ![Friend requests](assets/screenshots/Friend-requests-page.png)
 ![Group page](assets/screenshots/Group-page.png)
