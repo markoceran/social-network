@@ -23,19 +23,19 @@ export class CommentComponent implements OnInit{
   comments!:Comments[];
   showReactions: boolean = false;
 
-  
+
   constructor(private commentService:CommentService, private fb: FormBuilder,private route: ActivatedRoute, private userService: UserServiceService, private postService: PostService, private reactionService: ReactionService, private toast:ToastrService, private imageService:ImageService,private router:Router) {
     this.commentForm = this.fb.group({
       text: [null, Validators.required]
     });
-  } 
- 
+  }
+
   ngOnInit(): void {
 
     console.log("OnInit");
 
     this.route.params.subscribe(params => {
-        this.postId = params['postId']; 
+        this.postId = params['postId'];
     });
 
     this.commentService.getComments(this.postId).subscribe(
@@ -43,7 +43,7 @@ export class CommentComponent implements OnInit{
         this.comments = data.map((comment: any) => ({
           ...comment,
           timestamp: this.parseDateArrayToDate(comment.timestamp)
-          
+
       }));
 
       this.comments.forEach(comment => {
@@ -57,9 +57,9 @@ export class CommentComponent implements OnInit{
 
         this.reactionService.getCommentReaction(comment.id).subscribe(
           (reaction: Reaction[]) => {
-            
+
             if(reaction.length>0){
-              
+
               comment.reactions = reaction;
 
               reaction.forEach(r => {
@@ -73,9 +73,9 @@ export class CommentComponent implements OnInit{
               }else{ comment.isHearted = true;}
 
             }
-            });  
+            });
           }
-                      
+
           }
         )
 
@@ -87,16 +87,16 @@ export class CommentComponent implements OnInit{
               console.log(image);
             }
           )
-  
+
           this.reactionService.getCommentReaction(reply.id).subscribe(
             (reaction: Reaction[]) => {
-              
+
               if(reaction.length>0){
-                
+
                 reply.reactions = reaction;
-  
+
                 reaction.forEach(r => {
-  
+
                 if(r.madeBy.username === this.userService.getUsernameFromToken()){
                 console.log(r);
                 if(r.type === "LIKE"){
@@ -104,14 +104,14 @@ export class CommentComponent implements OnInit{
                 }else if(r.type === "DISLIKE"){
                   reply.isDisliked = true;
                 }else{ reply.isHearted = true;}
-  
+
               }
-              });  
+              });
             }
-                        
+
             }
           )
-  
+
         })
       })
     },
@@ -143,11 +143,11 @@ export class CommentComponent implements OnInit{
 
     this.reactionService.heartComment(id).subscribe(
       (data: any) => {
-        
+
         console.log(data);
         this.toast.success('You add heart on comment');
         this.comments[commentIndex].isHearted = true;
-    
+
         this.comments[commentIndex].isLiked = false;
         this.comments[commentIndex].isDisliked = false;
       },
@@ -162,11 +162,11 @@ export class CommentComponent implements OnInit{
 
     this.reactionService.likeComment(id).subscribe(
       (data: any) => {
-       
+
         console.log(data);
         this.toast.success('You add like on comment');
         this.comments[commentIndex].isLiked = true;
-       
+
         this.comments[commentIndex].isHearted = false;
         this.comments[commentIndex].isDisliked = false;
       },
@@ -177,14 +177,14 @@ export class CommentComponent implements OnInit{
   }
 
   dislike(id: number, commentIndex: number){
-    
+
     this.reactionService.dislikeComment(id).subscribe(
       (data: any) => {
-        
+
         console.log(data);
         this.toast.success('You add dislike on comment');
         this.comments[commentIndex].isDisliked = true;
-        
+
         this.comments[commentIndex].isHearted = false;
         this.comments[commentIndex].isLiked = false;
       },
@@ -211,7 +211,7 @@ export class CommentComponent implements OnInit{
     // Note: Months in JavaScript Date are 0-based (0 - January, 1 - February, etc.)
     return new Date(year, month-1, day+1);
   }
-  
+
 
   show(){
     this.showReactions = !this.showReactions;
@@ -223,7 +223,7 @@ export class CommentComponent implements OnInit{
   orderAscLikes(){
 
     console.log(this.comments);
-    
+
     this.commentService.orderAscLikes(this.comments).subscribe(
       (data: Comments[]) => {
         console.log(data);
@@ -231,7 +231,7 @@ export class CommentComponent implements OnInit{
         this.comments = data.map((comment: any) => ({
           ...comment,
           timestamp: this.parseDateArrayToDate2(comment.timestamp)
-          
+
         }));
 
         this.comments.forEach(comment => {
@@ -242,16 +242,16 @@ export class CommentComponent implements OnInit{
               console.log(image);
             }
           )
-  
+
           this.reactionService.getCommentReaction(comment.id).subscribe(
             (reaction: Reaction[]) => {
-              
+
               if(reaction.length>0){
-                
+
                 comment.reactions = reaction;
-  
+
                 reaction.forEach(r => {
-  
+
                 if(r.madeBy.username === this.userService.getUsernameFromToken()){
                 console.log(r);
                 if(r.type === "LIKE"){
@@ -259,11 +259,11 @@ export class CommentComponent implements OnInit{
                 }else if(r.type === "DISLIKE"){
                   comment.isDisliked = true;
                 }else{ comment.isHearted = true;}
-  
+
               }
-              });  
+              });
             }
-                        
+
             }
           )
 
@@ -275,16 +275,16 @@ export class CommentComponent implements OnInit{
                 console.log(image);
               }
             )
-    
+
             this.reactionService.getCommentReaction(reply.id).subscribe(
               (reaction: Reaction[]) => {
-                
+
                 if(reaction.length>0){
-                  
+
                   reply.reactions = reaction;
-    
+
                   reaction.forEach(r => {
-    
+
                   if(r.madeBy.username === this.userService.getUsernameFromToken()){
                   console.log(r);
                   if(r.type === "LIKE"){
@@ -292,14 +292,14 @@ export class CommentComponent implements OnInit{
                   }else if(r.type === "DISLIKE"){
                     reply.isDisliked = true;
                   }else{ reply.isHearted = true;}
-    
+
                 }
-                });  
+                });
               }
-                          
+
               }
             )
-    
+
           })
         })
       },
@@ -312,7 +312,7 @@ export class CommentComponent implements OnInit{
   orderAscDislikes(){
 
     console.log(this.comments);
-    
+
     this.commentService.orderAscDislikes(this.comments).subscribe(
       (data: Comments[]) => {
         console.log(data);
@@ -320,7 +320,7 @@ export class CommentComponent implements OnInit{
         this.comments = data.map((comment: any) => ({
           ...comment,
           timestamp: this.parseDateArrayToDate2(comment.timestamp)
-          
+
         }));
 
         this.comments.forEach(comment => {
@@ -331,16 +331,16 @@ export class CommentComponent implements OnInit{
               console.log(image);
             }
           )
-  
+
           this.reactionService.getCommentReaction(comment.id).subscribe(
             (reaction: Reaction[]) => {
-              
+
               if(reaction.length>0){
-                
+
                 comment.reactions = reaction;
-  
+
                 reaction.forEach(r => {
-  
+
                 if(r.madeBy.username === this.userService.getUsernameFromToken()){
                 console.log(r);
                 if(r.type === "LIKE"){
@@ -348,11 +348,11 @@ export class CommentComponent implements OnInit{
                 }else if(r.type === "DISLIKE"){
                   comment.isDisliked = true;
                 }else{ comment.isHearted = true;}
-  
+
               }
-              });  
+              });
             }
-                        
+
             }
           )
 
@@ -364,16 +364,16 @@ export class CommentComponent implements OnInit{
                 console.log(image);
               }
             )
-    
+
             this.reactionService.getCommentReaction(reply.id).subscribe(
               (reaction: Reaction[]) => {
-                
+
                 if(reaction.length>0){
-                  
+
                   reply.reactions = reaction;
-    
+
                   reaction.forEach(r => {
-    
+
                   if(r.madeBy.username === this.userService.getUsernameFromToken()){
                   console.log(r);
                   if(r.type === "LIKE"){
@@ -381,14 +381,14 @@ export class CommentComponent implements OnInit{
                   }else if(r.type === "DISLIKE"){
                     reply.isDisliked = true;
                   }else{ reply.isHearted = true;}
-    
+
                 }
-                });  
+                });
               }
-                          
+
               }
             )
-    
+
           })
         })
       },
@@ -401,7 +401,7 @@ export class CommentComponent implements OnInit{
   orderAscHearts(){
 
     console.log(this.comments);
-    
+
     this.commentService.orderAscHearts(this.comments).subscribe(
       (data: Comments[]) => {
         console.log(data);
@@ -409,7 +409,7 @@ export class CommentComponent implements OnInit{
         this.comments = data.map((comment: any) => ({
           ...comment,
           timestamp: this.parseDateArrayToDate2(comment.timestamp)
-          
+
         }));
 
         this.comments.forEach(comment => {
@@ -420,16 +420,16 @@ export class CommentComponent implements OnInit{
               console.log(image);
             }
           )
-  
+
           this.reactionService.getCommentReaction(comment.id).subscribe(
             (reaction: Reaction[]) => {
-              
+
               if(reaction.length>0){
-                
+
                 comment.reactions = reaction;
-  
+
                 reaction.forEach(r => {
-  
+
                 if(r.madeBy.username === this.userService.getUsernameFromToken()){
                 console.log(r);
                 if(r.type === "LIKE"){
@@ -437,11 +437,11 @@ export class CommentComponent implements OnInit{
                 }else if(r.type === "DISLIKE"){
                   comment.isDisliked = true;
                 }else{ comment.isHearted = true;}
-  
+
               }
-              });  
+              });
             }
-                        
+
             }
           )
 
@@ -453,16 +453,16 @@ export class CommentComponent implements OnInit{
                 console.log(image);
               }
             )
-    
+
             this.reactionService.getCommentReaction(reply.id).subscribe(
               (reaction: Reaction[]) => {
-                
+
                 if(reaction.length>0){
-                  
+
                   reply.reactions = reaction;
-    
+
                   reaction.forEach(r => {
-    
+
                   if(r.madeBy.username === this.userService.getUsernameFromToken()){
                   console.log(r);
                   if(r.type === "LIKE"){
@@ -470,14 +470,14 @@ export class CommentComponent implements OnInit{
                   }else if(r.type === "DISLIKE"){
                     reply.isDisliked = true;
                   }else{ reply.isHearted = true;}
-    
+
                 }
-                });  
+                });
               }
-                          
+
               }
             )
-    
+
           })
         })
       },
@@ -492,7 +492,7 @@ export class CommentComponent implements OnInit{
   orderDescLikes(){
 
     console.log(this.comments);
-    
+
     this.commentService.orderDescLikes(this.comments).subscribe(
       (data: Comments[]) => {
         console.log(data);
@@ -500,7 +500,7 @@ export class CommentComponent implements OnInit{
         this.comments = data.map((comment: any) => ({
           ...comment,
           timestamp: this.parseDateArrayToDate2(comment.timestamp)
-          
+
         }));
 
         this.comments.forEach(comment => {
@@ -511,16 +511,16 @@ export class CommentComponent implements OnInit{
               console.log(image);
             }
           )
-  
+
           this.reactionService.getCommentReaction(comment.id).subscribe(
             (reaction: Reaction[]) => {
-              
+
               if(reaction.length>0){
-                
+
                 comment.reactions = reaction;
-  
+
                 reaction.forEach(r => {
-  
+
                 if(r.madeBy.username === this.userService.getUsernameFromToken()){
                 console.log(r);
                 if(r.type === "LIKE"){
@@ -528,11 +528,11 @@ export class CommentComponent implements OnInit{
                 }else if(r.type === "DISLIKE"){
                   comment.isDisliked = true;
                 }else{ comment.isHearted = true;}
-  
+
               }
-              });  
+              });
             }
-                        
+
             }
           )
 
@@ -544,16 +544,16 @@ export class CommentComponent implements OnInit{
                 console.log(image);
               }
             )
-    
+
             this.reactionService.getCommentReaction(reply.id).subscribe(
               (reaction: Reaction[]) => {
-                
+
                 if(reaction.length>0){
-                  
+
                   reply.reactions = reaction;
-    
+
                   reaction.forEach(r => {
-    
+
                   if(r.madeBy.username === this.userService.getUsernameFromToken()){
                   console.log(r);
                   if(r.type === "LIKE"){
@@ -561,14 +561,14 @@ export class CommentComponent implements OnInit{
                   }else if(r.type === "DISLIKE"){
                     reply.isDisliked = true;
                   }else{ reply.isHearted = true;}
-    
+
                 }
-                });  
+                });
               }
-                          
+
               }
             )
-    
+
           })
         })
       },
@@ -581,7 +581,7 @@ export class CommentComponent implements OnInit{
   orderDescDislikes(){
 
     console.log(this.comments);
-    
+
     this.commentService.orderDescDislikes(this.comments).subscribe(
       (data: Comments[]) => {
         console.log(data);
@@ -589,7 +589,7 @@ export class CommentComponent implements OnInit{
         this.comments = data.map((comment: any) => ({
           ...comment,
           timestamp: this.parseDateArrayToDate2(comment.timestamp)
-          
+
         }));
 
         this.comments.forEach(comment => {
@@ -600,16 +600,16 @@ export class CommentComponent implements OnInit{
               console.log(image);
             }
           )
-  
+
           this.reactionService.getCommentReaction(comment.id).subscribe(
             (reaction: Reaction[]) => {
-              
+
               if(reaction.length>0){
-                
+
                 comment.reactions = reaction;
-  
+
                 reaction.forEach(r => {
-  
+
                 if(r.madeBy.username === this.userService.getUsernameFromToken()){
                 console.log(r);
                 if(r.type === "LIKE"){
@@ -617,11 +617,11 @@ export class CommentComponent implements OnInit{
                 }else if(r.type === "DISLIKE"){
                   comment.isDisliked = true;
                 }else{ comment.isHearted = true;}
-  
+
               }
-              });  
+              });
             }
-                        
+
             }
           )
 
@@ -633,16 +633,16 @@ export class CommentComponent implements OnInit{
                 console.log(image);
               }
             )
-    
+
             this.reactionService.getCommentReaction(reply.id).subscribe(
               (reaction: Reaction[]) => {
-                
+
                 if(reaction.length>0){
-                  
+
                   reply.reactions = reaction;
-    
+
                   reaction.forEach(r => {
-    
+
                   if(r.madeBy.username === this.userService.getUsernameFromToken()){
                   console.log(r);
                   if(r.type === "LIKE"){
@@ -650,14 +650,14 @@ export class CommentComponent implements OnInit{
                   }else if(r.type === "DISLIKE"){
                     reply.isDisliked = true;
                   }else{ reply.isHearted = true;}
-    
+
                 }
-                });  
+                });
               }
-                          
+
               }
             )
-    
+
           })
         })
       },
@@ -670,7 +670,7 @@ export class CommentComponent implements OnInit{
   orderDescHearts(){
 
     console.log(this.comments);
-    
+
     this.commentService.orderDescHearts(this.comments).subscribe(
       (data: Comments[]) => {
         console.log(data);
@@ -678,7 +678,7 @@ export class CommentComponent implements OnInit{
         this.comments = data.map((comment: any) => ({
           ...comment,
           timestamp: this.parseDateArrayToDate2(comment.timestamp)
-          
+
         }));
 
         this.comments.forEach(comment => {
@@ -689,16 +689,16 @@ export class CommentComponent implements OnInit{
               console.log(image);
             }
           )
-  
+
           this.reactionService.getCommentReaction(comment.id).subscribe(
             (reaction: Reaction[]) => {
-              
+
               if(reaction.length>0){
-                
+
                 comment.reactions = reaction;
-  
+
                 reaction.forEach(r => {
-  
+
                 if(r.madeBy.username === this.userService.getUsernameFromToken()){
                 console.log(r);
                 if(r.type === "LIKE"){
@@ -706,11 +706,11 @@ export class CommentComponent implements OnInit{
                 }else if(r.type === "DISLIKE"){
                   comment.isDisliked = true;
                 }else{ comment.isHearted = true;}
-  
+
               }
-              });  
+              });
             }
-                        
+
             }
           )
 
@@ -722,16 +722,16 @@ export class CommentComponent implements OnInit{
                 console.log(image);
               }
             )
-    
+
             this.reactionService.getCommentReaction(reply.id).subscribe(
               (reaction: Reaction[]) => {
-                
+
                 if(reaction.length>0){
-                  
+
                   reply.reactions = reaction;
-    
+
                   reaction.forEach(r => {
-    
+
                   if(r.madeBy.username === this.userService.getUsernameFromToken()){
                   console.log(r);
                   if(r.type === "LIKE"){
@@ -739,14 +739,14 @@ export class CommentComponent implements OnInit{
                   }else if(r.type === "DISLIKE"){
                     reply.isDisliked = true;
                   }else{ reply.isHearted = true;}
-    
+
                 }
-                });  
+                });
               }
-                          
+
               }
             )
-    
+
           })
         })
       },
@@ -761,7 +761,7 @@ export class CommentComponent implements OnInit{
   orderAscDate(){
 
     console.log(this.comments);
-    
+
     this.commentService.orderAscDate(this.comments).subscribe(
       (data: Comments[]) => {
         console.log(data);
@@ -769,7 +769,7 @@ export class CommentComponent implements OnInit{
         this.comments = data.map((comment: any) => ({
           ...comment,
           timestamp: this.parseDateArrayToDate2(comment.timestamp)
-          
+
         }));
 
         this.comments.forEach(comment => {
@@ -780,16 +780,16 @@ export class CommentComponent implements OnInit{
               console.log(image);
             }
           )
-  
+
           this.reactionService.getCommentReaction(comment.id).subscribe(
             (reaction: Reaction[]) => {
-              
+
               if(reaction.length>0){
-                
+
                 comment.reactions = reaction;
-  
+
                 reaction.forEach(r => {
-  
+
                 if(r.madeBy.username === this.userService.getUsernameFromToken()){
                 console.log(r);
                 if(r.type === "LIKE"){
@@ -797,11 +797,11 @@ export class CommentComponent implements OnInit{
                 }else if(r.type === "DISLIKE"){
                   comment.isDisliked = true;
                 }else{ comment.isHearted = true;}
-  
+
               }
-              });  
+              });
             }
-                        
+
             }
           )
 
@@ -813,16 +813,16 @@ export class CommentComponent implements OnInit{
                 console.log(image);
               }
             )
-    
+
             this.reactionService.getCommentReaction(reply.id).subscribe(
               (reaction: Reaction[]) => {
-                
+
                 if(reaction.length>0){
-                  
+
                   reply.reactions = reaction;
-    
+
                   reaction.forEach(r => {
-    
+
                   if(r.madeBy.username === this.userService.getUsernameFromToken()){
                   console.log(r);
                   if(r.type === "LIKE"){
@@ -830,14 +830,14 @@ export class CommentComponent implements OnInit{
                   }else if(r.type === "DISLIKE"){
                     reply.isDisliked = true;
                   }else{ reply.isHearted = true;}
-    
+
                 }
-                });  
+                });
               }
-                          
+
               }
             )
-    
+
           })
         })
       },
@@ -850,7 +850,7 @@ export class CommentComponent implements OnInit{
   orderDescDate(){
 
     console.log(this.comments);
-    
+
     this.commentService.orderDescDate(this.comments).subscribe(
       (data: Comments[]) => {
         console.log(data);
@@ -858,7 +858,7 @@ export class CommentComponent implements OnInit{
         this.comments = data.map((comment: any) => ({
           ...comment,
           timestamp: this.parseDateArrayToDate2(comment.timestamp)
-          
+
         }));
 
         this.comments.forEach(comment => {
@@ -869,16 +869,16 @@ export class CommentComponent implements OnInit{
               console.log(image);
             }
           )
-  
+
           this.reactionService.getCommentReaction(comment.id).subscribe(
             (reaction: Reaction[]) => {
-              
+
               if(reaction.length>0){
-                
+
                 comment.reactions = reaction;
-  
+
                 reaction.forEach(r => {
-  
+
                 if(r.madeBy.username === this.userService.getUsernameFromToken()){
                 console.log(r);
                 if(r.type === "LIKE"){
@@ -886,11 +886,11 @@ export class CommentComponent implements OnInit{
                 }else if(r.type === "DISLIKE"){
                   comment.isDisliked = true;
                 }else{ comment.isHearted = true;}
-  
+
               }
-              });  
+              });
             }
-                        
+
             }
           )
 
@@ -902,16 +902,16 @@ export class CommentComponent implements OnInit{
                 console.log(image);
               }
             )
-    
+
             this.reactionService.getCommentReaction(reply.id).subscribe(
               (reaction: Reaction[]) => {
-                
+
                 if(reaction.length>0){
-                  
+
                   reply.reactions = reaction;
-    
+
                   reaction.forEach(r => {
-    
+
                   if(r.madeBy.username === this.userService.getUsernameFromToken()){
                   console.log(r);
                   if(r.type === "LIKE"){
@@ -919,14 +919,14 @@ export class CommentComponent implements OnInit{
                   }else if(r.type === "DISLIKE"){
                     reply.isDisliked = true;
                   }else{ reply.isHearted = true;}
-    
+
                 }
-                });  
+                });
               }
-                          
+
               }
             )
-    
+
           })
         })
       },
@@ -935,5 +935,5 @@ export class CommentComponent implements OnInit{
       }
     );
   }
-  
+
 }

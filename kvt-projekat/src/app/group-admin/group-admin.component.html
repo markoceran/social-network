@@ -2,9 +2,9 @@
 <section class="h-100 gradient-custom-2">
     <div class="container py-5 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
-        <div class="col col-lg-9 col-xl-7">
-          <div class="card" *ngFor="let g of groups">            
-            
+        <div class="col col-lg-9 col-xl-7" >
+          <div id="card" *ngFor="let g of groups">
+
             <ul class="list-group list-group-light">
               <li class="list-group-item d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center">
@@ -17,18 +17,17 @@
                     <p style="color: rgba(214, 56, 56, 0.657);">Suspended reason: {{g.suspendedReason}}</p>
                   </div>
                 </div>
-                
+
                 <button *ngIf="!g.isSuspended" class="btn btn-link btn-rounded btn-sm"><a style="color: rgba(255, 0, 0, 0.721);" class="nav-link" [routerLink]="['/suspendGroup/', g.id]">Suspend group</a></button>
                 <button class="btn btn-link btn-rounded btn-sm" (click)="showAdmin()">Group admin</button>
               </li>
             </ul>
 
-            <div *ngIf="show" style="border: gray 1px solid; margin-bottom: 15px;">
-              <h5 style="color: rgba(168, 96, 83, 0.752); text-align: center; margin-top: 10px;">Admin:</h5>
+            <div *ngIf="show" style="border: gray 1px solid;">
               <ul class="list-group list-group-light">
                   <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let a of g.groupAdmins">
                     <div class="d-flex align-items-center">
-              
+
                       <img *ngIf="a.user.profileImage === undefined" [src]="getImageUrl('avatar.jpg')" alt="" style="width: 45px; height: 45px;margin-left: 15px;" class="rounded-circle" />
                       <img *ngIf="a.user.profileImage !== undefined" [src]="getImageUrl(a.user.profileImage)" alt="" style="width: 45px; height: 45px;margin-left: 15px;" class="rounded-circle" />
 

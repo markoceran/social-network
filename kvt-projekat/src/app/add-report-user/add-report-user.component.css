@@ -1,0 +1,18 @@
+form{
+  width: 500px;
+  margin: 0 auto;
+}
+h4{
+  padding: 30px 15px;
+  text-align: center;
+}
+.form-group{
+  text-align: center;
+}
+button{
+  width: 500px;
+  margin: 20px auto 0;
+}
+select{
+  margin-left: 10px;
+}

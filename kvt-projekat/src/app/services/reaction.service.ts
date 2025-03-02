@@ -99,7 +99,7 @@ export class ReactionService {
 
     return this.http.get<Array<Reaction>>('api/reactions/byPost/'+ id, {headers});
   }
- 
+
   getCommentReaction(id:number): Observable<Array<Reaction>> {
 
     const token = localStorage.getItem('user');
@@ -125,6 +125,6 @@ export class ReactionService {
 
     return this.http.delete<any>('api/reactions/'+ postId, {headers,params});
   }
-  
+
 
 }

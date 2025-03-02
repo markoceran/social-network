@@ -1,0 +1,22 @@
+.add-comment-form{
+  width: 250px;
+  margin: 0 auto;
+  padding-top: 40px;
+}
+.add-comment-form button{
+  display: block;
+  margin: 0 auto;
+  width: 250px;
+}
+#no-comments{
+  text-align: center;
+}
+.form-group textarea{
+  width: 250px;
+  margin: 0 auto;
+  resize: none;
+}
+#reply-comment-div{
+  width: 70%;
+  height: 40%;
+}
