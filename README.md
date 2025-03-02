@@ -20,7 +20,7 @@ Set up datasource url to socialnetwork database and other parameters in applicat
 
 4. Run the backend application:
 Navigate to the backend directory and run: mvn spring-boot:run.
-   
+
 5. Run the frontend application:
 Navigate to the frontend directory and run: npm install then ng serve --proxy-config proxy.conf.json.
 
